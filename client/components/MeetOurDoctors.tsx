@@ -54,42 +54,41 @@ export default function MeetOurDoctors() {
   }, [])
 
   return (
-    <section className="relative py-16 lg:py-24 px-6 lg:px-20 bg-gradient-to-b">
+    <section className="relative py-12 md:py-16 lg:py-24 px-4 sm:px-6 lg:px-20 bg-gradient-to-b overflow-x-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <ElegantShadowTitle>Meet Our Doctors</ElegantShadowTitle>
-          <div ref={subtitleRef} className="mt-8">
-            <SubtextWithStrip 
-              className="font-light text-white text-lg lg:text-xl" 
+          <div ref={subtitleRef} className="mt-6 md:mt-8 px-4">
+            <SubtextWithStrip
+              className="font-light text-white text-base md:text-lg lg:text-xl"
               delay={0.3}
-              // Add any necessary props to ensure text remains visible
             >
               Compassionate experts dedicated to your recovery and well-being.
             </SubtextWithStrip>
           </div>
         </div>
 
-        {/* Doctor Cards with Left-Right Alignment */}
+        {/* Doctor Cards with Zig-Zag Pattern */}
         <div className="relative w-full">
-          <div className="space-y-32">
+          <div className="space-y-16 md:space-y-24 lg:space-y-32">
             {/* First card - left aligned */}
-            <div className="w-full flex">
-              <div className="flex justify-start ">
+            <div className="w-full flex justify-center lg:justify-start">
+              <div className="w-full max-w-xl lg:max-w-[600px]">
                 <ThankYouCard doctor={doctorsData[0]} />
               </div>
             </div>
 
             {/* Second card - right aligned */}
-            <div className="w-full flex justify-end">
-              <div className="flex justify-end ">
+            <div className="w-full flex justify-center lg:justify-end">
+              <div className="w-full max-w-xl lg:max-w-[600px]">
                 <ThankYouCard doctor={doctorsData[1]} />
               </div>
             </div>
 
             {/* Third card - left aligned */}
-            <div className="w-full flex">
-              <div className="flex justify-start ">
+            <div className="w-full flex justify-center lg:justify-start">
+              <div className="w-full max-w-xl lg:max-w-[600px]">
                 <ThankYouCard doctor={doctorsData[2]} />
               </div>
             </div>
