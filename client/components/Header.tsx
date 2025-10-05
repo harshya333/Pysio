@@ -34,7 +34,7 @@ export default function Header() {
     { name: "Services", to: "/services" },
     { name: "Careers", to: "/careers" },
     { name: "Perks", to: "/perks" },
-    { name: "Corporate", to: "/corporate" },
+    { name: "Wave Gym", to: "/corporate" },
     { name: "Portfolio", to: "/portfolio" },
     { name: "Feedback", to: "#", isButton: true },
   ]
@@ -43,12 +43,24 @@ export default function Header() {
     <>
       {/* Navbar */}
       <header
-        className={`fixed left-0 w-full transition-all duration-500 z-[9999] 
+        className={`fixed left-0 w-full transition-all duration-500 z-[9999]
           lg:top-5 top-0
           ${isVisible ? "translate-y-0" : "-translate-y-full"}
         `}
       >
-        <div className="max-w-6xl mx-auto flex items-center justify-center px-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between lg:justify-center px-4 lg:px-4 py-4 lg:py-0">
+          {/* Mobile menu button */}
+          <button
+            className="lg:hidden flex flex-col space-y-1.5 z-[10000]"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle mobile menu"
+          >
+            <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></div>
+            <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''}`}></div>
+            <div className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></div>
+          </button>
+
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center">
             <div className="flex items-center space-x-8 xl:space-x-12">
               {navItems.map((item) =>
@@ -74,6 +86,39 @@ export default function Header() {
                 )
               )}
             </div>
+          </nav>
+        </div>
+
+        {/* Mobile Navigation */}
+        <div
+          className={`lg:hidden fixed top-0 left-0 w-full h-screen bg-black/95 backdrop-blur-lg transition-all duration-500 ${
+            isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+        >
+          <nav className="flex flex-col items-center justify-center h-full space-y-8">
+            {navItems.map((item) =>
+              item.isButton ? (
+                <button
+                  key={item.name}
+                  onClick={() => {
+                    setIsModalOpen(true)
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="text-white text-2xl font-light hover:text-white/80 transition-colors duration-300"
+                >
+                  {item.name}
+                </button>
+              ) : (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="text-white text-2xl font-light hover:text-white/80 transition-colors duration-300"
+                  onClick={handleLinkClick}
+                >
+                  {item.name}
+                </Link>
+              )
+            )}
           </nav>
         </div>
       </header>
