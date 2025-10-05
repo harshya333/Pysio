@@ -43,7 +43,18 @@ export function Text3D() {
 
   return (
     <div ref={containerRef} className="text3d">
-      <span ref={textRef} className="text3d__text">Flexwrite World</span>
+      <img
+        src="/images/footertext.png"
+        alt="Flexrite World"
+        className="text3d__image"
+        style={{
+          width: '100%',
+          height: 'auto',
+          maxWidth: '800px',
+          margin: '0 auto',
+          display: 'block'
+        }}
+      />
     </div>
   );
 }
