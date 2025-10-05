@@ -198,12 +198,12 @@ export default function CelebrityTestimonials() {
       <style jsx global>{`
         .carousel-container {
           width: 100%;
-          max-width: 1400px;
-          height: 420px;
+          max-width: 1800px; /* Increased from 1400px */
+          height: 500px; /* Increased from 420px */
           position: relative;
           perspective: 1200px;
           margin: 0 auto;
-          overflow: hidden;
+          overflow: visible; /* Changed from hidden to visible */
         }
 
         .carousel-track {
@@ -218,8 +218,8 @@ export default function CelebrityTestimonials() {
 
         .testimonial-card {
           position: absolute;
-          width: 320px;
-          height: 380px;
+          width: 350px; /* Increased from 320px */
+          height: 420px; /* Increased from 380px */
           background: rgba(255, 255, 255, 0.24);
           border-radius: 16px;
           box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -259,7 +259,7 @@ export default function CelebrityTestimonials() {
 
         .testimonial-card.left-2 {
           z-index: 1;
-          transform: translateX(-240px) scale(0.75) translateZ(-350px);
+          transform: translateX(-280px) scale(0.75) translateZ(-350px); /* Increased translateX */
           opacity: 0.6;
         }
 
@@ -269,7 +269,7 @@ export default function CelebrityTestimonials() {
 
         .testimonial-card.left-1 {
           z-index: 5;
-          transform: translateX(-120px) scale(0.85) translateZ(-150px);
+          transform: translateX(-140px) scale(0.85) translateZ(-150px); /* Increased translateX */
           opacity: 0.8;
         }
 
@@ -279,7 +279,7 @@ export default function CelebrityTestimonials() {
 
         .testimonial-card.right-1 {
           z-index: 5;
-          transform: translateX(120px) scale(0.85) translateZ(-150px);
+          transform: translateX(140px) scale(0.85) translateZ(-150px); /* Increased translateX */
           opacity: 0.8;
         }
 
@@ -289,7 +289,7 @@ export default function CelebrityTestimonials() {
 
         .testimonial-card.right-2 {
           z-index: 1;
-          transform: translateX(240px) scale(0.75) translateZ(-350px);
+          transform: translateX(280px) scale(0.75) translateZ(-350px); /* Increased translateX */
           opacity: 0.6;
         }
 
@@ -304,7 +304,7 @@ export default function CelebrityTestimonials() {
 
         .card-image {
           width: 100%;
-          height: 180px;
+          height: 200px; /* Increased from 180px */
           object-fit: cover;
           transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           position: relative;
@@ -321,7 +321,7 @@ export default function CelebrityTestimonials() {
         }
 
         .card-content {
-          padding: 20px;
+          padding: 24px; /* Increased from 20px */
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -349,7 +349,7 @@ export default function CelebrityTestimonials() {
         }
 
         .card-title {
-          font-size: 18px;
+          font-size: 20px; /* Increased from 18px */
           color: rgba(0, 0, 0, 0.9);
           margin-bottom: 12px;
           font-weight: 700;
@@ -357,7 +357,7 @@ export default function CelebrityTestimonials() {
         }
 
         .card-excerpt {
-          font-size: 14px;
+          font-size: 15px; /* Increased from 14px */
           line-height: 1.5;
           color: rgba(0, 0, 0, 0.75);
           margin-bottom: 16px;
@@ -405,13 +405,13 @@ export default function CelebrityTestimonials() {
 
         .member-info {
           text-align: center;
-          margin-top: 60px;
+          margin-top: 80px; /* Increased from 60px */
           transition: all 0.5s ease-out;
         }
 
         .member-name {
           color: rgba(255, 255, 255, 0.95);
-          font-size: 2rem;
+          font-size: 2.2rem; /* Increased from 2rem */
           font-weight: 700;
           margin-bottom: 8px;
           position: relative;
@@ -438,7 +438,7 @@ export default function CelebrityTestimonials() {
 
         .member-role {
           color: rgba(255, 255, 255, 0.7);
-          font-size: 1.2rem;
+          font-size: 1.3rem; /* Increased from 1.2rem */
           font-weight: 500;
           opacity: 0.8;
           text-transform: uppercase;
@@ -451,7 +451,7 @@ export default function CelebrityTestimonials() {
           display: flex;
           justify-content: center;
           gap: 8px;
-          margin-top: 30px;
+          margin-top: 40px; /* Increased from 30px */
         }
 
         .dot {
@@ -476,8 +476,8 @@ export default function CelebrityTestimonials() {
           backdrop-filter: blur(4.6px);
           -webkit-backdrop-filter: blur(4.6px);
           color: rgba(0, 0, 0, 0.8);
-          width: 45px;
-          height: 45px;
+          width: 50px; /* Increased from 45px */
+          height: 50px; /* Increased from 45px */
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -485,7 +485,7 @@ export default function CelebrityTestimonials() {
           cursor: pointer;
           z-index: 20;
           transition: all 0.3s ease;
-          font-size: 1.4rem;
+          font-size: 1.5rem; /* Increased from 1.4rem */
           border: 1px solid rgba(255, 255, 255, 0.5);
           outline: none;
           box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -499,51 +499,51 @@ export default function CelebrityTestimonials() {
         }
 
         .nav-arrow.left {
-          left: 15px;
+          left: 20px; /* Increased from 15px */
         }
 
         .nav-arrow.right {
-          right: 15px;
+          right: 20px; /* Increased from 15px */
         }
 
         @media (max-width: 1024px) {
           .carousel-container {
-            max-width: 1200px;
-            height: 400px;
+            max-width: 1400px; /* Increased from 1200px */
+            height: 450px; /* Increased from 400px */
           }
 
           .testimonial-card {
-            width: 300px;
-            height: 360px;
+            width: 320px; /* Increased from 300px */
+            height: 400px; /* Increased from 360px */
           }
 
           .testimonial-card.left-2 {
-            transform: translateX(-220px) scale(0.75) translateZ(-350px);
+            transform: translateX(-240px) scale(0.75) translateZ(-350px); /* Increased translateX */
           }
 
           .testimonial-card.left-1 {
-            transform: translateX(-110px) scale(0.85) translateZ(-150px);
+            transform: translateX(-120px) scale(0.85) translateZ(-150px); /* Increased translateX */
           }
 
           .testimonial-card.right-1 {
-            transform: translateX(110px) scale(0.85) translateZ(-150px);
+            transform: translateX(120px) scale(0.85) translateZ(-150px); /* Increased translateX */
           }
 
           .testimonial-card.right-2 {
-            transform: translateX(220px) scale(0.75) translateZ(-350px);
+            transform: translateX(240px) scale(0.75) translateZ(-350px); /* Increased translateX */
           }
         }
 
         @media (max-width: 768px) {
           .carousel-container {
-            height: 380px;
+            height: 420px; /* Increased from 380px */
             max-width: 100%;
             padding: 0 20px;
           }
 
           .testimonial-card {
-            width: 280px;
-            height: 340px;
+            width: 300px; /* Increased from 280px */
+            height: 380px; /* Increased from 340px */
           }
 
           .testimonial-card.center {
@@ -551,73 +551,73 @@ export default function CelebrityTestimonials() {
           }
 
           .testimonial-card.left-2 {
-            transform: translateX(-180px) scale(0.7) translateZ(-300px);
+            transform: translateX(-200px) scale(0.7) translateZ(-300px); /* Increased translateX */
           }
 
           .testimonial-card.left-1 {
-            transform: translateX(-90px) scale(0.8) translateZ(-100px);
+            transform: translateX(-100px) scale(0.8) translateZ(-100px); /* Increased translateX */
           }
 
           .testimonial-card.right-1 {
-            transform: translateX(90px) scale(0.8) translateZ(-100px);
+            transform: translateX(100px) scale(0.8) translateZ(-100px); /* Increased translateX */
           }
 
           .testimonial-card.right-2 {
-            transform: translateX(180px) scale(0.7) translateZ(-300px);
+            transform: translateX(200px) scale(0.7) translateZ(-300px); /* Increased translateX */
           }
 
           .card-image {
-            height: 160px;
+            height: 180px; /* Increased from 160px */
           }
 
           .card-content {
-            padding: 18px;
+            padding: 20px; /* Increased from 18px */
           }
 
           .card-title {
-            font-size: 16px;
+            font-size: 18px; /* Increased from 16px */
           }
 
           .card-excerpt {
-            font-size: 13px;
+            font-size: 14px; /* Increased from 13px */
           }
 
           .nav-arrow {
-            width: 40px;
-            height: 40px;
-            font-size: 1.2rem;
+            width: 45px; /* Increased from 40px */
+            height: 45px; /* Increased from 40px */
+            font-size: 1.3rem; /* Increased from 1.2rem */
           }
 
           .nav-arrow.left {
-            left: 8px;
+            left: 10px; /* Increased from 8px */
           }
 
           .nav-arrow.right {
-            right: 8px;
+            right: 10px; /* Increased from 8px */
           }
 
           .member-info {
-            margin-top: 50px;
+            margin-top: 60px; /* Increased from 50px */
           }
 
           .member-name {
-            font-size: 1.8rem;
+            font-size: 2rem; /* Increased from 1.8rem */
           }
 
           .member-role {
-            font-size: 1.1rem;
+            font-size: 1.2rem; /* Increased from 1.1rem */
           }
         }
 
         @media (max-width: 640px) {
           .carousel-container {
-            height: 350px;
+            height: 380px; /* Increased from 350px */
             padding: 0 10px;
           }
 
           .testimonial-card {
-            width: 250px;
-            height: 320px;
+            width: 280px; /* Increased from 250px */
+            height: 360px; /* Increased from 320px */
           }
 
           .testimonial-card.left-2,
@@ -627,35 +627,35 @@ export default function CelebrityTestimonials() {
           }
 
           .testimonial-card.left-1 {
-            transform: translateX(-80px) scale(0.75) translateZ(-100px);
+            transform: translateX(-90px) scale(0.75) translateZ(-100px); /* Increased translateX */
           }
 
           .testimonial-card.right-1 {
-            transform: translateX(80px) scale(0.75) translateZ(-100px);
+            transform: translateX(90px) scale(0.75) translateZ(-100px); /* Increased translateX */
           }
 
           .card-image {
-            height: 140px;
+            height: 160px; /* Increased from 140px */
           }
 
           .card-content {
-            padding: 16px;
+            padding: 18px; /* Increased from 16px */
           }
 
           .card-title {
-            font-size: 15px;
+            font-size: 17px; /* Increased from 15px */
           }
 
           .card-excerpt {
-            font-size: 12px;
+            font-size: 13px; /* Increased from 12px */
           }
 
           .member-name {
-            font-size: 1.6rem;
+            font-size: 1.8rem; /* Increased from 1.6rem */
           }
 
           .member-role {
-            font-size: 1rem;
+            font-size: 1.1rem; /* Increased from 1rem */
           }
 
           .member-name::before,
@@ -664,54 +664,54 @@ export default function CelebrityTestimonials() {
           }
           
           .nav-arrow {
-            width: 35px;
-            height: 35px;
-            font-size: 1.1rem;
+            width: 40px; /* Increased from 35px */
+            height: 40px; /* Increased from 35px */
+            font-size: 1.2rem; /* Increased from 1.1rem */
           }
         }
         
         @media (max-width: 480px) {
           .carousel-container {
-            height: 320px;
+            height: 360px; /* Increased from 320px */
           }
           
           .testimonial-card {
-            width: 230px;
-            height: 300px;
+            width: 260px; /* Increased from 230px */
+            height: 340px; /* Increased from 300px */
           }
           
           .testimonial-card.left-1 {
-            transform: translateX(-70px) scale(0.7) translateZ(-100px);
+            transform: translateX(-80px) scale(0.7) translateZ(-100px); /* Increased translateX */
           }
 
           .testimonial-card.right-1 {
-            transform: translateX(70px) scale(0.7) translateZ(-100px);
+            transform: translateX(80px) scale(0.7) translateZ(-100px); /* Increased translateX */
           }
           
           .card-image {
-            height: 130px;
+            height: 150px; /* Increased from 130px */
           }
           
           .member-name {
-            font-size: 1.4rem;
+            font-size: 1.6rem; /* Increased from 1.4rem */
           }
 
           .member-role {
-            font-size: 0.9rem;
+            font-size: 1rem; /* Increased from 0.9rem */
           }
 
           .dots {
-            margin-top: 25px;
+            margin-top: 30px; /* Increased from 25px */
           }
         }
       `}</style>
 
       <section
         ref={sectionRef}
-        className="py-8 lg:py-12 px-4 lg:px-8 w-full overflow-hidden"
+        className="py-12 lg:py-16 px-4 lg:px-8 w-full overflow-visible" /* Changed from overflow-hidden */
       >
         <div className="max-w-7xl mx-auto w-full">
-          <div className="text-center mb-8 lg:mb-12">
+          <div className="text-center mb-10 lg:mb-14">
             <div style={{ color: "#ffffff" }}>
               <ElegantShadowTitle>What Clients Are Saying ?</ElegantShadowTitle>
             </div>
