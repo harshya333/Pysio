@@ -114,44 +114,7 @@ const Hero: FC = () => {
     setLinesAnimated(true)
   }, [])
 
-  useEffect(() => {
-    let firstRun = true
-
-    const handleScroll = () => {
-      const scrollValue = window.scrollY
-      const headings = document.querySelectorAll(".hero-heading")
-
-      headings.forEach((heading, index) => {
-        const element = heading as HTMLElement
-
-        element.style.top = `${scrollValue * 0.07 * index}px`
-
-        if (index > 0) {
-          const opacity = Math.min(scrollValue / 200, 0.8)
-          element.style.opacity = opacity.toString()
-        } else {
-          element.style.opacity = "1"
-        }
-
-        if (firstRun) {
-          element.style.transform = "translateY(0px)"
-          firstRun = false
-        }
-      })
-    }
-
-    window.addEventListener("scroll", handleScroll)
-
-    // Apply initial transforms immediately
-    const headings = document.querySelectorAll(".hero-heading")
-    headings.forEach((heading, index) => {
-      (heading as HTMLElement).style.transform = `translateY(${index * 4}px)`
-    })
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+  // Removed scroll parallax effect for hero headings
 
   useEffect(() => {
     // Remove the 4-second delay
@@ -192,13 +155,13 @@ const Hero: FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative h-[300vh] overflow-hidden bg-transparent debug-section"
+      className="relative h-[300vh] bg-transparent"
       data-debug="HERO-SECTION"
       onClick={(e) => {
         e.stopPropagation()
         console.log("🐛 DEBUG - Hero Section:", {
           element: "Hero Section Container",
-          className: "relative h-[300vh] overflow-hidden bg-transparent",
+          className: "relative h-[300vh] overflow-x-hidden bg-transparent",
           dimensions: e.currentTarget.getBoundingClientRect(),
           scrollHeight: e.currentTarget.scrollHeight,
         })
@@ -209,7 +172,7 @@ const Hero: FC = () => {
           position: relative;
           overflow: hidden;
         }
-        
+
         .pixel-text::before {
           content: '';
           position: absolute;
@@ -217,7 +180,7 @@ const Hero: FC = () => {
           left: 0;
           width: 100%;
           height: 100%;
-          background: 
+          background:
             radial-gradient(circle at 20% 30%, rgba(255,255,255,0.03) 1px, transparent 1px),
             radial-gradient(circle at 40% 70%, rgba(255,255,255,0.02) 1px, transparent 1px),
             radial-gradient(circle at 60% 20%, rgba(255,255,255,0.04) 1px, transparent 1px),
@@ -226,10 +189,10 @@ const Hero: FC = () => {
             radial-gradient(circle at 70% 40%, rgba(255,255,255,0.02) 1px, transparent 1px),
             radial-gradient(circle at 10% 50%, rgba(255,255,255,0.04) 1px, transparent 1px),
             radial-gradient(circle at 90% 30%, rgba(255,255,255,0.02) 1px, transparent 1px);
-          background-size: 
-            15px 15px, 
-            20px 20px, 
-            18px 18px, 
+          background-size:
+            15px 15px,
+            20px 20px,
+            18px 18px,
             22px 22px,
             16px 16px,
             19px 19px,
@@ -240,7 +203,7 @@ const Hero: FC = () => {
           z-index: 1;
           mix-blend-mode: screen;
         }
-        
+
         @keyframes pixelShimmer {
           0%, 100% {
             transform: translate(0, 0);
@@ -259,7 +222,7 @@ const Hero: FC = () => {
             opacity: 0.7;
           }
         }
-        
+
         .animated-line {
           position: absolute;
           z-index: 5;
@@ -268,40 +231,40 @@ const Hero: FC = () => {
           white-space: nowrap;
           transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        
+
         .line-part {
           height: 2px;
           background: rgba(255,255,255,1);
           transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        
+
         .top-line-container {
-          top: calc(50% - 100px);
+          top: calc(50% - 80px);
           left: 0;
           width: 50%;
         }
-        
+
         .bottom-line-container {
-          top: calc(50% + 100px);
+          top: calc(50% + 80px);
           right: 0;
           width: 50%;
         }
-        
+
         .hero-text-container {
           opacity: 1;
           transform: translateY(0);
         }
-        
+
       `}</style>
 
       <div
-        className="relative z-10 h-screen w-full debug-container"
+        className="relative z-10 h-screen w-full"
         data-debug="HERO-VIEWPORT"
         onClick={(e) => {
           e.stopPropagation()
           console.log("🐛 DEBUG - Hero Viewport:", {
             element: "Hero Viewport Container",
-            className: "relative z-10 h-screen w-full",
+            className: "relative z-10 h-screen w-full overflow-x-hidden",
             dimensions: e.currentTarget.getBoundingClientRect(),
           })
         }}
@@ -323,9 +286,9 @@ const Hero: FC = () => {
         </>
 
         <div
-          className="relative w-full h-full debug-container flex items-center justify-center"
+          className="relative w-full h-full debug-container flex flex-col items-center justify-center py-20"
           data-debug="HERO-CONTENT"
-          style={{ zIndex: 2 }}
+          style={{ zIndex: 2, paddingTop: "100px" }}
           onClick={(e) => {
             e.stopPropagation()
             console.log("🐛 DEBUG - Hero Content:", {
@@ -338,13 +301,14 @@ const Hero: FC = () => {
         >
           <div
             ref={heroTextRef}
-            className="text-center z-[10001] w-fit h-fit debug-component hero-text-container"
+            className="text-center z-[10001] w-full hero-text-container"
             data-debug="HERO-TEXT-CONTAINER"
+            style={{ transform: "translateY(70px)" }}
             onClick={(e) => {
               e.stopPropagation()
               console.log("🐛 DEBUG - Hero Text Container:", {
                 element: "Hero Text Container",
-                className: "text-center z-[10001] w-fit h-fit",
+                className: "text-center z-[10001] w-full",
                 dimensions: e.currentTarget.getBoundingClientRect(),
                 zIndex: 10001,
               })
@@ -355,101 +319,122 @@ const Hero: FC = () => {
                 className="hero-heading hero-heading-1 pixel-text debug-text"
                 data-debug="HERO-TEXT-1"
                 style={{
-                  fontSize: "160px",
-                  lineHeight: "120px",
+                  fontSize: "clamp(32px, 8vw, 160px)",
+                  lineHeight: "1.1",
                   fontFamily: "Playfair Display, serif",
                   color: "white",
                   margin: 0,
-                  padding: 0,
-                  height: "130px",
+                  padding: "0 10px",
                   position: "relative",
-                  whiteSpace: "nowrap",
-                  letterSpacing: "10.5px",
+                  letterSpacing: "clamp(1px, 0.5vw, 10.5px)",
                   textShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
+                  maxWidth: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
                 onClick={(e) => {
                   e.stopPropagation()
                   console.log("🐛 DEBUG - Hero Text 1:", {
                     element: "Main Hero Text",
                     text: "FLEXRITE WORLD",
-                    fontSize: "160px",
                     className: "hero-heading hero-heading-1 pixel-text",
                     dimensions: e.currentTarget.getBoundingClientRect(),
                   })
                 }}
               >
-                FLEXRITE W<span style={{ letterSpacing: "6px" }}>O</span>RLD
+                FLEXRITE W<span style={{ letterSpacing: "clamp(0px, 0.3vw, 6px)" }}>O</span>RLD
               </h1>
               <h1
                 className="hero-heading hero-heading-2 debug-text"
                 data-debug="HERO-TEXT-2"
                 aria-hidden="true"
                 style={{
-                  fontSize: "160px",
-                  lineHeight: "130px",
+                  fontSize: "clamp(32px, 8vw, 160px)",
+                  lineHeight: "1.1",
                   fontFamily: "Playfair Display, serif",
                   color: "rgba(255, 255, 255, 0.1)",
                   WebkitTextStroke: "2px rgba(255, 255, 255, 0.3)",
                   margin: 0,
-                  padding: 0,
-                  height: "130px",
+                  padding: "0 10px",
                   position: "absolute",
-                  top: 0,
+                  top: "4px",
                   left: 0,
+                  width: "100%",
                   transition: "transform 0.3s, opacity 0.3s",
-                  whiteSpace: "nowrap",
-                  letterSpacing: "10.5px",
+                  letterSpacing: "clamp(1px, 0.5vw, 10.5px)",
                   opacity: 0.1,
+                  maxWidth: "100%",
+                  overflow: "hidden",
                 }}
                 onClick={(e) => {
                   e.stopPropagation()
                   console.log("🐛 DEBUG - Hero Text 2:", {
                     element: "Hero Text Outline 1",
                     text: "FLEXRITE WORLD",
-                    fontSize: "160px",
                     className: "hero-heading hero-heading-2",
                     dimensions: e.currentTarget.getBoundingClientRect(),
                   })
                 }}
               >
-                FLEXRITE W<span style={{ letterSpacing: "6px" }}>O</span>RLD
+                FLEXRITE W<span style={{ letterSpacing: "clamp(0px, 0.3vw, 6px)" }}>O</span>RLD
               </h1>
               <h1
                 className="hero-heading hero-heading-3 debug-text"
                 data-debug="HERO-TEXT-3"
                 aria-hidden="true"
                 style={{
-                  fontSize: "160px",
-                  lineHeight: "130px",
+                  fontSize: "clamp(32px, 8vw, 160px)",
+                  lineHeight: "1.1",
                   fontFamily: "Playfair Display, serif",
                   color: "rgba(255, 255, 255, 0.05)",
                   WebkitTextStroke: "2px rgba(255, 255, 255, 0.2)",
                   margin: 0,
-                  padding: 0,
-                  height: "130px",
+                  padding: "0 10px",
                   position: "absolute",
-                  top: 0,
+                  top: "8px",
                   left: 0,
+                  width: "100%",
                   transition: "transform 0.3s, opacity 0.3s",
-                  whiteSpace: "nowrap",
-                  letterSpacing: "10.5px",
+                  letterSpacing: "clamp(1px, 0.5vw, 10.5px)",
                   opacity: 0.05,
+                  maxWidth: "100%",
+                  overflow: "hidden",
                 }}
                 onClick={(e) => {
                   e.stopPropagation()
                   console.log("🐛 DEBUG - Hero Text 3:", {
                     element: "Hero Text Outline 2",
                     text: "FLEXRITE WORLD",
-                    fontSize: "160px",
                     className: "hero-heading hero-heading-3",
                     dimensions: e.currentTarget.getBoundingClientRect(),
                   })
                 }}
               >
-                FLEXRITE W<span style={{ letterSpacing: "6px" }}>O</span>RLD
+                FLEXRITE W<span style={{ letterSpacing: "clamp(0px, 0.3vw, 6px)" }}>O</span>RLD
               </h1>
             </div>
           </div>
+
+          <p
+            className="hero-subtext"
+            style={{
+              fontSize: "clamp(14px, 3vw, 24px)",
+              lineHeight: "1.4",
+              fontFamily: "Playfair Display, serif",
+              color: "rgba(255, 255, 255, 0.9)",
+              marginTop: "clamp(60px, 15vw, 120px)",
+              padding: "0 20px",
+              position: "relative",
+              letterSpacing: "clamp(1px, 0.25vw, 2px)",
+              textShadow: "0 0 10px rgba(255, 255, 255, 0.2)",
+              opacity: 0,
+              animation: "fadeInUp 1s ease-out 0.8s forwards",
+              zIndex: 10001,
+              textAlign: "center",
+            }}
+          >
+            Move faster, quicker and better with Flexrite
+          </p>
         </div>
       </div>
 
