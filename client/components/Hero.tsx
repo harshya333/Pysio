@@ -271,7 +271,7 @@ const Hero: FC = () => {
         
         .line-part {
           height: 2px;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), rgba(255,255,255,0.8));
+          background: rgba(255,255,255,1);
           transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
