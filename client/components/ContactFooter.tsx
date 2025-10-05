@@ -84,7 +84,9 @@ export default function ContactFooter() {
           <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
             <div className="flex items-center gap-4 flex-wrap justify-center">
               <a
-                href="#"
+                href="https://www.instagram.com/flexriteworld"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center justify-center p-3 rounded-xl transition-all duration-300 hover:scale-110"
                 style={{
                   background: "rgba(255, 255, 255, 0.24)",
