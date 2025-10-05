@@ -7,7 +7,7 @@ import Carousel3D from "@/components/Carousel3D"
 
 export default function Portfolio() {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative overflow-x-hidden" style={{ maxWidth: '100vw', width: '100%' }}>
       {/* Shader Background Animation */}
       <div className="fixed inset-0 w-full h-full z-0">
         <ShaderBackground>
@@ -37,7 +37,7 @@ export default function Portfolio() {
 
       <div className="relative z-10">
         <Header />
-        <main className="container mx-auto px-4 sm:px-6 mt-16 md:mt-24 mb-12 md:mb-16">
+        <main className="container mx-auto px-4 sm:px-6 pt-20 md:pt-28 pb-12 md:pb-16">
           {/* Profile Section */}
           <section className="flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-12 mb-16 md:mb-20">
             {/* Profile Image - Responsive sizing */}
@@ -48,6 +48,7 @@ export default function Portfolio() {
                 className="w-full h-full object-cover" 
               />
             </div>
+
 
             {/* Profile Content - Responsive alignment */}
             <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left px-4 sm:px-0 lg:ml-6 xl:ml-10 mt-6 lg:mt-0">
