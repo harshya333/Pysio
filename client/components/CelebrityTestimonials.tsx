@@ -1,6 +1,6 @@
 "use client"
-import { useEffect, useState, useRef } from "react"
-import ElegantShadowTitle from "./ui/ElegantShadowTitle"
+import { useState } from "react"
+import ElegantShadowTitle from './ui/ElegantShadowTitle'
 
 interface CardData {
   id: string
@@ -68,7 +68,6 @@ const cards: CardData[] = [
 export default function CelebrityTestimonials() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
 
   const updateCarousel = (newIndex: number) => {
     if (isAnimating) return
@@ -79,7 +78,7 @@ export default function CelebrityTestimonials() {
 
     setTimeout(() => {
       setIsAnimating(false)
-    }, 800) // Animation duration
+    }, 800)
   }
 
   const goToNext = () => {
@@ -89,98 +88,6 @@ export default function CelebrityTestimonials() {
   const goToPrevious = () => {
     updateCarousel(currentIndex - 1)
   }
-
-  // --- UPDATED LOGIC FOR SCROLL-BASED NAVIGATION ---
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      // Prevent scrolling if an animation is already in progress
-      if (isAnimating) {
-        e.preventDefault()
-        return
-      }
-
-      const isScrollingDown = e.deltaY > 0
-      const isScrollingUp = e.deltaY < 0
-
-      if (isScrollingDown) {
-        // If we are NOT on the last card, hijack the scroll to navigate the carousel
-        if (currentIndex < cards.length - 1) {
-          e.preventDefault()
-          goToNext()
-        }
-        // If we ARE on the last card, this block is skipped, allowing default scroll
-      } else if (isScrollingUp) {
-        // If we are NOT on the first card, hijack the scroll to navigate the carousel
-        if (currentIndex > 0) {
-          e.preventDefault()
-          goToPrevious()
-        }
-        // If we ARE on the first card, this block is skipped, allowing default scroll
-      }
-    }
-
-    const section = sectionRef.current
-    if (section) {
-      section.addEventListener("wheel", handleWheel, { passive: false })
-      return () => section.removeEventListener("wheel", handleWheel)
-    }
-  }, [isAnimating, currentIndex])
-
-  // --- Keyboard navigation ---
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (isAnimating) return
-
-      if (e.key === "ArrowLeft") {
-        e.preventDefault()
-        goToPrevious()
-      } else if (e.key === "ArrowRight") {
-        e.preventDefault()
-        goToNext()
-      }
-    }
-
-    const section = sectionRef.current
-    if (section) {
-      section.addEventListener("keydown", handleKeyDown)
-      section.setAttribute("tabindex", "0") // Make the section focusable
-      return () => section.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [isAnimating, currentIndex])
-
-  // --- Touch swipe navigation ---
-  useEffect(() => {
-    let touchStartX = 0
-    let touchEndX = 0
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartX = e.changedTouches[0].screenX
-    }
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      touchEndX = e.changedTouches[0].screenX
-      const swipeThreshold = 50
-      const diff = touchStartX - touchEndX
-
-      if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) { // Swiped left
-          goToNext()
-        } else { // Swiped right
-          goToPrevious()
-        }
-      }
-    }
-
-    const section = sectionRef.current
-    if (section) {
-      section.addEventListener("touchstart", handleTouchStart)
-      section.addEventListener("touchend", handleTouchEnd)
-      return () => {
-        section.removeEventListener("touchstart", handleTouchStart)
-        section.removeEventListener("touchend", handleTouchEnd)
-      }
-    }
-  }, [currentIndex]) // Dependency on currentIndex to re-bind if needed, though not strictly necessary here
 
   const getCardPositionClass = (index: number) => {
     const offset = (index - currentIndex + cards.length) % cards.length
@@ -196,14 +103,41 @@ export default function CelebrityTestimonials() {
   return (
     <>
       <style jsx global>{`
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .testimonials-section {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 40px 20px;
+          overflow: hidden;
+        }
+
+        .header-container {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        @media (min-width: 1024px) {
+          .header-container {
+            margin-bottom: 3rem;
+          }
+        }
+
         .carousel-container {
           width: 100%;
-          max-width: 1800px; /* Increased from 1400px */
-          height: 500px; /* Increased from 420px */
+          max-width: 1200px;
+          height: 450px;
           position: relative;
-          perspective: 1200px;
+          perspective: 1000px;
           margin: 0 auto;
-          overflow: visible; /* Changed from hidden to visible */
         }
 
         .carousel-track {
@@ -216,255 +150,142 @@ export default function CelebrityTestimonials() {
           transform-style: preserve-3d;
         }
 
-        .testimonial-card {
+        .card {
           position: absolute;
-          width: 350px; /* Increased from 320px */
-          height: 420px; /* Increased from 380px */
-          background: rgba(255, 255, 255, 0.24);
-          border-radius: 16px;
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(4.6px);
-          -webkit-backdrop-filter: blur(4.6px);
-          border: 1px solid rgba(255, 255, 255, 0.5);
+          width: 280px;
+          height: 380px;
+          background: white;
+          border-radius: 20px;
           overflow: hidden;
+          box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
           transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           cursor: pointer;
-          display: flex;
-          flex-direction: column;
         }
 
-        .testimonial-card::before {
-          content: '';
+        .card img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .card-overlay {
           position: absolute;
-          top: 0;
+          bottom: 0;
           left: 0;
           right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+          background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+          padding: 20px;
+          color: white;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
         }
 
-        .testimonial-card.center {
+        .card-name {
+          font-size: 1.4rem;
+          font-weight: 700;
+          margin-bottom: 5px;
+          color: white;
+          text-align: center;
+          width: 100%;
+        }
+
+        .card-role {
+          font-size: 1rem;
+          opacity: 0.9;
+          color: white;
+          text-align: center;
+          width: 100%;
+        }
+
+        .card.center {
           z-index: 10;
           transform: scale(1.1) translateZ(0);
-          background: rgba(255, 255, 255, 0.32);
-          border: 1px solid rgba(255, 255, 255, 0.6);
-          box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
         }
 
-        .testimonial-card.center .card-image {
+        .card.center img {
           filter: none;
         }
 
-        .testimonial-card.left-2 {
+        .card.left-2 {
           z-index: 1;
-          transform: translateX(-280px) scale(0.75) translateZ(-350px); /* Increased translateX */
-          opacity: 0.6;
+          transform: translateX(-220px) scale(0.8) translateZ(-300px);
+          opacity: 0.7;
         }
 
-        .testimonial-card.left-2 .card-image {
-          filter: grayscale(100%) brightness(0.7);
+        .card.left-2 img {
+          filter: grayscale(100%);
         }
 
-        .testimonial-card.left-1 {
+        .card.left-1 {
           z-index: 5;
-          transform: translateX(-140px) scale(0.85) translateZ(-150px); /* Increased translateX */
-          opacity: 0.8;
+          transform: translateX(-110px) scale(0.9) translateZ(-100px);
+          opacity: 0.9;
         }
 
-        .testimonial-card.left-1 .card-image {
-          filter: grayscale(80%) brightness(0.8);
+        .card.left-1 img {
+          filter: grayscale(100%);
         }
 
-        .testimonial-card.right-1 {
+        .card.right-1 {
           z-index: 5;
-          transform: translateX(140px) scale(0.85) translateZ(-150px); /* Increased translateX */
-          opacity: 0.8;
+          transform: translateX(110px) scale(0.9) translateZ(-100px);
+          opacity: 0.9;
         }
 
-        .testimonial-card.right-1 .card-image {
-          filter: grayscale(80%) brightness(0.8);
+        .card.right-1 img {
+          filter: grayscale(100%);
         }
 
-        .testimonial-card.right-2 {
+        .card.right-2 {
           z-index: 1;
-          transform: translateX(280px) scale(0.75) translateZ(-350px); /* Increased translateX */
-          opacity: 0.6;
+          transform: translateX(220px) scale(0.8) translateZ(-300px);
+          opacity: 0.7;
         }
 
-        .testimonial-card.right-2 .card-image {
-          filter: grayscale(100%) brightness(0.7);
+        .card.right-2 img {
+          filter: grayscale(100%);
         }
 
-        .testimonial-card.hidden {
+        .card.hidden {
           opacity: 0;
           pointer-events: none;
         }
 
-        .card-image {
-          width: 100%;
-          height: 200px; /* Increased from 180px */
-          object-fit: cover;
-          transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          position: relative;
-        }
-
-        .card-image::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
-        }
-
-        .card-content {
-          padding: 24px; /* Increased from 20px */
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          position: relative;
-        }
-
-        .card-content::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 20px;
-          right: 20px;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-        }
-
-        .card-tagline {
-          font-size: 12px;
-          font-weight: 600;
-          text-transform: uppercase;
-          color: rgba(0, 0, 0, 0.8);
-          margin-bottom: 8px;
-          letter-spacing: 0.5px;
-        }
-
-        .card-title {
-          font-size: 20px; /* Increased from 18px */
-          color: rgba(0, 0, 0, 0.9);
-          margin-bottom: 12px;
-          font-weight: 700;
-          line-height: 1.3;
-        }
-
-        .card-excerpt {
-          font-size: 15px; /* Increased from 14px */
-          line-height: 1.5;
-          color: rgba(0, 0, 0, 0.75);
-          margin-bottom: 16px;
-          flex: 1;
-        }
-
-        .card-cta {
-          margin-top: auto;
-        }
-
-        .card-cta a {
-          display: inline-block;
-          padding: 8px 16px;
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(4.6px);
-          -webkit-backdrop-filter: blur(4.6px);
-          border: 1px solid rgba(0, 0, 0, 0.3);
-          color: rgba(255, 255, 255, 0.95);
-          font-size: 12px;
-          font-weight: 500;
-          text-decoration: none;
-          border-radius: 10px;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .card-cta a::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-          transition: left 0.5s ease;
-        }
-
-        .card-cta a:hover {
-          background: rgba(0, 0, 0, 0.7);
-          border-color: rgba(0, 0, 0, 0.4);
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .member-info {
+        .testimonial-excerpt {
+          color: white;
+          font-size: 1.3rem;
+          line-height: 1.6;
+          max-width: 800px;
           text-align: center;
-          margin-top: 80px; /* Increased from 60px */
-          transition: all 0.5s ease-out;
-        }
-
-        .member-name {
-          color: rgba(255, 255, 255, 0.95);
-          font-size: 2.2rem; /* Increased from 2rem */
-          font-weight: 700;
-          margin-bottom: 8px;
-          position: relative;
-          display: inline-block;
-        }
-
-        .member-name::before,
-        .member-name::after {
-          content: "";
-          position: absolute;
-          top: 100%;
-          width: 80px;
-          height: 2px;
-          background: rgba(255, 255, 255, 0.6);
-        }
-
-        .member-name::before {
-          left: -90px;
-        }
-
-        .member-name::after {
-          right: -90px;
-        }
-
-        .member-role {
-          color: rgba(255, 255, 255, 0.7);
-          font-size: 1.3rem; /* Increased from 1.2rem */
-          font-weight: 500;
-          opacity: 0.8;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          padding: 8px 0;
-          margin-top: -12px;
+          margin: 40px auto 0;
+          padding: 0 20px;
+          opacity: ${isAnimating ? 0 : 1};
+          transition: opacity 0.3s ease;
+          font-weight: 300;
         }
 
         .dots {
           display: flex;
           justify-content: center;
-          gap: 8px;
-          margin-top: 40px; /* Increased from 30px */
+          gap: 10px;
+          margin-top: 60px;
         }
 
         .dot {
-          width: 8px;
-          height: 8px;
+          width: 12px;
+          height: 12px;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.3);
           cursor: pointer;
           transition: all 0.3s ease;
         }
 
         .dot.active {
-          background: rgba(255, 255, 255, 0.8);
+          background: white;
           transform: scale(1.2);
         }
 
@@ -472,12 +293,10 @@ export default function CelebrityTestimonials() {
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
-          background: rgba(255, 255, 255, 0.24);
-          backdrop-filter: blur(4.6px);
-          -webkit-backdrop-filter: blur(4.6px);
-          color: rgba(0, 0, 0, 0.8);
-          width: 50px; /* Increased from 45px */
-          height: 50px; /* Increased from 45px */
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -485,290 +304,203 @@ export default function CelebrityTestimonials() {
           cursor: pointer;
           z-index: 20;
           transition: all 0.3s ease;
-          font-size: 1.5rem; /* Increased from 1.4rem */
-          border: 1px solid rgba(255, 255, 255, 0.5);
+          font-size: 1.5rem;
+          border: none;
           outline: none;
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          padding-bottom: 4px;
         }
 
         .nav-arrow:hover {
-          background: rgba(255, 255, 255, 0.32);
-          border-color: rgba(255, 255, 255, 0.6);
-          transform: translateY(-50%) scale(1.05);
-          box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+          background: rgba(255, 255, 255, 0.4);
+          transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
         }
 
         .nav-arrow.left {
-          left: 20px; /* Increased from 15px */
+          left: 20px;
+          padding-right: 3px;
         }
 
         .nav-arrow.right {
-          right: 20px; /* Increased from 15px */
-        }
-
-        @media (max-width: 1024px) {
-          .carousel-container {
-            max-width: 1400px; /* Increased from 1200px */
-            height: 450px; /* Increased from 400px */
-          }
-
-          .testimonial-card {
-            width: 320px; /* Increased from 300px */
-            height: 400px; /* Increased from 360px */
-          }
-
-          .testimonial-card.left-2 {
-            transform: translateX(-240px) scale(0.75) translateZ(-350px); /* Increased translateX */
-          }
-
-          .testimonial-card.left-1 {
-            transform: translateX(-120px) scale(0.85) translateZ(-150px); /* Increased translateX */
-          }
-
-          .testimonial-card.right-1 {
-            transform: translateX(120px) scale(0.85) translateZ(-150px); /* Increased translateX */
-          }
-
-          .testimonial-card.right-2 {
-            transform: translateX(240px) scale(0.75) translateZ(-350px); /* Increased translateX */
-          }
+          right: 20px;
+          padding-left: 3px;
         }
 
         @media (max-width: 768px) {
+          .header-container {
+            margin-bottom: 1.5rem;
+          }
+
           .carousel-container {
-            height: 420px; /* Increased from 380px */
-            max-width: 100%;
-            padding: 0 20px;
+            height: 400px;
           }
 
-          .testimonial-card {
-            width: 300px; /* Increased from 280px */
-            height: 380px; /* Increased from 340px */
+          .card {
+            width: 200px;
+            height: 280px;
           }
 
-          .testimonial-card.center {
-            transform: scale(1.05) translateZ(0);
+          .card-overlay {
+            padding: 15px;
           }
 
-          .testimonial-card.left-2 {
-            transform: translateX(-200px) scale(0.7) translateZ(-300px); /* Increased translateX */
+          .card-name {
+            font-size: 1.2rem;
           }
 
-          .testimonial-card.left-1 {
-            transform: translateX(-100px) scale(0.8) translateZ(-100px); /* Increased translateX */
+          .card-role {
+            font-size: 0.9rem;
           }
 
-          .testimonial-card.right-1 {
-            transform: translateX(100px) scale(0.8) translateZ(-100px); /* Increased translateX */
+          .card.left-2 {
+            transform: translateX(-140px) scale(0.8) translateZ(-300px);
           }
 
-          .testimonial-card.right-2 {
-            transform: translateX(200px) scale(0.7) translateZ(-300px); /* Increased translateX */
+          .card.left-1 {
+            transform: translateX(-70px) scale(0.9) translateZ(-100px);
           }
 
-          .card-image {
-            height: 180px; /* Increased from 160px */
+          .card.right-1 {
+            transform: translateX(70px) scale(0.9) translateZ(-100px);
           }
 
-          .card-content {
-            padding: 20px; /* Increased from 18px */
+          .card.right-2 {
+            transform: translateX(140px) scale(0.8) translateZ(-300px);
           }
 
-          .card-title {
-            font-size: 18px; /* Increased from 16px */
-          }
-
-          .card-excerpt {
-            font-size: 14px; /* Increased from 13px */
+          .testimonial-excerpt {
+            font-size: 1.1rem;
+            margin-top: 30px;
           }
 
           .nav-arrow {
-            width: 45px; /* Increased from 40px */
-            height: 45px; /* Increased from 40px */
-            font-size: 1.3rem; /* Increased from 1.2rem */
+            width: 35px;
+            height: 35px;
+            font-size: 1.3rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .header-container {
+            margin-bottom: 1rem;
+          }
+
+          .carousel-container {
+            height: 350px;
+          }
+
+          .card {
+            width: 180px;
+            height: 260px;
+          }
+
+          .card-overlay {
+            padding: 12px;
+          }
+
+          .card-name {
+            font-size: 1rem;
+          }
+
+          .card-role {
+            font-size: 0.8rem;
+          }
+
+          .card.left-2,
+          .card.right-2 {
+            opacity: 0;
+          }
+
+          .card.left-1 {
+            transform: translateX(-60px) scale(0.85) translateZ(-100px);
+          }
+
+          .card.right-1 {
+            transform: translateX(60px) scale(0.85) translateZ(-100px);
+          }
+
+          .testimonial-excerpt {
+            font-size: 1rem;
+            margin-top: 25px;
+          }
+
+          .nav-arrow {
+            width: 30px;
+            height: 30px;
+            font-size: 1.2rem;
           }
 
           .nav-arrow.left {
-            left: 10px; /* Increased from 8px */
+            left: 10px;
           }
 
           .nav-arrow.right {
-            right: 10px; /* Increased from 8px */
-          }
-
-          .member-info {
-            margin-top: 60px; /* Increased from 50px */
-          }
-
-          .member-name {
-            font-size: 2rem; /* Increased from 1.8rem */
-          }
-
-          .member-role {
-            font-size: 1.2rem; /* Increased from 1.1rem */
-          }
-        }
-
-        @media (max-width: 640px) {
-          .carousel-container {
-            height: 380px; /* Increased from 350px */
-            padding: 0 10px;
-          }
-
-          .testimonial-card {
-            width: 280px; /* Increased from 250px */
-            height: 360px; /* Increased from 320px */
-          }
-
-          .testimonial-card.left-2,
-          .testimonial-card.right-2 {
-            opacity: 0;
-            pointer-events: none;
-          }
-
-          .testimonial-card.left-1 {
-            transform: translateX(-90px) scale(0.75) translateZ(-100px); /* Increased translateX */
-          }
-
-          .testimonial-card.right-1 {
-            transform: translateX(90px) scale(0.75) translateZ(-100px); /* Increased translateX */
-          }
-
-          .card-image {
-            height: 160px; /* Increased from 140px */
-          }
-
-          .card-content {
-            padding: 18px; /* Increased from 16px */
-          }
-
-          .card-title {
-            font-size: 17px; /* Increased from 15px */
-          }
-
-          .card-excerpt {
-            font-size: 13px; /* Increased from 12px */
-          }
-
-          .member-name {
-            font-size: 1.8rem; /* Increased from 1.6rem */
-          }
-
-          .member-role {
-            font-size: 1.1rem; /* Increased from 1rem */
-          }
-
-          .member-name::before,
-          .member-name::after {
-            display: none;
-          }
-          
-          .nav-arrow {
-            width: 40px; /* Increased from 35px */
-            height: 40px; /* Increased from 35px */
-            font-size: 1.2rem; /* Increased from 1.1rem */
-          }
-        }
-        
-        @media (max-width: 480px) {
-          .carousel-container {
-            height: 360px; /* Increased from 320px */
-          }
-          
-          .testimonial-card {
-            width: 260px; /* Increased from 230px */
-            height: 340px; /* Increased from 300px */
-          }
-          
-          .testimonial-card.left-1 {
-            transform: translateX(-80px) scale(0.7) translateZ(-100px); /* Increased translateX */
-          }
-
-          .testimonial-card.right-1 {
-            transform: translateX(80px) scale(0.7) translateZ(-100px); /* Increased translateX */
-          }
-          
-          .card-image {
-            height: 150px; /* Increased from 130px */
-          }
-          
-          .member-name {
-            font-size: 1.6rem; /* Increased from 1.4rem */
-          }
-
-          .member-role {
-            font-size: 1rem; /* Increased from 0.9rem */
-          }
-
-          .dots {
-            margin-top: 30px; /* Increased from 25px */
+            right: 10px;
           }
         }
       `}</style>
 
-      <section
-        ref={sectionRef}
-        className="py-12 lg:py-16 px-4 lg:px-8 w-full overflow-visible" /* Changed from overflow-hidden */
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="text-center mb-10 lg:mb-14">
-            <div style={{ color: "#ffffff" }}>
-              <ElegantShadowTitle>What Clients Are Saying ?</ElegantShadowTitle>
-            </div>
-          </div>
-
-          <div className="carousel-container">
-            <button className="nav-arrow left" onClick={goToPrevious} disabled={isAnimating}>
-              ‹
-            </button>
-            <div className="carousel-track">
-              {cards.map((card, index) => (
-                <div
-                  key={card.id}
-                  className={`testimonial-card ${getCardPositionClass(index)}`}
-                  onClick={() => updateCarousel(index)}
-                >
-                  <img src={card.imageSrc || "/placeholder.svg"} alt={card.title} className="card-image" />
-                  <div className="card-content">
-                    <div>
-                      <div className="card-tagline">{card.tagline}</div>
-                      <h3 className="card-title">{card.title}</h3>
-                      <p className="card-excerpt">{card.excerpt}</p>
-                    </div>
-                    <div className="card-cta">
-                      <a href={card.ctaLink} target="_blank" rel="noopener noreferrer">
-                        {card.ctaText}
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button className="nav-arrow right" onClick={goToNext} disabled={isAnimating}>
-              ›
-            </button>
-          </div>
-
-          <div className="member-info">
-            <h2 className="member-name" style={{ opacity: isAnimating ? 0 : 1 }}>
-              {cards[currentIndex].title.split(" / ")[0]}
-            </h2>
-            <p className="member-role" style={{ opacity: isAnimating ? 0 : 1 }}>
-              {cards[currentIndex].title.split(" / ")[1] || "Client"}
-            </p>
-          </div>
-
-          <div className="dots">
-            {cards.map((_, index) => (
-              <div
-                key={index}
-                className={`dot ${index === currentIndex ? "active" : ""}`}
-                onClick={() => updateCarousel(index)}
-              />
-            ))}
+      <div className="testimonials-section">
+        <div className="header-container">
+          <div style={{ color: "#ffffff" }}>
+            <ElegantShadowTitle>What Clients Are Saying ?</ElegantShadowTitle>
           </div>
         </div>
-      </section>
+
+        <div className="carousel-container">
+          <button 
+            className="nav-arrow left" 
+            onClick={goToPrevious} 
+            disabled={isAnimating}
+            aria-label="Previous testimonial"
+          >
+            ‹
+          </button>
+          
+          <div className="carousel-track">
+            {cards.map((card, index) => (
+              <div
+                key={card.id}
+                className={`card ${getCardPositionClass(index)}`}
+                onClick={() => updateCarousel(index)}
+              >
+                <img src={card.imageSrc} alt={card.title.split('/')[0].trim()} />
+                <div className="card-overlay">
+                  <div className="card-name">{card.title.split('/')[0].trim()}</div>
+                  <div className="card-role">{card.title.split('/')[1].trim()}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <button 
+            className="nav-arrow right" 
+            onClick={goToNext} 
+            disabled={isAnimating}
+            aria-label="Next testimonial"
+          >
+            ›
+          </button>
+        </div>
+
+        <div className="testimonial-excerpt">
+          "{cards[currentIndex].excerpt}"
+        </div>
+
+        <div className="dots">
+          {cards.map((_, index) => (
+            <div
+              key={index}
+              className={`dot ${index === currentIndex ? "active" : ""}`}
+              onClick={() => updateCarousel(index)}
+            />
+          ))}
+        </div>
+      </div>
     </>
   )
 }
