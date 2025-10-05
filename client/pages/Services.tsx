@@ -191,7 +191,7 @@ export default function Services() {
   };
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative overflow-x-hidden" style={{ maxWidth: '100vw', width: '100%' }}>
       <div className="fixed inset-0 w-full h-full z-0">
         <ShaderBackground>
           <div></div>
@@ -485,28 +485,28 @@ export default function Services() {
                   style={{ willChange: "opacity, transform" }}
                 >
                   {service.layout === "left" ? (
-                    <div className="relative">
-                      <div className="service-bg w-full h-48 md:h-56 lg:h-64 rounded-[80px] 
-                        bg-gradient-to-r from-purple-200/20 to-transparent 
+                    <div className="relative overflow-hidden">
+                      <div className="service-bg w-full h-auto min-h-[24rem] md:min-h-[18rem] lg:min-h-[20rem] rounded-[40px] md:rounded-[60px] lg:rounded-[80px]
+                        bg-gradient-to-r from-purple-200/20 to-transparent
                         backdrop-blur-lg border border-white/20 shadow-lg"></div>
-                      <div className="absolute inset-0 flex flex-col md:flex-row items-center">
-                        <div className="service-img w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-black flex-shrink-0 mb-4 md:mb-0 md:ml-4 lg:ml-8 overflow-hidden flex items-center justify-center">
+                      <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-between py-6 px-4 md:py-8 md:px-6 gap-4">
+                        <div className="service-img w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-black flex-shrink-0 overflow-hidden flex items-center justify-center md:ml-4 lg:ml-8">
                           <img
                             src={service.image}
                             alt={service.title}
                             className="object-cover w-full h-full"
                           />
                         </div>
-                        <div className="flex-1 px-2 md:px-4 lg:px-6 text-center md:text-left">
-                          <h2 className="font-playfair font-bold text-xl md:text-2xl lg:text-3xl text-white mb-3">
+                        <div className="flex-1 px-4 md:px-6 lg:px-8 text-center md:text-left w-full flex flex-col justify-center">
+                          <h2 className="font-playfair font-bold text-xl md:text-2xl lg:text-3xl text-white mb-2">
                             {service.title}
                           </h2>
-                          <p className="font-source text-sm md:text-base lg:text-lg xl:text-xl text-white mb-4 leading-relaxed">
+                          <p className="font-source text-sm md:text-base lg:text-lg text-white mb-4 leading-relaxed line-clamp-3">
                             {service.description}
                           </p>
-                          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-2">
                             <button
-                              className="iridescent-button"
+                              className="iridescent-button flex-shrink-0"
                               onClick={(e) => {
                                 const btn = e.currentTarget;
                                 btn.classList.add("shine");
@@ -520,11 +520,11 @@ export default function Services() {
                               Book Session
                               <span className="drop-shadow"></span>
                             </button>
-                            <div className="text-right">
-                              <p className="font-source text-base md:text-lg text-white">
+                            <div className="text-center sm:text-right flex-shrink-0 min-w-0">
+                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
                                 {service.duration}
                               </p>
-                              <p className="font-source text-base md:text-lg text-white">
+                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
                                 Based on Experts
                               </p>
                             </div>
@@ -533,21 +533,21 @@ export default function Services() {
                       </div>
                     </div>
                   ) : (
-                    <div className="relative">
-                      <div className="service-bg w-full h-48 md:h-56 lg:h-64 rounded-[80px] 
-                        bg-gradient-to-l from-purple-200/20 to-transparent 
+                    <div className="relative overflow-hidden">
+                      <div className="service-bg w-full h-auto min-h-[24rem] md:min-h-[18rem] lg:min-h-[20rem] rounded-[40px] md:rounded-[60px] lg:rounded-[80px]
+                        bg-gradient-to-l from-purple-200/20 to-transparent
                         backdrop-blur-lg border border-white/20 shadow-lg"></div>
-                      <div className="absolute inset-0 flex flex-col md:flex-row items-center">
-                        <div className="flex-1 px-2 md:px-4 lg:px-6 text-center md:text-left order-2 md:order-1">
-                          <h2 className="font-playfair font-bold text-xl md:text-2xl lg:text-3xl text-white mb-3">
+                      <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-between py-6 px-4 md:py-8 md:px-6 gap-4">
+                        <div className="flex-1 px-4 md:px-6 lg:px-8 text-center md:text-left order-2 md:order-1 w-full flex flex-col justify-center">
+                          <h2 className="font-playfair font-bold text-xl md:text-2xl lg:text-3xl text-white mb-2">
                             {service.title}
                           </h2>
-                          <p className="font-source text-sm md:text-base lg:text-lg xl:text-xl text-white mb-4 leading-relaxed">
+                          <p className="font-source text-sm md:text-base lg:text-lg text-white mb-4 leading-relaxed line-clamp-3">
                             {service.description}
                           </p>
-                          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-2">
                             <button
-                              className="iridescent-button"
+                              className="iridescent-button flex-shrink-0"
                               onClick={(e) => {
                                 const btn = e.currentTarget;
                                 btn.classList.add("shine");
@@ -561,17 +561,17 @@ export default function Services() {
                               Book Session
                               <span className="drop-shadow"></span>
                             </button>
-                            <div className="text-right">
-                              <p className="font-source text-base md:text-lg text-white">
+                            <div className="text-center sm:text-right flex-shrink-0 min-w-0">
+                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
                                 {service.duration}
                               </p>
-                              <p className="font-source text-base md:text-lg text-white">
+                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
                                 Based on Experts
                               </p>
                             </div>
                           </div>
                         </div>
-                        <div className="service-img w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-black flex-shrink-0 mb-4 md:mb-0 md:mr-4 lg:mr-8 order-1 md:order-2 overflow-hidden flex items-center justify-center">
+                        <div className="service-img w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-black flex-shrink-0 md:mr-4 lg:mr-8 order-1 md:order-2 overflow-hidden flex items-center justify-center">
                           <img
                             src={service.image}
                             alt={service.title}
