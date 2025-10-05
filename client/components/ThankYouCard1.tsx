@@ -1,6 +1,6 @@
 "use client"
 import type React from "react"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 interface Doctor {
   name: string
@@ -20,6 +20,21 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
   const greenShineRef = useRef<HTMLDivElement>(null)
   const cometRef = useRef<HTMLDivElement>(null)
   const shineRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
+  }, [])
 
   const getVideoSource = () => {
     if (doctor.name.includes("Our Story") || doctor.title.includes("INTRO")) {
@@ -33,6 +48,8 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
   }
 
   useEffect(() => {
+    if (isMobile) return // Disable mouse effects on mobile
+
     const generateTranslate = (el: HTMLElement | null, e: MouseEvent, value: number) => {
       if (el) {
         el.style.transform = `translate(${e.clientX * value}px, ${e.clientY * value}px)`
@@ -62,9 +79,9 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
 
       const cardOffset = cumulativeOffset(cardRef.current)
       const cardTop = cardOffset.top
-      const cardBottom = cardOffset.top + 650 // Updated to new card height
+      const cardBottom = cardOffset.top + cardRef.current.offsetHeight
       const cardLeft = cardOffset.left
-      const cardRight = cardOffset.left + 1100 // Updated to new card width
+      const cardRight = cardOffset.left + cardRef.current.offsetWidth
 
       // Check if cursor is within restricted boundaries (60px vertical, 80px horizontal)
       const reactZoneTop = cardTop - 60
@@ -110,8 +127,10 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
       if (cometRef.current) cometRef.current.style.transition = ""
       if (shineRef.current) shineRef.current.style.transition = ""
 
-      const x = ((e.pageX - cardOffset.left - 1100 / 2) * -1) / 100 // Updated to new card width
-      const y = ((e.pageY - cardOffset.top - 650 / 2) * -1) / 100 // Updated to new card height
+      const cardWidth = cardRef.current.offsetWidth
+      const cardHeight = cardRef.current.offsetHeight
+      const x = ((e.pageX - cardOffset.left - cardWidth / 2) * -1) / 100
+      const y = ((e.pageY - cardOffset.top - cardHeight / 2) * -1) / 100
 
       const matrix = [
         [1, 0, 0, -x * 0.00003],
@@ -127,8 +146,8 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
 
       // Realistic Pokemon shine reflection based on mouse position
       if (shineRef.current) {
-        const shineX = (e.clientX - cardOffset.left - 550) * 0.18 // Updated to half of new width
-        const shineY = (e.clientY - cardOffset.top - 325) * 0.18 // Updated to half of new height
+        const shineX = (e.clientX - cardOffset.left - cardWidth / 2) * 0.18
+        const shineY = (e.clientY - cardOffset.top - cardHeight / 2) * 0.18
         shineRef.current.style.transform = `translateX(${shineX}px) translateY(${shineY}px) rotate(45deg)`
       }
 
@@ -142,7 +161,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
     return () => {
       document.removeEventListener("mousemove", handleMouseMove)
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <div className="thank-you-wrapper">
@@ -154,16 +173,19 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         .thank-you-wrapper {
           position: relative;
           margin: 0 auto;
-          width: 1100px;
-          height: 650px;
+          width: 100%;
+          max-width: 1100px;
+          height: auto;
+          aspect-ratio: 1100 / 650;
           display: flex;
           justify-content: center;
           align-items: center;
+          padding: 20px;
         }
 
         .thank-you-card {
-          width: 1100px;
-          height: 650px;
+          width: 100%;
+          height: 100%;
           border-radius: 24px;
           position: absolute;
           box-shadow: -10px 15px 60px 0 rgba(255, 255, 255, 0.08);
@@ -233,6 +255,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           background-repeat: no-repeat;
           background-size: cover;
           transition: transform 0.2s ease-out;
+          display: ${isMobile ? 'none' : 'block'};
         }
 
         .card__orangeShine {
@@ -282,6 +305,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           background-color: rgba(255, 255, 255, 0.7);
           border-radius: 100%;
           transition: all 0.3s ease;
+          display: ${isMobile ? 'none' : 'block'};
         }
 
         .thank-you-card:hover .card__comet {
@@ -296,6 +320,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           position: absolute;
           top: 30%;
           left: 25%;
+          display: ${isMobile ? 'none' : 'block'};
         }
 
         .card__comet--second {
@@ -326,6 +351,95 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           height: 64px;
           transform-origin: 0px 6px;
         }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+          .thank-you-wrapper {
+            padding: 15px;
+            aspect-ratio: 16 / 9;
+          }
+
+          .thank-you-card {
+            border-radius: 16px;
+          }
+
+          .card__backgroundGlassmorphism {
+            border-radius: 16px;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+          }
+
+          .card__videoContainer {
+            top: 15px;
+            left: 15px;
+            width: calc(100% - 30px);
+            height: calc(100% - 30px);
+            border-radius: 12px;
+          }
+
+          .card__video {
+            border-radius: 12px;
+          }
+        }
+
+        /* Small Mobile Styles */
+        @media (max-width: 480px) {
+          .thank-you-wrapper {
+            padding: 10px;
+          }
+
+          .thank-you-card {
+            border-radius: 12px;
+          }
+
+          .card__backgroundGlassmorphism {
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+          }
+
+          .card__videoContainer {
+            top: 10px;
+            left: 10px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            border-radius: 8px;
+          }
+
+          .card__video {
+            border-radius: 8px;
+          }
+        }
+
+        /* Tablet Styles */
+        @media (min-width: 769px) and (max-width: 1024px) {
+          .thank-you-wrapper {
+            max-width: 90%;
+            padding: 25px;
+          }
+        }
+
+        /* Large Desktop Styles */
+        @media (min-width: 1440px) {
+          .thank-you-wrapper {
+            max-width: 1200px;
+          }
+        }
+
+        /* Extra Small Devices */
+        @media (max-width: 320px) {
+          .thank-you-wrapper {
+            padding: 5px;
+          }
+        }
+
+        /* Landscape Mobile Optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+          .thank-you-wrapper {
+            aspect-ratio: 16 / 9;
+            max-height: 80vh;
+          }
+        }
       `}</style>
 
       <link
@@ -349,9 +463,10 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
                 "linear-gradient(45deg, transparent 20%, rgba(255, 255, 255, 0.02) 35%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.15) 52%, rgba(255, 255, 255, 0.05) 65%, transparent 80%)",
               transform: "translateX(-50%) translateY(-50%) rotate(45deg)",
               transition: "transform 0.1s ease-out",
-              opacity: 0,
+              opacity: isMobile ? 0 : 0, // Disable on mobile
               willChange: "transform",
               pointerEvents: "none",
+              display: isMobile ? "none" : "block",
             }}
           ></div>
         </div>
@@ -362,12 +477,16 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
             Your browser does not support the video tag.
           </video>
         </div>
-        <div ref={cometRef} className="card__cometOuter">
-          <div className="card__comet"></div>
-          <div className="card__comet card__comet--second"></div>
-        </div>
-        <div ref={orangeShineRef} className="card__orangeShine"></div>
-        <div ref={greenShineRef} className="card__greenShine"></div>
+        {!isMobile && (
+          <>
+            <div ref={cometRef} className="card__cometOuter">
+              <div className="card__comet"></div>
+              <div className="card__comet card__comet--second"></div>
+            </div>
+            <div ref={orangeShineRef} className="card__orangeShine"></div>
+            <div ref={greenShineRef} className="card__greenShine"></div>
+          </>
+        )}
       </div>
     </div>
   )
