@@ -28,6 +28,11 @@ export default function Portfolio() {
             font-size: 14px;
           }
         }
+
+        /* Ensure no white backgrounds */
+        body {
+          background: transparent;
+        }
       `}</style>
 
       <div className="relative z-10">
@@ -36,7 +41,7 @@ export default function Portfolio() {
           {/* Profile Section */}
           <section className="flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-12 mb-16 md:mb-20">
             {/* Profile Image - Responsive sizing */}
-            <div className="w-full max-w-md sm:w-4/5 md:w-3/5 lg:w-[40%] xl:w-[550px] h-auto aspect-video md:aspect-[4/3] lg:aspect-[11/8] rounded-2xl md:rounded-3xl lg:rounded-[52px] flex-shrink-0 overflow-hidden mx-auto lg:mx-0 lg:ml-4 xl:ml-20">
+            <div className="w-full max-w-md sm:w-4/5 md:w-3/5 lg:w-[40%] xl:w-[550px] h-auto aspect-video md:aspect-[4/3] lg:aspect-[11/8] rounded-2xl md:rounded-3xl lg:rounded-[52px] flex-shrink-0 overflow-hidden mx-auto lg:mx-0 lg:ml-4 xl:ml-20 border border-gray-700/50">
               <img 
                 src="/Port1.avif" 
                 alt="Mrs. Kavita Nim" 
@@ -75,7 +80,7 @@ export default function Portfolio() {
 
           {/* Professional Journey Text */}
           <section className="mb-12 md:mb-16 px-4 sm:px-0">
-            <p className="font-montserrat text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white leading-relaxed">
+            <p className="font-montserrat text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl text-white/80 leading-relaxed">
               Mrs. Kavita's professional journey gained momentum in 2015 at the HEAL Institute, Khar West, where she
               trained under Dr. Priyanka Das and served as Center Head. During her tenure, she honed her techniques
               while treating elite athletes and fitness enthusiasts. Now a senior therapist at Flexrite World, she
