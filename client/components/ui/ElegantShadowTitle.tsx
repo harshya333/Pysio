@@ -74,13 +74,13 @@ const ElegantShadowTitle: React.FC<ElegantShadowTitleProps> = ({
         style={{
           position: 'relative',
           fontFamily: '"Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif',
-          fontSize: '92px',
-          padding: '40px 50px',
+          fontSize: 'clamp(2rem, 6vw, 5.75rem)',
+          padding: 'clamp(1rem, 3vw, 2.5rem) clamp(1rem, 4vw, 3.125rem)',
           textAlign: 'center',
           textTransform: 'uppercase',
           textRendering: 'optimizeLegibility',
           color: 'white',
-          letterSpacing: '.15em',
+          letterSpacing: 'clamp(0.05em, 0.1vw, 0.15em)',
           margin: 0,
           lineHeight: 1.2,
           textShadow: '0 0 20px rgba(255, 255, 255, 0.4), 0 0 40px rgba(255, 255, 255, 0.2)'
