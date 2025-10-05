@@ -155,22 +155,33 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         .thank-you-wrapper {
           position: relative;
           margin: 0 auto;
-          height: 410px;
-          width: 600px;
+          width: 100%;
+          max-width: 600px;
+          aspect-ratio: 600 / 410;
           display: flex;
           justify-content: center;
           align-items: center;
         }
 
         .thank-you-card {
-          width: 600px;
-          height: 410px;
+          width: 100%;
+          height: 100%;
           border-radius: 24px;
           position: absolute;
           box-shadow: -10px 15px 60px 0 rgba(255, 255, 255, 0.08);
-          overflow: hidden;
+          overflow: visible;
           z-index: 4;
           transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @media (max-width: 768px) {
+          .thank-you-wrapper {
+            max-width: 100%;
+          }
+
+          .thank-you-card {
+            border-radius: 16px;
+          }
         }
 
         .thank-you-card:hover {
@@ -183,8 +194,8 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           position: absolute;
           top: 0;
           left: 0;
-          width: 600px;
-          height: 410px;
+          width: 100%;
+          height: 100%;
           background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
@@ -194,6 +205,12 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           overflow: hidden;
           transition: all 0.3s ease;
           box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        @media (max-width: 768px) {
+          .card__backgroundGlassmorphism {
+            border-radius: 16px;
+          }
         }
 
         .card__backgroundGlassmorphism::before {
@@ -266,16 +283,29 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           z-index: 10;
           border-radius: 20px;
           overflow: hidden;
-          transition: transform 0.3s ease-out; /* Added transition for smooth movement */
+          transition: transform 0.3s ease-out;
         }
 
         .card__video {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           border-radius: 20px;
-          min-height: 10%;
-          min-width: 10%;
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .card__videoContainer {
+            top: 12px;
+            left: 12px;
+            width: calc(100% - 24px);
+            height: calc(100% - 24px);
+            border-radius: 12px;
+          }
+
+          .card__video {
+            border-radius: 12px;
+          }
         }
 
         .card__comet {
