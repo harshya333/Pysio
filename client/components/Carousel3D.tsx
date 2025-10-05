@@ -5,7 +5,7 @@ export default function Carousel3D() {
     <div className="carousel-container">
       <style jsx>{`
         .carousel-container {
-          margin: 4% auto;
+          margin: 8% auto;
           width: 360px; /* 10% smaller than before */
           height: 252px; /* 10% smaller than before */
           position: relative;
