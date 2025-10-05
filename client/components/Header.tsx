@@ -16,9 +16,9 @@ export default function Header() {
 
       const currentScrollY = window.scrollY
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false) // Hide navbar on scroll down
+        setIsVisible(false)
       } else {
-        setIsVisible(true) // Show navbar on scroll up
+        setIsVisible(true)
       }
       setLastScrollY(currentScrollY)
     }
@@ -27,12 +27,8 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
 
-  // Close mobile menu when a link is clicked
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false)
-  }
+  const handleLinkClick = () => setIsMobileMenuOpen(false)
 
-  // Navigation items data
   const navItems = [
     { name: "Home", to: "/" },
     { name: "Services", to: "/services" },
@@ -45,7 +41,7 @@ export default function Header() {
 
   return (
     <>
-      {/* Header Navbar */}
+      {/* Navbar */}
       <header
         className={`fixed left-0 w-full transition-all duration-500 z-[9999] 
           lg:top-5 top-0
@@ -53,10 +49,9 @@ export default function Header() {
         `}
       >
         <div className="max-w-6xl mx-auto flex items-center justify-center px-4">
-          {/* Centered Navigation - Desktop */}
           <nav className="hidden lg:flex items-center justify-center">
             <div className="flex items-center space-x-8 xl:space-x-12">
-              {navItems.map((item) => (
+              {navItems.map((item) =>
                 item.isButton ? (
                   <button
                     key={item.name}
@@ -71,81 +66,35 @@ export default function Header() {
                     key={item.to}
                     to={item.to}
                     className="group relative font-light text-white text-sm hover:text-white transition-colors duration-300"
+                    onClick={handleLinkClick}
                   >
                     {item.name}
                     <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
                   </Link>
                 )
-              ))}
+              )}
             </div>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <button 
-            className="lg:hidden flex flex-col space-y-1.5 z-50 ml-4 absolute right-4 top-4"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <div
-              className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'transform rotate-45 translate-y-2' : ''}`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
-            ></div>
-            <div
-              className={`w-6 h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'transform -rotate-45 -translate-y-2' : ''}`}
-            ></div>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        <div className={`lg:hidden fixed top-0 left-0 w-full h-screen bg-gray-900 transition-all duration-500 transform ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'} flex flex-col items-center justify-center z-40`}>
-          <button 
-            className="absolute top-6 right-6 text-white text-2xl z-50"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="Close menu"
-          >
-            ✕
-          </button>
-          
-          <nav className="flex flex-col items-center space-y-8">
-            {navItems.map((item) => (
-              item.isButton ? (
-                <button
-                  key={item.name}
-                  onClick={() => {
-                    setIsModalOpen(true)
-                    setIsMobileMenuOpen(false)
-                  }}
-                  className="group relative font-light text-white text-xl hover:text-white transition-colors duration-300 py-2"
-                >
-                  {item.name}
-                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                </button>
-              ) : (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className="group relative font-light text-white text-xl hover:text-white transition-colors duration-300 py-2"
-                  onClick={handleLinkClick}
-                >
-                  {item.name}
-                  <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
-                </Link>
-              )
-            ))}
           </nav>
         </div>
       </header>
 
       {/* Feedback Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/4 backdrop-blur-md flex items-center justify-center z-[10000]">
-          <div className="bg-gray-8 p-6 rounded-xl w-full max-w-md mx-4 relative">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-[10000]">
+          <div
+            className="relative p-10 rounded-3xl w-full max-w-3xl mx-4"
+            style={{
+              background: "rgba(90, 206, 128, 0.05)", // deep green glass
+              border: "1px solid rgba(180, 255, 180, 0.25)",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+            }}
+          >
             {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-white text-lg hover:text-white transition-colors duration-300"
+              className="absolute top-5 right-5 text-white text-xl hover:text-white/80 transition-all duration-300"
             >
               ✕
             </button>
