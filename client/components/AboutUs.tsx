@@ -51,38 +51,38 @@ export default function AboutUs() {
   }, [slogans.length])
 
   return (
-    <section className="relative min-h-screen py-16 lg:py-24 px-6 lg:px-20 z-[20]">
+    <section className="relative min-h-screen py-12 md:py-16 lg:py-24 px-4 sm:px-6 lg:px-20 z-[20] overflow-x-hidden" style={{ maxWidth: '100vw', width: '100%' }}>
       <div className="max-w-7xl mx-auto">
         {/* Content Container - Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24 mb-12 md:mb-16">
           {/* Left Column - Text Content */}
           <div className="flex flex-col">
             {/* Our Story Title */}
             <div className="mb-6 lg:mb-8 w-full">
-              <h2 className="text-left w-full text-3xl lg:text-7xl font-semibold leading-snug text-white">
+              <h2 className="text-left w-full text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-snug text-white">
                 OUR STORY.
               </h2>
             </div>
 
             {/* Main Heading with Word Animation */}
-            <div className="mb-8 w-full">
+            <div className="mb-6 md:mb-8 w-full">
               <div className="text-left">
                 <WordByWordAnimation
-                  className="font-light text-4xl lg:text-5xl leading-tight text-white block"
+                  className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white block"
                   delay={0.1}
                   staggerDelay={0.03}
                 >
                   Your health is our mission.
                 </WordByWordAnimation>
                 <WordByWordAnimation
-                  className="font-light text-4xl lg:text-5xl leading-tight text-white block"
+                  className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white block"
                   delay={0.3}
                   staggerDelay={0.03}
                 >
                   Helping you move better, recover faster,
                 </WordByWordAnimation>
                 <WordByWordAnimation
-                  className="font-light text-4xl lg:text-5xl leading-tight text-white block"
+                  className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white block"
                   delay={0.5}
                   staggerDelay={0.03}
                 >
@@ -94,7 +94,7 @@ export default function AboutUs() {
             {/* Subheading */}
             <div className="w-full">
               <WordByWordAnimation
-                className="font-light text-xl lg:text-2xl mb-8 text-white text-left"
+                className="font-light text-lg sm:text-xl lg:text-2xl mb-6 md:mb-8 text-white text-left"
                 delay={0.7}
                 staggerDelay={0.05}
               >
@@ -104,18 +104,18 @@ export default function AboutUs() {
           </div>
 
           {/* Right Column - Video Placeholder with Glass 3D */}
-          <div className="flex items-center justify-center">
-            <div className="w-full lg:w-[90%] max-w-2xl">
+          <div className="flex items-center justify-center mt-8 lg:mt-0">
+            <div className="w-full max-w-2xl px-4 sm:px-0">
               <ThankYouCard doctor={videoCards[0]} />
             </div>
           </div>
         </div>
 
         {/* Quotes and Description Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mt-8 md:mt-12">
           {/* Left Half - Animated Slogans/Quotes */}
           <div className="flex flex-col items-start justify-center">
-            <div className="relative h-24 overflow-hidden flex items-center w-full">
+            <div className="relative h-20 sm:h-24 md:h-28 overflow-hidden flex items-center w-full">
               {slogans.map((slogan, index) => (
                 <div
                   key={index}
@@ -128,7 +128,7 @@ export default function AboutUs() {
                   }`}
                 >
                   <p
-                    className="text-white text-xl lg:text-2xl font-light leading-tight text-left"
+                    className="text-white text-base sm:text-lg md:text-xl lg:text-2xl font-light leading-tight text-left px-2 sm:px-0"
                     style={{
                       fontStyle: "italic",
                       letterSpacing: "0.5px",
@@ -142,9 +142,9 @@ export default function AboutUs() {
           </div>
 
           {/* Right Half - Description Text */}
-          <div className="flex items-center">
+          <div className="flex items-center mt-4 lg:mt-0">
             <LineByLineAnimation
-              className="font-light text-4xl lg:text-5xl leading-tight text-white/90 text-left"
+              className="font-light text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-white/90 text-left px-2 sm:px-0"
               delay={0.8}
               staggerDelay={0.2}
             >
@@ -155,7 +155,7 @@ export default function AboutUs() {
             </LineByLineAnimation>
           </div>
         </div>
-        
+
       </div>
     </section>
   )
