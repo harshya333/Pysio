@@ -150,16 +150,18 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         .thank-you-wrapper {
           position: relative;
           margin: 0 auto;
-          height: 410px; /* Keep height same */
-          width: 600px; /* Reduced from 786px */
+          width: 100%;
+          max-width: 600px;
+          aspect-ratio: 600 / 410;
           display: flex;
           justify-content: center;
           align-items: center;
+          padding: 0 20px;
         }
 
         .thank-you-card {
-          width: 600px; /* Reduced from 786px */
-          height: 410px; /* Keep height same */
+          width: 100%;
+          height: 100%;
           border-radius: 24px;
           position: absolute;
           box-shadow: -20px 30px 116px 0 rgba(255, 255, 255, 0.1);
@@ -178,8 +180,8 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           position: absolute;
           top: 0;
           left: 0;
-          width: 600px; /* Updated card width */
-          height: 410px; /* Keep height same */
+          width: 100%;
+          height: 100%;
           background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
           backdrop-filter: blur(10px);
           -webkit-backdrop-filter: blur(10px);
@@ -229,16 +231,16 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
 
         .card__circularGlassmorphism {
           position: absolute;
-          right: 62px; /* Moved right by 20px */
-          bottom: 41px; /* Keep same vertical position */
-          width: 276px; /* Same as circle size */
-          height: 276px; /* Same as circle size */
+          right: 10.3%;
+          bottom: 10%;
+          width: 46%;
+          aspect-ratio: 1;
           background: transparent;
           backdrop-filter: blur(10px) saturate(1.3);
           -webkit-backdrop-filter: blur(10px) saturate(1.3);
           border: 1px solid rgba(255, 255, 255, 0.15);
           border-radius: 50%;
-          z-index: 2; /* Lower than image */
+          z-index: 2;
           pointer-events: none;
           transition: all 0.4s ease;
           overflow: hidden;
@@ -289,12 +291,12 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
 
         .card__orangeShine {
           background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 40%, transparent 70%);
-          right: -180px; /* -150px * 1.2 */
-          top: -108px; /* -90px * 1.2 */
-          bottom: 60px; /* 50px * 1.2 */
+          right: -30%;
+          top: -26.3%;
+          bottom: 14.6%;
           z-index: 2;
-          width: 684px; /* 570px * 1.2 */
-          height: 600px; /* 500px * 1.2 */
+          width: 114%;
+          height: 146.3%;
         }
 
         .card__greenShine {
@@ -303,7 +305,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           top: 0;
           bottom: 0;
           z-index: 1;
-          width: 480px; /* 400px * 1.2 */
+          width: 80%;
         }
 
         .card__doctorInfo {
@@ -317,42 +319,42 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         }
 
         .card__doctorName {
-          font-size: 32px; /* Increased by 4 from 28px */
+          font-size: clamp(20px, 5.3vw, 32px);
           font-weight: 600;
-          margin-bottom: 12px;
+          margin-bottom: 2.9%;
           line-height: 1.2;
           color: #fff !important;
           text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2) !important;
         }
 
         .card__doctorTitle {
-          font-size: 16px; /* Increased by 4 from 12px */
+          font-size: clamp(12px, 2.7vw, 16px);
           font-weight: 400;
           text-transform: uppercase;
           letter-spacing: 1px;
           color: rgba(255, 255, 255, 0.85) !important;
-          margin-bottom: 16px;
+          margin-bottom: 3.9%;
           line-height: 1.3;
           text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25) !important;
         }
 
         .card__doctorDescription {
-          font-size: 15px; /* Increased by 4 from 11px */
+          font-size: clamp(11px, 2.5vw, 15px);
           font-weight: 300;
           color: rgba(255, 255, 255, 0.75) !important;
           line-height: 1.4;
-          margin-bottom: 20px;
+          margin-bottom: 4.9%;
           white-space: pre-line;
           text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2) !important;
         }
 
         .card__consultButton {
-          padding: 8px 16px;
+          padding: 2% 4%;
           background: rgba(255, 255, 255, 0.15) !important;
           color: white !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
           border-radius: 20px;
-          font-size: 14px; /* Increased by 4 from 10px */
+          font-size: clamp(10px, 2.3vw, 14px);
           font-weight: 500;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -379,15 +381,15 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
 
         .card__doctorImage {
           position: absolute;
-          right: 100px; /* Centered on the glassmorphism circle */
-          bottom: 79px; /* Centered on the glassmorphism circle */
-          width: 200px;
-          height: 200px;
+          right: 16.7%;
+          bottom: 19.3%;
+          width: 33.3%;
+          aspect-ratio: 1;
           border-radius: 50%;
           object-fit: cover;
-          z-index: 3; /* Above circular glassmorphism */
+          z-index: 3;
           border: 2px solid rgba(0, 0, 0, 0.3);
-          box-shadow: 
+          box-shadow:
             0 0 20px rgba(255, 255, 255, 0.15),
             0 0 40px rgba(255, 255, 255, 0.08);
           transition: all 0.3s ease;
@@ -402,8 +404,8 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         .card__smallCircle {
           right: 40%;
           top: -7%;
-          width: 60px; /* 50px * 1.2 */
-          height: 60px; /* 50px * 1.2 */
+          width: 10%;
+          aspect-ratio: 1;
         }
 
         .card__outer-year {
@@ -413,7 +415,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         .card__outer-year span {
           position: absolute;
           color: #fff;
-          font-size: 16px;
+          font-size: clamp(12px, 2.7vw, 16px);
           z-index: 4;
         }
 
@@ -433,23 +435,23 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         }
 
         .card__outer-year span:nth-child(1) {
-          top: 42px; /* 35px * 1.2 */
-          left: 42px; /* 35px * 1.2 */
+          top: 10.2%;
+          left: 7%;
         }
 
         .card__outer-year span:nth-child(2) {
-          top: 42px; /* 35px * 1.2 */
-          right: 42px; /* 35px * 1.2 */
+          top: 10.2%;
+          right: 7%;
         }
 
         .card__outer-year span:nth-child(3) {
-          bottom: 42px; /* 35px * 1.2 */
-          left: 42px; /* 35px * 1.2 */
+          bottom: 10.2%;
+          left: 7%;
         }
 
         .card__outer-year span:nth-child(4) {
-          right: 42px; /* 35px * 1.2 */
-          bottom: 42px; /* 35px * 1.2 */
+          right: 7%;
+          bottom: 10.2%;
         }
 
         .card__comet {
@@ -502,6 +504,154 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           width: 12px;
           height: 80px;
           transform-origin: 0px 8px;
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+          .thank-you-wrapper {
+            padding: 0 10px;
+          }
+
+          .thank-you-card {
+            border-radius: 16px;
+          }
+
+          .card__backgroundGlassmorphism {
+            border-radius: 16px;
+          }
+
+          .card__doctorName {
+            font-size: clamp(18px, 6vw, 28px);
+            margin-bottom: 8px;
+          }
+
+          .card__doctorTitle {
+            font-size: clamp(10px, 3.5vw, 14px);
+            margin-bottom: 10px;
+          }
+
+          .card__doctorDescription {
+            font-size: clamp(9px, 3vw, 13px);
+            margin-bottom: 12px;
+            line-height: 1.3;
+          }
+
+          .card__consultButton {
+            padding: 6px 12px;
+            font-size: clamp(9px, 2.8vw, 12px);
+            border-radius: 16px;
+          }
+
+          .card__doctorImage {
+            width: 35%;
+            right: 15%;
+            bottom: 18%;
+          }
+
+          .card__circularGlassmorphism {
+            width: 48%;
+            right: 8%;
+            bottom: 8%;
+          }
+
+          .card__smallCircle {
+            width: 12%;
+            right: 38%;
+          }
+
+          .card__outer-year span {
+            font-size: clamp(10px, 3.5vw, 14px);
+          }
+
+          .card__comet {
+            width: 6px;
+            height: 6px;
+          }
+
+          .card__comet:before {
+            width: 14px;
+            height: 55px;
+          }
+
+          .card__comet:after {
+            width: 10px;
+            height: 65px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .thank-you-wrapper {
+            padding: 0 5px;
+          }
+
+          .card__doctorInfo {
+            left: 4%;
+            top: 12%;
+            width: 48%;
+          }
+
+          .card__doctorName {
+            font-size: clamp(16px, 7vw, 24px);
+            margin-bottom: 6px;
+          }
+
+          .card__doctorTitle {
+            font-size: clamp(9px, 4vw, 12px);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+          }
+
+          .card__doctorDescription {
+            font-size: clamp(8px, 3.5vw, 11px);
+            margin-bottom: 10px;
+          }
+
+          .card__consultButton {
+            padding: 5px 10px;
+            font-size: clamp(8px, 3vw, 11px);
+          }
+
+          .card__doctorImage {
+            width: 38%;
+            right: 12%;
+            bottom: 16%;
+          }
+
+          .card__circularGlassmorphism {
+            width: 50%;
+            right: 6%;
+            bottom: 6%;
+          }
+
+          .card__smallCircle {
+            width: 14%;
+            right: 35%;
+            top: -5%;
+          }
+
+          .card__outer-year span {
+            font-size: clamp(9px, 4vw, 12px);
+          }
+
+          .card__outer-year span:nth-child(1),
+          .card__outer-year span:nth-child(2) {
+            top: 8%;
+          }
+
+          .card__outer-year span:nth-child(3),
+          .card__outer-year span:nth-child(4) {
+            bottom: 8%;
+          }
+
+          .card__outer-year span:nth-child(1),
+          .card__outer-year span:nth-child(3) {
+            left: 5%;
+          }
+
+          .card__outer-year span:nth-child(2),
+          .card__outer-year span:nth-child(4) {
+            right: 5%;
+          }
         }
       `}</style>
 
