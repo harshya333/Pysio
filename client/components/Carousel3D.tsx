@@ -1,227 +1,181 @@
-"use client"
+"use client";
 
-export default function Carousel3D() {
+import { useState, useEffect } from 'react';
+import { Carousel } from "@/components/ui/carousel";
+
+export default function SimpleCarousel() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+  // Updated slides without "Portfolio 1,2" text
+  const slides = [
+    {
+      title: "Creative Design",
+      button: "View Project",
+      src: "/Port1.avif",
+      alt: "Creative Design Project"
+    },
+    {
+      title: "Modern Solution",
+      button: "View Project",
+      src: "/Port2.avif",
+      alt: "Modern Solution Project"
+    },
+    {
+      title: "Innovative Approach",
+      button: "View Project",
+      src: "/Port3.avif",
+      alt: "Innovative Approach Project"
+    },
+    {
+      title: "Brand Identity",
+      button: "View Project",
+      src: "/Port4.avif",
+      alt: "Brand Identity Project"
+    },
+    {
+      title: "Digital Experience",
+      button: "View Project",
+      src: "/Port5.avif",
+      alt: "Digital Experience Project"
+    }
+  ];
+
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, slides.length]);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const goToSlide = (index) => {
+    setCurrentSlide(index);
+  };
+
   return (
-    <div className="carousel-container">
-      <style jsx>{`
-        .carousel-container {
-          margin: 8% auto;
-          width: 100%;
-          max-width: 320px;
-          height: 224px;
-          position: relative;
-          perspective: 1000px;
-        }
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+      {/* Carousel Section using the imported Carousel component */}
+      <div className="mb-8 sm:mb-12 lg:mb-16">
+        <div className="relative overflow-hidden w-full h-full">
+          <Carousel slides={slides} />
+        </div>
+      </div>
 
-        /* Small mobile styles */
-        @media (max-width: 480px) {
-          .carousel-container {
-            max-width: 280px;
-            height: 196px;
-            perspective: 800px;
-            margin: 12% auto;
-          }
-        }
+      {/* Enhanced Simple Carousel Section with transparent background */}
+      <div className="w-full max-w-6xl mx-auto">
+        <div className="relative bg-transparent rounded-lg sm:rounded-xl overflow-hidden">
+          {/* Slides with transparent background and proper image fitting */}
+          <div className="relative h-64 sm:h-80 md:h-96 lg:h-[450px] xl:h-[500px]">
+            {slides.map((slide, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-opacity duration-500 ease-in-out ${
+                  index === currentSlide ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {/* Image container with semi-transparent overlay effect */}
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <img 
+                    src={slide.src} 
+                    alt={slide.alt}
+                    className="w-auto h-full max-w-full max-h-full object-contain rounded-lg sm:rounded-xl shadow-2xl"
+                    loading="lazy"
+                    style={{
+                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
+                    }}
+                  />
+                </div>
+                {/* Overlay with title - enhanced for better visibility on shader background */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent p-4 sm:p-6 rounded-b-lg sm:rounded-b-xl">
+                  <h3 className="text-white text-lg sm:text-xl md:text-2xl font-semibold text-center drop-shadow-lg">
+                    {slide.title}
+                  </h3>
+                </div>
+              </div>
+            ))}
+          </div>
 
-        /* Tablet styles */
-        @media (min-width: 768px) {
-          .carousel-container {
-            max-width: 400px;
-            height: 280px;
-            perspective: 1200px;
-          }
-        }
+          {/* Navigation Buttons - enhanced for better visibility */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-105 border border-white/20"
+            aria-label="Previous slide"
+          >
+            <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
 
-        /* Laptop styles - Reduced size for better fit */
-        @media (min-width: 1024px) {
-          .carousel-container {
-            max-width: 450px;
-            height: 315px;
-            perspective: 1300px;
-          }
-        }
+          <button
+            onClick={nextSlide}
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-105 border border-white/20"
+            aria-label="Next slide"
+          >
+            <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
 
-        /* Large desktop styles */
-        @media (min-width: 1280px) {
-          .carousel-container {
-            max-width: 500px;
-            height: 350px;
-            perspective: 1400px;
-          }
-        }
+          {/* Indicators - enhanced for better visibility */}
+          <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 ${
+                  index === currentSlide 
+                    ? 'bg-white/80 shadow-lg' 
+                    : 'bg-white/30 hover:bg-white/50'
+                }`}
+                style={{
+                  width: index === currentSlide ? '2rem' : '0.625rem',
+                  height: '0.625rem'
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
 
-        /* Extra large screens */
-        @media (min-width: 1536px) {
-          .carousel-container {
-            max-width: 550px;
-            height: 385px;
-            perspective: 1500px;
-          }
-        }
+          {/* Slide Counter - enhanced for better visibility */}
+          <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 backdrop-blur-sm text-white text-xs sm:text-sm rounded-full px-2 sm:px-3 py-1 border">
+            {currentSlide + 1} / {slides.length}
+          </div>
+        </div>
 
-        .carousel {
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          transform-style: preserve-3d;
-          animation: rotation 20s infinite linear;
-        }
-
-        .carousel:hover {
-          animation-play-state: paused;
-        }
-
-        .carousel figure {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: absolute;
-          width: 90%;
-          height: 85.7%;
-          left: 5%;
-          top: 7.14%;
-          border-radius: 16px;
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          overflow: hidden;
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-        }
-
-        /* Positioning of each figure in 3D space */
-        .carousel figure:nth-child(1) {
-          transform: rotateY(0deg) translateZ(280px);
-        }
-        .carousel figure:nth-child(2) {
-          transform: rotateY(72deg) translateZ(280px);
-        }
-        .carousel figure:nth-child(3) {
-          transform: rotateY(144deg) translateZ(280px);
-        }
-        .carousel figure:nth-child(4) {
-          transform: rotateY(216deg) translateZ(280px);
-        }
-        .carousel figure:nth-child(5) {
-          transform: rotateY(288deg) translateZ(280px);
-        }
-
-        /* Responsive translateZ values */
-        @media (max-width: 480px) {
-          .carousel figure:nth-child(1),
-          .carousel figure:nth-child(2),
-          .carousel figure:nth-child(3),
-          .carousel figure:nth-child(4),
-          .carousel figure:nth-child(5) {
-            transform: rotateY(calc(72deg * var(--i))) translateZ(220px);
-          }
-        }
-
-        @media (min-width: 768px) {
-          .carousel figure:nth-child(1),
-          .carousel figure:nth-child(2),
-          .carousel figure:nth-child(3),
-          .carousel figure:nth-child(4),
-          .carousel figure:nth-child(5) {
-            transform: rotateY(calc(72deg * var(--i))) translateZ(320px);
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .carousel figure:nth-child(1),
-          .carousel figure:nth-child(2),
-          .carousel figure:nth-child(3),
-          .carousel figure:nth-child(4),
-          .carousel figure:nth-child(5) {
-            transform: rotateY(calc(72deg * var(--i))) translateZ(340px);
-          }
-        }
-
-        @media (min-width: 1280px) {
-          .carousel figure:nth-child(1),
-          .carousel figure:nth-child(2),
-          .carousel figure:nth-child(3),
-          .carousel figure:nth-child(4),
-          .carousel figure:nth-child(5) {
-            transform: rotateY(calc(72deg * var(--i))) translateZ(380px);
-          }
-        }
-
-        @media (min-width: 1536px) {
-          .carousel figure:nth-child(1),
-          .carousel figure:nth-child(2),
-          .carousel figure:nth-child(3),
-          .carousel figure:nth-child(4),
-          .carousel figure:nth-child(5) {
-            transform: rotateY(calc(72deg * var(--i))) translateZ(420px);
-          }
-        }
-
-        .carousel img {
-          width: 90%;
-          height: 90%;
-          border-radius: 12px;
-          object-fit: cover;
-          filter: grayscale(1);
-          cursor: pointer;
-          transition: all 0.5s ease;
-        }
-
-        .carousel img:hover {
-          filter: grayscale(0);
-          transform: scale(1.05);
-        }
-
-        @keyframes rotation {
-          from {
-            transform: rotateY(0deg);
-          }
-          to {
-            transform: rotateY(360deg);
-          }
-        }
-
-        /* Reduce animation speed on mobile for better performance */
-        @media (max-width: 768px) {
-          .carousel {
-            animation: rotation 25s infinite linear;
-          }
-        }
-
-        /* Very small devices */
-        @media (max-width: 360px) {
-          .carousel-container {
-            max-width: 240px;
-            height: 168px;
-          }
+        {/* Additional Controls for Mobile - enhanced for better visibility */}
+        <div className="flex justify-center items-center gap-4 mt-4 sm:mt-6">
+          <button
+            onClick={prevSlide}
+            className="sm:hidden bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-3 shadow-lg transition-all border border-white/20"
+            aria-label="Previous slide"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
           
-          .carousel figure {
-            border-radius: 12px;
-          }
-          
-          .carousel img {
-            border-radius: 10px;
-          }
-        }
-      `}</style>
-
-      <div className="carousel">
-        <figure style={{ '--i': 0 } as React.CSSProperties}>
-          <img src="/Port1.avif" alt="Portfolio 1" />
-        </figure>
-        <figure style={{ '--i': 1 } as React.CSSProperties}>
-          <img src="/Port2.avif" alt="Portfolio 2" />
-        </figure>
-        <figure style={{ '--i': 2 } as React.CSSProperties}>
-          <img src="/Port3.avif" alt="Portfolio 3" />
-        </figure>
-        <figure style={{ '--i': 3 } as React.CSSProperties}>
-          <img src="/Port4.avif" alt="Portfolio 4" />
-        </figure>
-        <figure style={{ '--i': 4 } as React.CSSProperties}>
-          <img src="/Port5.avif" alt="Portfolio 5" />
-        </figure>
+          <button
+            onClick={nextSlide}
+            className="sm:hidden bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-3 shadow-lg transition-all border border-white/20"
+            aria-label="Next slide"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
-  )
+  );
 }

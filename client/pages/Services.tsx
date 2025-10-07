@@ -1,9 +1,11 @@
 import Header from "@/components/Header";
+import ContactFooter from "@/components/ContactFooter";
 import ShaderBackground from "@/components/ui/ShaderBackground";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useNavigate } from "react-router-dom";
 gsap.registerPlugin(ScrollTrigger);
 
 interface Service {
@@ -73,6 +75,7 @@ const services: Service[] = [
 ];
 
 export default function Services() {
+  const navigate = useNavigate();
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visible, setVisible] = React.useState<boolean[]>(
     Array(services.length).fill(false)
@@ -115,6 +118,32 @@ export default function Services() {
   const nextDoctor = () => {
     setCurrentDoctorIndex((prev) => (prev + 1) % doctors.length);
   };
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    // Scroll to top immediately when component mounts
+    window.scrollTo(0, 0);
+    
+    // Additional safety scroll after a short delay
+    const timeoutId = setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  // Also scroll to top when route changes to this page
+  useEffect(() => {
+    // Listen for navigation changes and scroll to top
+    const unlisten = navigate((location, action) => {
+      if (action === "PUSH" || action === "POP") {
+        window.scrollTo(0, 0);
+      }
+    });
+    return () => {
+      if (typeof unlisten === "function") unlisten();
+    };
+  }, [navigate]);
 
   useEffect(() => {
     if (showBookingModal) {
@@ -218,185 +247,39 @@ export default function Services() {
         * {
           transition: all 0.5s ease-out;
         }
-        
-        /* Iridescent Button Styles */
-        .iridescent-button {
-          font-family: "Amaranth", sans-serif;
-          font-size: 16px;
-          color: #818e9e;
-          width: 140px;
-          height: 50px;
-          line-height: 1;
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          padding: 0.5em 1.5em;
-          outline: none !important;
-          border-radius: 99vw;
-          box-sizing: border-box;
-          --brdr: 0.15em;
-          border: max(2px, var(--brdr)) solid transparent;
-          background: 
-            linear-gradient(to bottom, 
-              oklch(0.95 0.01 257), 
-              oklch(0.92 0.0175 257 / 80%) 33%, 
-              oklch(0.99 0.01 257 / 80%)) padding-box,
-            linear-gradient(165deg, 
-              oklch(0.94 0.025 257 / 80%) 25%, 
-              oklch(0.99 0.01 257 / 80%)) border-box;
-          --ibxs:
-            inset -0.35em -0.35em 0.25em -0.25em oklch(0.99 0.02 257),
-            inset -0.33em -1em 0.75em -0.75em oklch(0.99 0.01 257);
-          --bxs: 
-            oklch(0.35 0.1 257 / 0.12) 0px max(4px, 0.3em) 0.3em 0px, 
-            oklch(0.35 0.1 257 / 0.12) 0px max(2px, 0.18em) 0.18em 0px, 
-            oklch(0.35 0.1 257 / 0.1) 0px max(1px, 0.05em) max(2px, 0.05em) 0px;
-          box-shadow: var(--ibxs);
-          cursor: pointer;
-          transition: all 0.3s ease;
+
+        /* Unified Button Styles */
+        .desktop-button {
+          padding: 0.625rem 1.5rem;
+          background: linear-gradient(to right, #10b981, #059669);
+          color: white;
+          font-weight: 600;
+          border-radius: 0.75rem;
+          transition: all 0.3s;
+          transform: scale(1);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .iridescent-button .drop-shadow {
-          position: absolute;
-          inset: min(-2px, calc(var(--brdr) * -1));
-          border-radius: inherit;
-          pointer-events: none;
-          transition: all 0.6s cubic-bezier(0.32, 0, 0.67, 0);
-          box-shadow: var(--bxs);
-          z-index: -2;
+
+        .desktop-button:hover {
+          background: linear-gradient(to right, #059669, #047857);
+          transform: scale(1.05);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        
-        .iridescent-button:before,
-        .iridescent-button:after,
-        .iridescent-button .drop-shadow:after,
-        .iridescent-button .drop-shadow:before {
-          content: "";
-          position: absolute;
-          inset: min(-2px, calc(var(--brdr) * -1));
-          border-radius: inherit;
-          pointer-events: none;
-          transition: all 0.6s cubic-bezier(0.32, 0, 0.67, 0);
+
+        .mobile-button {
+          padding: 0.5rem 1rem;
+          background: linear-gradient(to right, #10b981, #059669);
+          color: white;
+          font-weight: 600;
+          border-radius: 0.75rem;
+          transition: all 0.3s;
+          font-size: 0.875rem;
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .iridescent-button:hover,
-        .iridescent-button.shine {
-          color: #3c5a80;
-        }
-        
-        .iridescent-button:after {
-          opacity: 0.3;
-          background: transparent;
-          box-shadow: 
-            inset 0 -0.3em 2px 1px oklch(0.99 0.01 257),
-            inset 0 -0.3em 0.25em oklch(0.99 0.01 257),
-            inset 0 -0.3em 0.5em oklch(0.99 0.01 257),
-            inset 0 -0.3em 0.75em oklch(0.99 0.01 257),
-            inset 0 -0.3em 1em oklch(0.99 0.01 257);
-          mix-blend-mode: lighten;
-          z-index: 2;
-        }
-        
-        .iridescent-button:before,
-        .iridescent-button .drop-shadow:after {
-          opacity: 0;
-          translate: 1.1em -0.05em;
-          scale: 0.8;
-          background: linear-gradient(
-            98deg in oklab,
-            oklch(97% 0.26 10 / 0%) -5%,
-            oklch(97% 0.26 10) 55%, 
-            oklch(100% 0.18 55) 62%, 
-            oklch(93% 0.15 138) 66%, 
-            oklch(96% 0.18 245) 76%, 
-            oklch(100% 0.25 275) 120%
-          );
-          mask: linear-gradient(166deg, transparent 60%, black);
-          filter: blur(3px) brightness(1) contrast(1.3);
-          box-shadow: 
-            inset 0 max(-2px, calc(var(--brdr) * -1)) 0 min(2px, var(--brdr)) oklch(0.99 0.01 257 / 20%),
-            inset 0 -0.25em 0.25em 0.125em oklch(0.99 0.01 257 / 40%);
-          z-index: 3;
-        }
-        
-        .iridescent-button .drop-shadow:after {
-          opacity: 0;
-          translate: -0.25em 1.2em;
-          scale: -1 0.8;
-          filter: blur(8px) brightness(1.2) contrast(1.05);
-          mix-blend-mode: lighten;
-          mask: radial-gradient(
-            closest-side, 
-            hsl(0, 0%, 100%) 0%,
-            hsla(0, 0%, 100%, 0.987) 8.1%,
-            hsla(0, 0%, 100%, 0.951) 15.5%,
-            hsla(0, 0%, 100%, 0.896) 22.5%,
-            hsla(0, 0%, 100%, 0.825) 29%,
-            hsla(0, 0%, 100%, 0.741) 35.3%,
-            hsla(0, 0%, 100%, 0.648) 41.2%,
-            hsla(0, 0%, 100%, 0.55) 47.1%,
-            hsla(0, 0%, 100%, 0.45) 52.9%,
-            hsla(0, 0%, 100%, 0.352) 58.8%,
-            hsla(0, 0%, 100%, 0.259) 64.7%,
-            hsla(0, 0%, 100%, 0.175) 71%,
-            hsla(0, 0%, 100%, 0.104) 77.5%,
-            hsla(0, 0%, 100%, 0.049) 84.5%,
-            hsla(0, 0%, 100%, 0.013) 91.9%,
-            hsla(0, 0%, 100%, 0) 100%
-          );
-          z-index: -2;
-        }
-        
-        .iridescent-button .drop-shadow:before {
-          opacity: 1;
-          translate: 1.2em 1.1em;
-          scale: 1.5 0.8;
-          background: oklch(0.98 0.03 257);
-          mask: radial-gradient(
-            closest-side, 
-            hsl(0, 0%, 100%) 0%,
-            hsla(0, 0%, 100%, 0.987) 8.1%,
-            hsla(0, 0%, 100%, 0.951) 15.5%,
-            hsla(0, 0%, 100%, 0.896) 22.5%,
-            hsla(0, 0%, 100%, 0.825) 29%,
-            hsla(0, 0%, 100%, 0.741) 35.3%,
-            hsla(0, 0%, 100%, 0.648) 41.2%,
-            hsla(0, 0%, 100%, 0.55) 47.1%,
-            hsla(0, 0%, 100%, 0.45) 52.9%,
-            hsla(0, 0%, 100%, 0.352) 58.8%,
-            hsla(0, 0%, 100%, 0.259) 64.7%,
-            hsla(0, 0%, 100%, 0.175) 71%,
-            hsla(0, 0%, 100%, 0.104) 77.5%,
-            hsla(0, 0%, 100%, 0.049) 84.5%,
-            hsla(0, 0%, 100%, 0.013) 91.9%,
-            hsla(0, 0%, 100%, 0) 100%
-          );
-          z-index: -1;
-        }
-        
-        .iridescent-button:hover:before,
-        .iridescent-button.shine:before,
-        .iridescent-button:hover .drop-shadow:after,
-        .iridescent-button.shine .drop-shadow:after {
-          opacity: 0.8;
-        }
-        
-        .iridescent-button:hover:before,
-        .iridescent-button.shine:before {
-          opacity: 0.6;
-          translate: 0em;
-          scale: 1;
-        }
-        
-        .iridescent-button:hover .drop-shadow:after,
-        .iridescent-button.shine .drop-shadow:after {
-          opacity: 0.4;
-          translate: 1.8em 1.2em;
-          scale: -1 1;
-        }
-        
-        .iridescent-button:focus {
-          border-color: oklch(0.99 0.01 257 / 70%);
+
+        .mobile-button:hover {
+          background: linear-gradient(to right, #059669, #047857);
         }
 
         /* Glass Button Styles */
@@ -452,11 +335,84 @@ export default function Services() {
         .glass-dropdown-item:hover {
           background: rgba(255, 255, 255, 0.1);
         }
+
+        /* Glass Card Styles */
+        .glass-card {
+          background: rgba(148, 188, 117, 0.08);
+          border-radius: 24px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(148, 188, 117, 0.3);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .glass-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(148, 188, 117, 0.4), transparent);
+        }
+
+        .glass-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          border-color: rgba(148, 188, 117, 0.6);
+          background: rgba(148, 188, 117, 0.12);
+        }
+
+        .service-image {
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card:hover .service-image {
+          transform: scale(1.05);
+          border-color: rgba(148, 188, 117, 0.4);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+          .glass-card {
+            border-radius: 20px;
+            margin: 0.5rem 0;
+          }
+          
+          .service-content {
+            padding: 1.5rem !important;
+          }
+          
+          .service-image {
+            width: 120px !important;
+            height: 120px !important;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .glass-card {
+            border-radius: 16px;
+          }
+          
+          .service-content {
+            padding: 1rem !important;
+          }
+          
+          .service-image {
+            width: 100px !important;
+            height: 100px !important;
+          }
+        }
       `}</style>
 
       <div className="relative z-10">
         <Header />
-        <div className="min-h-screen py-16 pt-24">
+        <div className="min-h-screen py-16 pt-32">
           <motion.div
             initial={{ opacity: 0, y: -32 }}
             animate={{ opacity: 1, y: 0 }}
@@ -472,7 +428,7 @@ export default function Services() {
             </p>
           </motion.div>
 
-          <div className="container mx-auto px-4 space-y-10 md:space-y-14">
+          <div className="container mx-auto px-4 space-y-8 md:space-y-12 mb-20">
             {services.map((service, idx) => {
               const direction = "slide-from-up";
               return (
@@ -484,127 +440,80 @@ export default function Services() {
                   }`}
                   style={{ willChange: "opacity, transform" }}
                 >
-                  {service.layout === "left" ? (
-                    <div className="relative overflow-hidden">
-                      <div className="service-bg w-full h-auto min-h-[24rem] md:min-h-[18rem] lg:min-h-[20rem] rounded-[40px] md:rounded-[60px] lg:rounded-[80px]
-                        bg-gradient-to-r from-purple-200/20 to-transparent
-                        backdrop-blur-lg border border-white/20 shadow-lg"></div>
-                      <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-between py-6 px-4 md:py-8 md:px-6 gap-4">
-                        <div className="service-img w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-black flex-shrink-0 overflow-hidden flex items-center justify-center md:ml-4 lg:ml-8">
+                  <div className="glass-card">
+                    <div className={`flex flex-col ${
+                      service.layout === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
+                    } items-center justify-between p-6 md:p-8 lg:p-10 gap-6 md:gap-8 lg:gap-12`}>
+                      
+                      {/* Service Image */}
+                      <div className="flex-shrink-0">
+                        <div className="service-image w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full overflow-hidden bg-black/20 backdrop-blur-sm">
                           <img
                             src={service.image}
                             alt={service.title}
-                            className="object-cover w-full h-full"
+                            className="object-cover w-full h-full transition-transform duration-500"
                           />
                         </div>
-                        <div className="flex-1 px-4 md:px-6 lg:px-8 text-center md:text-left w-full flex flex-col justify-center">
-                          <h2 className="font-playfair font-bold text-xl md:text-2xl lg:text-3xl text-white mb-2">
-                            {service.title}
-                          </h2>
-                          <p className="font-source text-sm md:text-base lg:text-lg text-white mb-4 leading-relaxed line-clamp-3">
-                            {service.description}
-                          </p>
-                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-2">
-                            <button
-                              className="iridescent-button flex-shrink-0"
-                              onClick={(e) => {
-                                const btn = e.currentTarget;
-                                btn.classList.add("shine");
-                                setTimeout(() => {
-                                  btn.classList.remove("shine");
-                                }, 1000);
-                                setShowBookingModal(true);
-                                setSelectedService(service.title);
-                              }}
-                            >
-                              Book Session
-                              <span className="drop-shadow"></span>
-                            </button>
-                            <div className="text-center sm:text-right flex-shrink-0 min-w-0">
-                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
-                                {service.duration}
-                              </p>
-                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
-                                Based on Experts
-                              </p>
-                            </div>
+                      </div>
+
+                      {/* Service Content */}
+                      <div className="service-content flex-1 text-center md:text-left px-4 md:px-0">
+                        <h2 className="font-playfair font-bold text-2xl md:text-3xl lg:text-4xl text-white mb-4">
+                          {service.title}
+                        </h2>
+                        <p className="font-source text-base md:text-lg lg:text-xl text-white/90 mb-6 leading-relaxed">
+                          {service.description}
+                        </p>
+                        
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+                          {/* Desktop Book Session Button */}
+                          
+                          
+                          {/* Mobile Book Session Button */}
+                          <button
+                            className="sm:hidden mobile-button"
+                            onClick={() => {
+                              setSelectedService(service.title);
+                              setShowBookingModal(true);
+                            }}
+                          >
+                            Book Session
+                          </button>
+                          
+                          <div className="text-center sm:text-right flex-shrink-0 min-w-0 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/10">
+                            <p className="font-source text-sm md:text-base text-white font-semibold">
+                              {service.duration}
+                            </p>
+                            <p className="font-source text-xs md:text-sm text-white/70">
+                              Expert Guided
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="relative overflow-hidden">
-                      <div className="service-bg w-full h-auto min-h-[24rem] md:min-h-[18rem] lg:min-h-[20rem] rounded-[40px] md:rounded-[60px] lg:rounded-[80px]
-                        bg-gradient-to-l from-purple-200/20 to-transparent
-                        backdrop-blur-lg border border-white/20 shadow-lg"></div>
-                      <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-between py-6 px-4 md:py-8 md:px-6 gap-4">
-                        <div className="flex-1 px-4 md:px-6 lg:px-8 text-center md:text-left order-2 md:order-1 w-full flex flex-col justify-center">
-                          <h2 className="font-playfair font-bold text-xl md:text-2xl lg:text-3xl text-white mb-2">
-                            {service.title}
-                          </h2>
-                          <p className="font-source text-sm md:text-base lg:text-lg text-white mb-4 leading-relaxed line-clamp-3">
-                            {service.description}
-                          </p>
-                          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-2">
-                            <button
-                              className="iridescent-button flex-shrink-0"
-                              onClick={(e) => {
-                                const btn = e.currentTarget;
-                                btn.classList.add("shine");
-                                setTimeout(() => {
-                                  btn.classList.remove("shine");
-                                }, 1000);
-                                setShowBookingModal(true);
-                                setSelectedService(service.title);
-                              }}
-                            >
-                              Book Session
-                              <span className="drop-shadow"></span>
-                            </button>
-                            <div className="text-center sm:text-right flex-shrink-0 min-w-0">
-                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
-                                {service.duration}
-                              </p>
-                              <p className="font-source text-xs md:text-base text-white whitespace-nowrap">
-                                Based on Experts
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="service-img w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 rounded-full bg-black flex-shrink-0 md:mr-4 lg:mr-8 order-1 md:order-2 overflow-hidden flex items-center justify-center">
-                          <img
-                            src={service.image}
-                            alt={service.title}
-                            className="object-cover w-full h-full"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </div>
               );
             })}
           </div>
+
+          
         </div>
+
+        {/* Contact Footer */}
+        <ContactFooter />
 
         {/* Booking Modal */}
         {showBookingModal && (
-          <div className="fixed inset-0 bg-black/4 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <div className="booking-form-glass" style={{
-              background: "rgba(148, 188, 117, 0.08)",
-              borderRadius: "16px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(3.2px)",
-              WebkitBackdropFilter: "blur(3.2px)",
-              border: "1px solid rgba(148, 188, 117, 0.53)",
-              padding: "2rem",
-              maxWidth: "28rem",
-              width: "100%",
-              position: "relative"
-            }}>
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="glass-card p-6 md:p-8 max-w-md w-full mx-4"
+            >
               <button
                 onClick={closeBookingModal}
-                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors bg-white/10 p-1 rounded-full backdrop-blur-sm"
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors bg-white/10 p-1 rounded-full backdrop-blur-sm z-10"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -690,28 +599,21 @@ export default function Services() {
                   <p className="text-gray-300 text-sm">Available for consultation</p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         )}
         
         {/* Knowledge Overlay */}
         {showKnowledgeOverlay && (
-          <div className="fixed inset-0 bg-black/4 backdrop-blur-xl flex items-center justify-center z-50 p-4">
-            <div className="booking-form-glass" style={{
-              background: "rgba(148, 188, 117, 0.08)",
-              borderRadius: "16px",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-              backdropFilter: "blur(3.2px)",
-              WebkitBackdropFilter: "blur(3.2px)",
-              border: "1px solid rgba(148, 188, 117, 0.53)",
-              padding: "2rem",
-              maxWidth: "32rem",
-              width: "100%",
-              position: "relative"
-            }}>
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-50 p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="glass-card p-6 md:p-8 max-w-md w-full mx-4"
+            >
               <button
                 onClick={closeBookingModal}
-                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors bg-white/10 p-1 rounded-full backdrop-blur-sm"
+                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors bg-white/10 p-1 rounded-full backdrop-blur-sm z-10"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -755,7 +657,7 @@ export default function Services() {
                   Done
                 </button>
               </div>
-            </div>
+            </motion.div>
           </div>
         )}
       </div>

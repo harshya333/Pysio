@@ -1,11 +1,52 @@
 "use client"
 
+import { useEffect } from "react"
 import Header from "@/components/Header"
 import ShaderBackground from "@/components/ui/ShaderBackground"
 import ThankYouCard from "@/components/ThankYouCard1"
 import Carousel3D from "@/components/Carousel3D"
+import ContactFooter from "@/components/ContactFooter"
 
 export default function Portfolio() {
+  useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0)
+
+    // Check if there's a hash in the URL for career section
+    const handleHashChange = () => {
+      if (window.location.hash === '#career') {
+        scrollToCareerSection();
+      }
+    };
+
+    // Handle initial hash
+    if (window.location.hash === '#career') {
+      // Small timeout to ensure the DOM is fully loaded
+      setTimeout(scrollToCareerSection, 100);
+    }
+
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, [])
+
+  const scrollToCareerSection = () => {
+    const careerSection = document.getElementById('career-section');
+    if (careerSection) {
+      const offsetTop = careerSection.getBoundingClientRect().top + window.pageYOffset;
+      const headerOffset = 80; // Adjust based on your header height
+      const targetPosition = offsetTop - headerOffset;
+      
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className="relative overflow-x-hidden" style={{ maxWidth: '100vw', width: '100%' }}>
       {/* Shader Background Animation */}
@@ -14,6 +55,15 @@ export default function Portfolio() {
           <div></div>
         </ShaderBackground>
       </div>
+
+      {/* Yellow Overlay Shader - 20% opacity */}
+      <div 
+        className="fixed inset-0 w-full h-full z-[5] pointer-events-none"
+        style={{
+          backgroundColor: 'rgba(255, 235, 59, 0.6)', // Yellow with 20% opacity
+          mixBlendMode: 'normal', // You can change to 'multiply', 'overlay', 'soft-light' for different effects
+        }}
+      />
 
       {/* Global CSS */}
       <style jsx global>{`
@@ -33,6 +83,16 @@ export default function Portfolio() {
         body {
           background: transparent;
         }
+
+        /* Smooth scrolling for the whole page */
+        html {
+          scroll-behavior: smooth;
+        }
+
+        /* Additional yellow tint for images if needed */
+        .yellow-tinted img {
+          filter: sepia(20%) saturate(1.2) hue-rotate(40deg);
+        }
       `}</style>
 
       <div className="relative z-10">
@@ -48,7 +108,6 @@ export default function Portfolio() {
                 className="w-full h-full object-cover" 
               />
             </div>
-
 
             {/* Profile Content - Responsive alignment */}
             <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left px-4 sm:px-0 lg:ml-6 xl:ml-10 mt-6 lg:mt-0">
@@ -69,12 +128,14 @@ export default function Portfolio() {
             </div>
           </section>
 
-          {/* Gallery Section */}
-          <section className="mb-24 md:mb-36 flex flex-col items-center mt-10 md:mt-14">
-            <h3 className="font-playfair text-2xl sm:text-3xl md:text-4xl text-white mb-8 md:mb-12 text-center">
+          {/* Gallery Section - Removed extra spacing */}
+          <section className="mb-16 md:mb-24 flex flex-col items-center ">
+            {/* Gallery Heading */}
+            <h3 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] 2xl:text-[70px] text-white leading-tight md:leading-none mb-2 md:mb-3 text-center">
               Gallery
             </h3>
-            <div className="w-full max-w-full overflow-hidden px-2">
+            {/* Carousel with no extra margin */}
+            <div className="w-full max-w-full overflow-hidden px-0 py">
               <Carousel3D />
             </div>
           </section>
@@ -91,8 +152,8 @@ export default function Portfolio() {
             </p>
           </section>
 
-          {/* Thank You Card */}
-          <section className="mb-20 flex justify-center">
+          {/* Career Section with ID for scrolling */}
+          <section id="career-section" className="mb-20 flex justify-center">
             <ThankYouCard
               doctor={{
                 name: "Mrs. Kavita Nim",
@@ -103,6 +164,9 @@ export default function Portfolio() {
             />
           </section>
         </main>
+
+        {/* Contact Footer */}
+        <ContactFooter />
       </div>
     </div>
   )

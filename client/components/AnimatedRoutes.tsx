@@ -7,7 +7,9 @@ import Careers from "../pages/Careers";
 import Perks from "../pages/Perks";
 import Corporate from "../pages/Corporate";
 import Portfolio from "../pages/Portfolio";
+
 import NotFound from "../pages/NotFound";
+import FreeHealthCheckup from "../pages/FreeHealthCheckup";
 
 const pageVariants = {
   initial: {
@@ -55,6 +57,9 @@ const AnimatedRoutes: React.FC = () => {
           <Route path="/perks" element={<Perks />} />
           <Route path="/corporate" element={<Corporate />} />
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/freehealthcheckup" element={<FreeHealthCheckup/>} />
+
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>

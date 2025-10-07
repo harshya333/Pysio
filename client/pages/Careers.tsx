@@ -3,6 +3,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import Header from "@/components/Header"
+import ContactFooter from "@/components/ContactFooter"
 import ShaderBackground from "@/components/ui/ShaderBackground"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -117,6 +118,9 @@ export default function Careers() {
   const [headerVisible, setHeaderVisible] = useState(false)
 
   useEffect(() => {
+    // Scroll to top when component mounts
+    window.scrollTo(0, 0)
+    
     // Animate header on mount
     const timeout = setTimeout(() => setHeaderVisible(true), 100)
     return () => clearTimeout(timeout)
@@ -301,9 +305,6 @@ export default function Careers() {
           >
             {/* Hero Section - Centered Content */}
             <div className="container mx-auto px-4 pt-16 pb-8 flex flex-col items-center text-center">
-              {/* Main heading - centered */}
-              
-
               {/* Services text from image - added as centered content */}
               <motion.div
                 initial={{ opacity: 0, y: -32 }}
@@ -312,10 +313,11 @@ export default function Careers() {
                 className="w-full max-w-4xl mb-12"
               >
                 <h1 className="font-playfair font-bold text-5xl md:text-6xl lg:text-7xl text-white mb-6">
-                Be part of our mission </h1>
+                  Be part of our mission
+                </h1>
                 <p className="font-source text-xl md:text-2xl text-white/90 leading-relaxed">
-                We're looking for passionate people to join us on our mission. We value flat hierarchies, clear
-                communication, and full ownership and responsibility.
+                  We're looking for passionate people to join us on our mission. We value flat hierarchies, clear
+                  communication, and full ownership and responsibility.
                 </p>
               </motion.div>
 
@@ -438,158 +440,238 @@ export default function Careers() {
             </div>
 
             {/* Walk-Ins Interview Section - horizontal layout with wider, shorter cards */}
-<div className="container mx-auto px-4 py-16 max-w-6xl">
-  <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-16 mx-auto"></div>
-  
-  <motion.div 
-    className="relative overflow-hidden rounded-2xl p-6 md:p-8 job-card-glass"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.7, ease: "easeOut" }}
-    viewport={{ once: true }}
-  >
-    {/* Glassmorphism background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-md border border-white/20 rounded-2xl"></div>
+            <div className="container mx-auto px-4 py-16 max-w-6xl">
+              <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-16 mx-auto"></div>
+              
+              <motion.div 
+                className="group relative overflow-hidden rounded-2xl p-6 md:p-8 job-card-glass cursor-pointer"
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{
+                  scale: 1.02,
+                  y: -8,
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
+                  },
+                }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                viewport={{ once: true }}
+              >
+                {/* Glassmorphism background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-white/5 to-transparent backdrop-blur-md border border-white/20 rounded-2xl"></div>
 
-    {/* Hover glow effect */}
-    <div className="absolute inset-0 bg-gradient-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover:from-blue-400/10 group-hover:via-purple-400/5 group-hover:to-pink-400/10 rounded-2xl transition-all duration-500"></div>
+                {/* Hover glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover:from-blue-400/10 group-hover:via-purple-400/5 group-hover:to-pink-400/10 rounded-2xl transition-all duration-500"></div>
 
-    <div className="relative z-10">
-      <motion.h2 
-        className="font-source font-bold text-4xl md:text-5xl text-white mb-8 text-center"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        viewport={{ once: true }}
-      >
-        Walk-Ins Interview
-      </motion.h2>
+                <div className="relative z-10">
+                  <motion.h2 
+                    className="font-source font-bold text-4xl md:text-5xl text-white mb-8 text-center transition-all duration-300 group-hover:text-blue-100"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    viewport={{ once: true }}
+                  >
+                    Walk-Ins Interview
+                  </motion.h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Location Card */}
-        <motion.div 
-          className="bg-white/5 rounded-xl p-5 border border-white/10 h-full"
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          viewport={{ once: true }}
-        >
-          <div className="flex flex-col h-full">
-            <div className="flex items-center mb-3">
-              <div className="bg-white/10 p-2 rounded-lg mr-3 flex-shrink-0">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-              </div>
-              <h3 className="font-source font-semibold text-xl text-white">Location</h3>
-            </div>
-            <p className="font-source text-lg text-white/90 mt-auto">Andheri West Office, Mumbai</p>
-          </div>
-        </motion.div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Location Card */}
+                    <motion.div 
+                      className="group/card relative overflow-hidden bg-white/5 rounded-xl p-5 border border-white/10 h-full cursor-pointer"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      whileHover={{
+                        scale: 1.05,
+                        y: -4,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        },
+                      }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                      viewport={{ once: true }}
+                    >
+                      {/* Hover glow effect for card */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover/card:from-blue-400/5 group-hover/card:via-purple-400/3 group-hover/card:to-pink-400/5 rounded-xl transition-all duration-500"></div>
+                      
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className="flex items-center mb-3">
+                          <div className="bg-white/10 p-2 rounded-lg mr-3 flex-shrink-0 group-hover/card:bg-white/20 transition-all duration-300">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                          </div>
+                          <h3 className="font-source font-semibold text-xl text-white transition-all duration-300 group-hover/card:text-blue-100">Location</h3>
+                        </div>
+                        <p className="font-source text-lg text-white/90 mt-auto transition-all duration-300 group-hover/card:text-white">Andheri West Office, Mumbai</p>
+                      </div>
+                    </motion.div>
 
-        {/* How to Apply Card */}
-        <motion.div 
-          className="bg-white/5 rounded-xl p-5 border border-white/10 h-full"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          viewport={{ once: true }}
-        >
-          <div className="flex flex-col h-full">
-            <div className="flex items-center mb-3">
-              <div className="bg-white/10 p-2 rounded-lg mr-3 flex-shrink-0">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-              </div>
-              <h3 className="font-source font-semibold text-xl text-white">How to Apply</h3>
-            </div>
-            <div className="mt-auto">
-              <p className="font-source text-lg text-white/90 mb-2">
-                Send CV to <span className="text-white underline">team@flexriteworld.org</span>
-              </p>
-              <ul className="ml-3 space-y-1">
-                <li className="font-source text-sm text-white/90">• Qualifications</li>
-                <li className="font-source text-sm text-white/90">• Experience</li>
-                <li className="font-source text-sm text-white/90">• Relevant links</li>
-              </ul>
-            </div>
-          </div>
-        </motion.div>
+                    {/* How to Apply Card */}
+                    <motion.div 
+                      className="group/card relative overflow-hidden bg-white/5 rounded-xl p-5 border border-white/10 h-full cursor-pointer"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      whileHover={{
+                        scale: 1.05,
+                        y: -4,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        },
+                      }}
+                      transition={{ duration: 0.5, delay: 0.4 }}
+                      viewport={{ once: true }}
+                    >
+                      {/* Hover glow effect for card */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover/card:from-blue-400/5 group-hover/card:via-purple-400/3 group-hover/card:to-pink-400/5 rounded-xl transition-all duration-500"></div>
+                      
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className="flex items-center mb-3">
+                          <div className="bg-white/10 p-2 rounded-lg mr-3 flex-shrink-0 group-hover/card:bg-white/20 transition-all duration-300">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <h3 className="font-source font-semibold text-xl text-white transition-all duration-300 group-hover/card:text-blue-100">How to Apply</h3>
+                        </div>
+                        <div className="mt-auto">
+                          <p className="font-source text-lg text-white/90 mb-2 transition-all duration-300 group-hover/card:text-white">
+                            Send CV to{" "}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = "mailto:team@flexriteworld.org?subject=Job Application&body=Hello, I would like to apply for a position at Flexrite. Please find my details attached."
+                              }}
+                              className="text-white underline hover:text-blue-200 transition-all duration-300 cursor-pointer"
+                            >
+                              team@flexriteworld.org
+                            </button>
+                          </p>
+                          <ul className="ml-3 space-y-1">
+                            <li className="font-source text-sm text-white/90 transition-all duration-300 group-hover/card:text-white">• Qualifications</li>
+                            <li className="font-source text-sm text-white/90 transition-all duration-300 group-hover/card:text-white">• Experience</li>
+                            <li className="font-source text-sm text-white/90 transition-all duration-300 group-hover/card:text-white">• Relevant links</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </motion.div>
 
-        {/* Contact Methods Card */}
-        <motion.div 
-          className="bg-white/5 rounded-xl p-5 border border-white/10 h-full"
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <div className="flex flex-col h-full">
-            <div className="flex items-center mb-3">
-              <div className="bg-white/10 p-2 rounded-lg mr-3 flex-shrink-0">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-              <h3 className="font-source font-semibold text-xl text-white">Contact Methods</h3>
-            </div>
-            <div className="mt-auto">
-              <p className="font-source text-lg text-white/90 mb-3">
-                We'll contact you via:
-              </p>
-              <div className="grid grid-cols-1 gap-2">
-                <div className="bg-white/5 rounded-lg p-3 text-center border border-white/10">
-                  <div className="flex items-center justify-center">
-                    <div className="bg-white/10 rounded-full p-1 mr-2">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                      </svg>
-                    </div>
-                    <p className="font-source text-white/90 text-sm">Official Email</p>
+                    {/* Contact Methods Card */}
+                    <motion.div 
+                      className="group/card relative overflow-hidden bg-white/5 rounded-xl p-5 border border-white/10 h-full cursor-pointer"
+                      initial={{ opacity: 0, x: 20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      whileHover={{
+                        scale: 1.05,
+                        y: -4,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20,
+                        },
+                      }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                      viewport={{ once: true }}
+                    >
+                      {/* Hover glow effect for card */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/0 via-purple-400/0 to-pink-400/0 group-hover/card:from-blue-400/5 group-hover/card:via-purple-400/3 group-hover/card:to-pink-400/5 rounded-xl transition-all duration-500"></div>
+                      
+                      <div className="relative z-10 flex flex-col h-full">
+                        <div className="flex items-center mb-3">
+                          <div className="bg-white/10 p-2 rounded-lg mr-3 flex-shrink-0 group-hover/card:bg-white/20 transition-all duration-300">
+                            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                          </div>
+                          <h3 className="font-source font-semibold text-xl text-white transition-all duration-300 group-hover/card:text-blue-100">Contact Methods</h3>
+                        </div>
+                        <div className="mt-auto">
+                          <p className="font-source text-lg text-white/90 mb-3 transition-all duration-300 group-hover/card:text-white">
+                            We'll contact you via:
+                          </p>
+                          <div className="grid grid-cols-1 gap-2">
+                            {/* Official Email Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = "mailto:team@flexriteworld.org?subject=Walk-In Interview Inquiry&body=Hello, I would like to know more about the walk-in interview process."
+                              }}
+                              className="bg-white/5 rounded-lg p-3 text-center border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group/btn"
+                            >
+                              <div className="flex items-center justify-center">
+                                <div className="bg-white/10 rounded-full p-1 mr-2 group-hover/btn:bg-white/20 transition-all duration-300">
+                                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                  </svg>
+                                </div>
+                                <p className="font-source text-white/90 text-sm group-hover/btn:text-white transition-all duration-300">Official Email</p>
+                              </div>
+                            </button>
+
+                            {/* Landline Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.location.href = "tel:+912266666666"
+                              }}
+                              className="bg-white/5 rounded-lg p-3 text-center border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group/btn"
+                            >
+                              <div className="flex items-center justify-center">
+                                <div className="bg-white/10 rounded-full p-1 mr-2 group-hover/btn:bg-white/20 transition-all duration-300">
+                                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                                  </svg>
+                                </div>
+                                <p className="font-source text-white/90 text-sm group-hover/btn:text-white transition-all duration-300">Landline</p>
+                              </div>
+                            </button>
+
+                            {/* WhatsApp Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open("https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20know%20more%20about%20the%20walk-in%20interview%20process%20at%20Flexrite.", "_blank")
+                              }}
+                              className="bg-white/5 rounded-lg p-3 text-center border border-white/10 hover:bg-white/10 transition-all duration-300 cursor-pointer group/btn"
+                            >
+                              <div className="flex items-center justify-center">
+                                <div className="bg-white/10 rounded-full p-1 mr-2 group-hover/btn:bg-white/20 transition-all duration-300">
+                                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                                  </svg>
+                                </div>
+                                <p className="font-source text-white/90 text-sm group-hover/btn:text-white transition-all duration-300">WhatsApp</p>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
                   </div>
-                </div>
-                <div className="bg-white/5 rounded-lg p-3 text-center border border-white/10">
-                  <div className="flex items-center justify-center">
-                    <div className="bg-white/10 rounded-full p-1 mr-2">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                      </svg>
-                    </div>
-                    <p className="font-source text-white/90 text-sm">Landline</p>
-                  </div>
-                </div>
-                <div className="bg-white/5 rounded-lg p-3 text-center border border-white/10">
-                  <div className="flex items-center justify-center">
-                    <div className="bg-white/10 rounded-full p-1 mr-2">
-                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-                      </svg>
-                    </div>
-                    <p className="font-source text-white/90 text-sm">WhatsApp</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
 
-      <motion.div 
-        className="pt-6 border-t border-white/10 mt-8 text-center"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-        viewport={{ once: true }}
-      >
-        <p className="font-source text-lg text-white/80 italic">
-          We're excited to meet talented individuals who are passionate about joining our team!
-        </p>
-      </motion.div>
-    </div>
-  </motion.div>
-</div>
+                  <motion.div 
+                    className="pt-6 border-t border-white/10 mt-8 text-center"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                    viewport={{ once: true }}
+                  >
+                    <p className="font-source text-lg text-white/80 italic transition-all duration-300 group-hover:text-white">
+                      We're excited to meet talented individuals who are passionate about joining our team!
+                    </p>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Contact Footer */}
+            <ContactFooter />
           </motion.div>
         </div>
       </div>

@@ -37,6 +37,7 @@ export default function AboutUs() {
   ]
 
   const [currentSloganIndex, setCurrentSloganIndex] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +45,11 @@ export default function AboutUs() {
       // Change slogan every 200px of scroll
       const scrollIndex = Math.floor(scrollY / 200) % slogans.length
       setCurrentSloganIndex(scrollIndex)
+      
+      // Trigger visibility for animations
+      if (scrollY > 100) {
+        setIsVisible(true)
+      }
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -57,10 +63,10 @@ export default function AboutUs() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-24 mb-12 md:mb-16">
           {/* Left Column - Text Content */}
           <div className="flex flex-col">
-            {/* Our Story Title */}
+            {/* Our Story Title with Outline Text */}
             <div className="mb-6 lg:mb-8 w-full">
-              <h2 className="text-left w-full text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-snug text-white">
-                OUR STORY.
+              <h2 className="text-left w-full text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-snug text-transparent [-webkit-text-stroke-width:1px] [-webkit-text-stroke-color:white]">
+                About US
               </h2>
             </div>
 
@@ -68,38 +74,38 @@ export default function AboutUs() {
             <div className="mb-6 md:mb-8 w-full">
               <div className="text-left">
                 <WordByWordAnimation
-                  className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white block"
+                  className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-4xl leading-tight text-white block tracking-wide"
                   delay={0.1}
                   staggerDelay={0.03}
                 >
                   Your health is our mission.
                 </WordByWordAnimation>
+
                 <WordByWordAnimation
-                  className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white block"
-                  delay={0.3}
+                  className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-3xl leading-tight text-white block tracking-wide"
+                  delay={0.1}
                   staggerDelay={0.03}
                 >
-                  Helping you move better, recover faster,
-                </WordByWordAnimation>
-                <WordByWordAnimation
-                  className="font-light text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight text-white block"
-                  delay={0.5}
-                  staggerDelay={0.03}
-                >
-                  and enjoy a vibrant lifestyle.
+                  Helping you move better, recover faster,and enjoy a vibrant lifestyle.
                 </WordByWordAnimation>
               </div>
             </div>
 
             {/* Subheading */}
-            <div className="w-full">
+            <div className="w-full mb-8">
               <WordByWordAnimation
-                className="font-light text-lg sm:text-xl lg:text-2xl mb-6 md:mb-8 text-white text-left"
-                delay={0.7}
-                staggerDelay={0.05}
+                className=" text-2xl sm:text-3xl md:text-4xl lg:text-3xl leading-tight text-white block tracking-wide"
+                delay={0.1}
+                staggerDelay={0.03}
               >
                 Stronger, Healthier, Happier
               </WordByWordAnimation>
+            </div>
+
+            {/* Additional Interactive Content - Fills the gap */}
+            <div className={`mt-4 transition-all duration-1000 ease-out transform ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}>
             </div>
           </div>
 
@@ -115,7 +121,7 @@ export default function AboutUs() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mt-8 md:mt-12">
           {/* Left Half - Animated Slogans/Quotes */}
           <div className="flex flex-col items-start justify-center">
-            <div className="relative h-20 sm:h-24 md:h-28 overflow-hidden flex items-center w-full">
+            <div className="relative h-20 sm:h-24 md:h-28 overflow-hidden flex items-center w-full mb-6">
               {slogans.map((slogan, index) => (
                 <div
                   key={index}
@@ -128,9 +134,8 @@ export default function AboutUs() {
                   }`}
                 >
                   <p
-                    className="text-white text-base sm:text-lg md:text-xl lg:text-2xl font-light leading-tight text-left px-2 sm:px-0"
+                    className="text-white text-base sm:text-lg md:text-xl lg:text-2xl font-light leading-tight text-left px-2 sm:px-0 font-serif italic"
                     style={{
-                      fontStyle: "italic",
                       letterSpacing: "0.5px",
                     }}
                   >
@@ -142,20 +147,61 @@ export default function AboutUs() {
           </div>
 
           {/* Right Half - Description Text */}
-          <div className="flex items-center mt-4 lg:mt-0">
-            <LineByLineAnimation
-              className="font-light text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-white/90 text-left px-2 sm:px-0"
-              delay={0.8}
-              staggerDelay={0.2}
+          <div className="flex flex-col justify-center mt-4 lg:mt-0">
+            <WordByWordAnimation
+              className=" text-2xl sm:text-3xl md:text-4xl lg:text-3xl leading-tight text-white block tracking-wide"
+              delay={0.1}
+              staggerDelay={0.03}
             >
-              Flexrite World is a health and wellness center in Mumbai, specializing in physiotherapy. Our mission is to
-              help people live active, pain-free lives by providing personalized care for recovery, pain management, and
-              improved performance. With expert guidance and tailored programs, we support every step of your wellness
-              journey toward strength, vitality,and joy....
-            </LineByLineAnimation>
+              We understand that good health is the foundation of an active and fulfilling life, 
+              and our mission is to empower you in realizing your wellness aspirations. Our personalized 
+              physiotherapy services are meticulously designed to cater to your unique needs.
+            </WordByWordAnimation>
           </div>
         </div>
 
+        {/* Expanded Mission Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 mt-16 md:mt-24">
+          {/* Left Column - Core Belief */}
+          <div className={`transition-all duration-1000 delay-500 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 h-full">
+              <h3 className="font-serif text-2xl sm:text-3xl text-white mb-6 font-medium">
+                Our Core Belief
+              </h3>
+
+              <WordByWordAnimation
+                className=" text-2xl sm:text-3xl md:text-4xl lg:text-3xl leading-tight text-white block tracking-wide"
+                delay={0.1}
+                staggerDelay={0.03}
+              >
+                At Flexrite World, we firmly believe that everyone deserves to live free from discomfort and pain. 
+                Investing in your health is not just important; it's essential for enhancing your overall quality of life.
+              </WordByWordAnimation>
+            </div>
+          </div>
+
+          {/* Right Column - Call to Action */}
+          <div className={`transition-all duration-1000 delay-700 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+          }`}>
+            <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-white/20 transition-all duration-500 h-full">
+              <h3 className="font-serif text-2xl sm:text-3xl text-white mb-6 font-medium">
+                Begin Your Journey
+              </h3>
+              <WordByWordAnimation
+                className=" text-2xl sm:text-3xl md:text-4xl lg:text-3xl leading-tight text-white block tracking-wide"
+                delay={0.1}
+                staggerDelay={0.03}
+              >
+                Take the step towards optimal health and recovery by reaching out to us today through 
+                our online portal or WhatsApp. Your journey to a healthier, more active lifestyle begins 
+                right here and we are excited to support you on this path.
+              </WordByWordAnimation>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )

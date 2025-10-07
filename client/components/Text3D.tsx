@@ -52,7 +52,9 @@ export function Text3D() {
           height: 'auto',
           maxWidth: '800px',
           margin: '0 auto',
-          display: 'block'
+          display: 'block',
+          transform: 'scale(1.4)',
+          transformOrigin: 'center'
         }}
       />
     </div>

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ElegantShadowTitle from './ui/ElegantShadowTitle'
 
 interface CardData {
@@ -18,8 +18,7 @@ const cards: CardData[] = [
     imageSrc: "/BT.avif",
     tagline: "Flexrite World",
     title: "Bhavna Talwar / Producer",
-    excerpt:
-      "Flexrite World has been my top choice for years. Whether it's any time, they are my first call for physiotherapy needs.",
+    excerpt: "Flexrite World has been my top choice for years. Whether it's any time, they are my first call for physiotherapy needs.",
     ctaText: "Learn More",
     ctaLink: "#",
   },
@@ -28,8 +27,7 @@ const cards: CardData[] = [
     imageSrc: "/JB.avif",
     tagline: "Flexrite World",
     title: "Jaya Bhattacharya / Actor",
-    excerpt:
-      "Flexrite World offers the fastest pain relief, and I believe the doctors there have a magical touch. I can vouch for their expertise.",
+    excerpt: "Flexrite World offers the fastest pain relief, and I believe the doctors there have a magical touch. I can vouch for their expertise.",
     ctaText: "Learn More",
     ctaLink: "#",
   },
@@ -38,8 +36,7 @@ const cards: CardData[] = [
     imageSrc: "/CH.avif",
     tagline: "Flexrite World",
     title: "Chandrakant Handore / MP",
-    excerpt:
-      "After collaborating with many physiotherapy institutes, I can say Flexrite World offers the best pain relief and treatment.",
+    excerpt: "After collaborating with many physiotherapy institutes, I can say Flexrite World offers the best pain relief and treatment.",
     ctaText: "Learn More",
     ctaLink: "#",
   },
@@ -48,8 +45,7 @@ const cards: CardData[] = [
     imageSrc: "/AM.avif",
     tagline: "Flexrite World",
     title: "Anupam Mittal / Investor",
-    excerpt:
-      "Priyanka excels at her work; bring your loved ones to Flexrite. Health is the biggest investment you can make.",
+    excerpt: "Priyanka excels at her work; bring your loved ones to Flexrite. Health is the biggest investment you can make.",
     ctaText: "Learn More",
     ctaLink: "#",
   },
@@ -58,8 +54,7 @@ const cards: CardData[] = [
     imageSrc: "/AB.avif",
     tagline: "Flexrite World",
     title: "Abhishek Bachchan / Actor",
-    excerpt:
-      "Experiencing healing at Flexrite World is essential on my agenda, right alongside refreshments and rest. Truly transformative.",
+    excerpt: "Experiencing healing at Flexrite World is essential on my agenda, right alongside refreshments and rest. Truly transformative.",
     ctaText: "Learn More",
     ctaLink: "#",
   },
@@ -72,26 +67,58 @@ export default function CelebrityTestimonials() {
   const updateCarousel = (newIndex: number) => {
     if (isAnimating) return
     setIsAnimating(true)
-
+    
     const nextIndex = (newIndex + cards.length) % cards.length
     setCurrentIndex(nextIndex)
-
+    
     setTimeout(() => {
       setIsAnimating(false)
     }, 800)
   }
 
-  const goToNext = () => {
-    updateCarousel(currentIndex + 1)
+  const goToNext = () => updateCarousel(currentIndex + 1)
+  const goToPrevious = () => updateCarousel(currentIndex - 1)
+
+  // Auto-rotate carousel
+  useEffect(() => {
+    const interval = setInterval(goToNext, 5000)
+    return () => clearInterval(interval)
+  }, [currentIndex])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') goToPrevious()
+      if (e.key === 'ArrowRight') goToNext()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [currentIndex])
+
+  // Touch swipe support
+  const [touchStartX, setTouchStartX] = useState(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX)
   }
 
-  const goToPrevious = () => {
-    updateCarousel(currentIndex - 1)
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndX = e.changedTouches[0].clientX
+    const diff = touchStartX - touchEndX
+    const swipeThreshold = 50
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        goToNext()
+      } else {
+        goToPrevious()
+      }
+    }
   }
 
-  const getCardPositionClass = (index: number) => {
+  const getCardClass = (index: number) => {
     const offset = (index - currentIndex + cards.length) % cards.length
-
+    
     if (offset === 0) return "center"
     if (offset === 1) return "right-1"
     if (offset === 2) return "right-2"
@@ -117,12 +144,14 @@ export default function CelebrityTestimonials() {
           align-items: center;
           justify-content: center;
           padding: 40px 20px;
+          position: relative;
           overflow: hidden;
         }
 
         .header-container {
           text-align: center;
           margin-bottom: 2rem;
+          z-index: 10;
         }
 
         @media (min-width: 1024px) {
@@ -133,11 +162,14 @@ export default function CelebrityTestimonials() {
 
         .carousel-container {
           width: 100%;
-          max-width: 1200px;
-          height: 450px;
+          max-width: 1100px; /* Increased to accommodate wider cards */
+          height: 520px; /* Increased height to maintain aspect ratio */
           position: relative;
           perspective: 1000px;
           margin: 0 auto;
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
 
         .carousel-track {
@@ -152,12 +184,12 @@ export default function CelebrityTestimonials() {
 
         .card {
           position: absolute;
-          width: 280px;
-          height: 380px;
+          width: 350px; /* Increased from 280px to 350px (+70px) */
+          height: 470px; /* Increased from 380px to 470px to maintain aspect ratio */
           background: white;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
           transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           cursor: pointer;
         }
@@ -178,10 +210,7 @@ export default function CelebrityTestimonials() {
           padding: 20px;
           color: white;
           text-align: center;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-end;
+          transition: all 0.8s ease;
         }
 
         .card-name {
@@ -189,18 +218,15 @@ export default function CelebrityTestimonials() {
           font-weight: 700;
           margin-bottom: 5px;
           color: white;
-          text-align: center;
-          width: 100%;
         }
 
         .card-role {
           font-size: 1rem;
           opacity: 0.9;
           color: white;
-          text-align: center;
-          width: 100%;
         }
 
+        /* 3D Carousel Positioning - ADJUSTED GAPS for wider cards */
         .card.center {
           z-index: 10;
           transform: scale(1.1) translateZ(0);
@@ -212,7 +238,7 @@ export default function CelebrityTestimonials() {
 
         .card.left-2 {
           z-index: 1;
-          transform: translateX(-220px) scale(0.8) translateZ(-300px);
+          transform: translateX(-340px) scale(0.8) translateZ(-300px); /* Increased from 270px to 340px */
           opacity: 0.7;
         }
 
@@ -222,7 +248,7 @@ export default function CelebrityTestimonials() {
 
         .card.left-1 {
           z-index: 5;
-          transform: translateX(-110px) scale(0.9) translateZ(-100px);
+          transform: translateX(-170px) scale(0.9) translateZ(-100px); /* Increased from 135px to 170px */
           opacity: 0.9;
         }
 
@@ -232,7 +258,7 @@ export default function CelebrityTestimonials() {
 
         .card.right-1 {
           z-index: 5;
-          transform: translateX(110px) scale(0.9) translateZ(-100px);
+          transform: translateX(170px) scale(0.9) translateZ(-100px); /* Increased from 135px to 170px */
           opacity: 0.9;
         }
 
@@ -242,7 +268,7 @@ export default function CelebrityTestimonials() {
 
         .card.right-2 {
           z-index: 1;
-          transform: translateX(220px) scale(0.8) translateZ(-300px);
+          transform: translateX(340px) scale(0.8) translateZ(-300px); /* Increased from 270px to 340px */
           opacity: 0.7;
         }
 
@@ -263,9 +289,56 @@ export default function CelebrityTestimonials() {
           text-align: center;
           margin: 40px auto 0;
           padding: 0 20px;
-          opacity: ${isAnimating ? 0 : 1};
-          transition: opacity 0.3s ease;
           font-weight: 300;
+          transition: all 0.5s ease-out;
+          min-height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .member-info {
+          text-align: center;
+          margin-top: 20px;
+          transition: all 0.5s ease-out;
+        }
+
+        .member-name {
+          color: white;
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin-bottom: 10px;
+          position: relative;
+          display: inline-block;
+        }
+
+        .member-name::before,
+        .member-name::after {
+          content: "";
+          position: absolute;
+          top: 100%;
+          width: 100px;
+          height: 2px;
+          background: white;
+        }
+
+        .member-name::before {
+          left: -120px;
+        }
+
+        .member-name::after {
+          right: -120px;
+        }
+
+        .member-role {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 1.5rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          padding: 10px 0;
+          margin-top: -15px;
+          position: relative;
         }
 
         .dots {
@@ -315,11 +388,6 @@ export default function CelebrityTestimonials() {
           transform: translateY(-50%) scale(1.1);
         }
 
-        .nav-arrow:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-
         .nav-arrow.left {
           left: 20px;
           padding-right: 3px;
@@ -336,12 +404,30 @@ export default function CelebrityTestimonials() {
           }
 
           .carousel-container {
-            height: 400px;
+            height: 420px; /* Increased from 350px */
+            max-width: 900px; /* Adjusted for tablet */
           }
 
           .card {
-            width: 200px;
-            height: 280px;
+            width: 270px; /* Increased from 200px to 270px (+70px) */
+            height: 350px; /* Increased from 280px to 350px */
+          }
+
+          /* Adjusted gaps for wider tablet cards */
+          .card.left-2 {
+            transform: translateX(-260px) scale(0.8) translateZ(-300px); /* Increased from 190px to 260px */
+          }
+
+          .card.left-1 {
+            transform: translateX(-130px) scale(0.9) translateZ(-100px); /* Increased from 95px to 130px */
+          }
+
+          .card.right-1 {
+            transform: translateX(130px) scale(0.9) translateZ(-100px); /* Increased from 95px to 130px */
+          }
+
+          .card.right-2 {
+            transform: translateX(260px) scale(0.8) translateZ(-300px); /* Increased from 190px to 260px */
           }
 
           .card-overlay {
@@ -356,25 +442,30 @@ export default function CelebrityTestimonials() {
             font-size: 0.9rem;
           }
 
-          .card.left-2 {
-            transform: translateX(-140px) scale(0.8) translateZ(-300px);
-          }
-
-          .card.left-1 {
-            transform: translateX(-70px) scale(0.9) translateZ(-100px);
-          }
-
-          .card.right-1 {
-            transform: translateX(70px) scale(0.9) translateZ(-100px);
-          }
-
-          .card.right-2 {
-            transform: translateX(140px) scale(0.8) translateZ(-300px);
-          }
-
           .testimonial-excerpt {
             font-size: 1.1rem;
             margin-top: 30px;
+          }
+
+          .member-name {
+            font-size: 2rem;
+          }
+
+          .member-role {
+            font-size: 1.2rem;
+          }
+
+          .member-name::before,
+          .member-name::after {
+            width: 50px;
+          }
+
+          .member-name::before {
+            left: -70px;
+          }
+
+          .member-name::after {
+            right: -70px;
           }
 
           .nav-arrow {
@@ -390,12 +481,30 @@ export default function CelebrityTestimonials() {
           }
 
           .carousel-container {
-            height: 350px;
+            height: 370px; /* Increased from 300px */
+            max-width: 700px; /* Adjusted for mobile */
           }
 
           .card {
-            width: 180px;
-            height: 260px;
+            width: 250px; /* Increased from 180px to 250px (+70px) */
+            height: 330px; /* Increased from 260px to 330px */
+          }
+
+          /* Adjusted gaps for wider mobile cards */
+          .card.left-2 {
+            transform: translateX(-240px) scale(0.8) translateZ(-300px); /* Increased from 170px to 240px */
+          }
+
+          .card.left-1 {
+            transform: translateX(-120px) scale(0.9) translateZ(-100px); /* Increased from 85px to 120px */
+          }
+
+          .card.right-1 {
+            transform: translateX(120px) scale(0.9) translateZ(-100px); /* Increased from 85px to 120px */
+          }
+
+          .card.right-2 {
+            transform: translateX(240px) scale(0.8) translateZ(-300px); /* Increased from 170px to 240px */
           }
 
           .card-overlay {
@@ -410,22 +519,17 @@ export default function CelebrityTestimonials() {
             font-size: 0.8rem;
           }
 
-          .card.left-2,
-          .card.right-2 {
-            opacity: 0;
-          }
-
-          .card.left-1 {
-            transform: translateX(-60px) scale(0.85) translateZ(-100px);
-          }
-
-          .card.right-1 {
-            transform: translateX(60px) scale(0.85) translateZ(-100px);
-          }
-
           .testimonial-excerpt {
             font-size: 1rem;
             margin-top: 25px;
+          }
+
+          .member-name {
+            font-size: 1.8rem;
+          }
+
+          .member-role {
+            font-size: 1rem;
           }
 
           .nav-arrow {
@@ -447,25 +551,30 @@ export default function CelebrityTestimonials() {
       <div className="testimonials-section">
         <div className="header-container">
           <div style={{ color: "#ffffff" }}>
-            <ElegantShadowTitle>What Clients Are Saying ?</ElegantShadowTitle>
+            <ElegantShadowTitle>What Clients 
+              <br />
+              Are Saying ?</ElegantShadowTitle>
           </div>
         </div>
 
         <div className="carousel-container">
           <button 
             className="nav-arrow left" 
-            onClick={goToPrevious} 
-            disabled={isAnimating}
+            onClick={goToPrevious}
             aria-label="Previous testimonial"
           >
             ‹
           </button>
           
-          <div className="carousel-track">
+          <div 
+            className="carousel-track"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             {cards.map((card, index) => (
               <div
                 key={card.id}
-                className={`card ${getCardPositionClass(index)}`}
+                className={`card ${getCardClass(index)}`}
                 onClick={() => updateCarousel(index)}
               >
                 <img src={card.imageSrc} alt={card.title.split('/')[0].trim()} />
@@ -479,15 +588,16 @@ export default function CelebrityTestimonials() {
           
           <button 
             className="nav-arrow right" 
-            onClick={goToNext} 
-            disabled={isAnimating}
+            onClick={goToNext}
             aria-label="Next testimonial"
           >
             ›
           </button>
         </div>
 
-        <div className="testimonial-excerpt">
+       
+
+        <div className="testimonial-excerpt" style={{ opacity: 1 }}>
           "{cards[currentIndex].excerpt}"
         </div>
 
