@@ -60,7 +60,7 @@ export default function Portfolio() {
       <div 
         className="fixed inset-0 w-full h-full z-[5] pointer-events-none"
         style={{
-          backgroundColor: 'rgba(255, 235, 59, 0.6)', // Yellow with 20% opacity
+          backgroundColor: 'rgba(255, 235, 59, 0.4)', // Yellow with 20% opacity
           mixBlendMode: 'normal', // You can change to 'multiply', 'overlay', 'soft-light' for different effects
         }}
       />
@@ -128,17 +128,26 @@ export default function Portfolio() {
             </div>
           </section>
 
-          {/* Gallery Section - Removed extra spacing */}
-          <section className="mb-16 md:mb-24 flex flex-col items-center ">
-            {/* Gallery Heading */}
-            <h3 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] 2xl:text-[70px] text-white leading-tight md:leading-none mb-2 md:mb-3 text-center">
-              Gallery
-            </h3>
-            {/* Carousel with no extra margin */}
-            <div className="w-full max-w-full overflow-hidden px-0 py">
-              <Carousel3D />
-            </div>
-          </section>
+          // Gallery Section - Removed extra spacing
+<section className="mb-16 md:mb-24 flex flex-col items-center relative">
+  {/* Gallery Heading */}
+  <h3 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] 2xl:text-[70px] text-white leading-tight md:leading-none mb-2 md:mb-3 text-center">
+    Gallery
+  </h3>
+  
+  {/* Black Background Strip for Carousel - Moved up by 30px */}
+  <div 
+    className="absolute left-1/2 -translate-x-1/2 w-[calc(100%+300px)] h-[350px] bg-black/80 backdrop-blur-sm -z-10 top-[calc(50%+70px)] -translate-y-1/2 flex items-center justify-center rounded-lg sm:rounded-xl"
+  >
+    {/* Strip content can be added here if needed */}
+  </div>
+  
+  {/* Carousel with no extra margin */}
+  <div className="w-full max-w-full overflow-hidden px-0 py relative z-10">
+    <Carousel3D />
+  </div>
+</section>
+
 
           {/* Professional Journey Text */}
           <section className="mb-12 md:mb-16 px-4 sm:px-0">

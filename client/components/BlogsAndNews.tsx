@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ElegantShadowTitle from './ui/ElegantShadowTitle';
+import ElegantShadowTitle from './ui/ElegantShadowTitle1';
 
 // Define interfaces for type safety
 interface BlogPost {
@@ -78,8 +78,8 @@ function BlogDetailPopup({ post, isOpen, onClose }: {
             </div>
           </div>
 
-          {/* Title */}
-          <h1 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold font-playfair-display mb-6" 
+          {/* Title - Reduced font size */}
+          <h1 className="text-white text-2xl md:text-1xl lg:text-2xl font-playfair-display mb-6" 
               style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}>
             {post.title}
           </h1>
@@ -129,58 +129,126 @@ function BlogDetailPopup({ post, isOpen, onClose }: {
   );
 }
 
-// BlogCard Component with variable image height and transition effects
-function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isFirstColumn = false }: { 
+// BlogCard Component with consistent width and adjusted image heights
+function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isSecondRow = false }: { 
   post: BlogPost; 
   isFeatured?: boolean;
   isVisible?: boolean;
   onReadMore: (post: BlogPost) => void;
-  isFirstColumn?: boolean;
+  isSecondRow?: boolean;
 }) {
+  // For second row cards, use horizontal layout with image on left
+  if (isSecondRow) {
+    return (
+      <div
+        className={`backdrop-blur-lg bg-white/10 border border-white/20 h-full relative p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8
+                   rounded-xl shadow-2xl transition-all duration-500 ease-in-out hover:scale-[1.02]
+                   group cursor-pointer hover:bg-white/15 hover:border-white/30
+                   ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'}
+                   w-full`}
+      >
+        {/* Image on Left Side for Second Row */}
+        <div className="md:w-2/5">
+          <img
+            src={post.image}
+            alt={post.title}
+            className="w-full h-56 md:h-64 lg:h-72 object-cover rounded-lg transition-transform duration-300 ease-out group-hover:scale-105"
+          />
+        </div>
+
+        {/* Content on Right Side for Second Row */}
+        <div className="md:w-3/5 flex flex-col text-left">
+          {/* Author and Meta Info */}
+          <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+            <img
+              src={post.authorImage}
+              alt={post.authorName}
+              className="w-10 h-10 md:w-12 md:h-12 rounded-full flex-shrink-0 object-cover
+                         border-2 border-white transition-transform duration-200 ease-out group-hover:rotate-6"
+            />
+            <div className="flex-1 text-left">
+              {/* Author name */}
+              <p className="text-white text-base md:text-lg font-semibold font-source-sans-pro text-left" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>
+                {post.authorName}
+              </p>
+              {/* Date */}
+              <p className="text-white/80 text-sm md:text-base font-source-sans-pro text-left">
+                {post.date}
+              </p>
+            </div>
+          </div>
+
+          {/* Content Preview */}
+          <h3 className="text-white text-xl md:text-2xl font-bold font-playfair-display line-clamp-2 mb-3 md:mb-4 text-left" style={{ textShadow: '0 0 12px rgba(255, 255, 255, 0.3)' }}>
+            {post.title}
+          </h3>
+          
+          {/* Excerpt */}
+          {!isFeatured && (
+            <p className="text-white/80 text-base md:text-lg line-clamp-4 mb-6 flex-grow text-left">
+              {post.excerpt}
+            </p>
+          )}
+
+          {/* Read More Button */}
+          <button 
+            onClick={() => onReadMore(post)}
+            className="mt-auto px-6 py-3 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-colors self-start text-base md:text-lg font-medium"
+          >
+            Read More
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Original vertical layout for first row cards
   return (
     <div
-      className={`backdrop-blur-lg bg-white/10 border border-white/20 h-full relative p-4 md:p-6 flex flex-col
-                 rounded-lg shadow-xl transition-all duration-500 ease-in-out hover:scale-[1.02]
+      className={`backdrop-blur-lg bg-white/10 border border-white/20 h-full relative p-6 md:p-8 flex flex-col
+                 rounded-xl shadow-2xl transition-all duration-500 ease-in-out hover:scale-[1.02]
                  group cursor-pointer hover:bg-white/15 hover:border-white/30
-                 ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'}`}
+                 ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'}
+                 w-full`}
     >
-      {/* Image Area with conditional height - larger for first column */}
+      {/* Image Area with consistent height for all cards */}
       <img
         src={post.image}
         alt={post.title}
-        className={`w-full object-cover mb-3 md:mb-4 rounded-md
-                   transition-transform duration-300 ease-out group-hover:scale-105
-                   ${isFirstColumn ? 'h-56 md:h-72 lg:h-96' : isFeatured ? 'h-40 md:h-48 lg:h-56' : 'h-40 md:h-48 lg:h-52'}`}
+        className={`w-full object-cover mb-4 md:mb-6 rounded-lg
+                   transition-transform duration-300 ease-out
+                   group-hover:scale-105
+                   h-56 md:h-72 lg:h-80`}
       />
 
       {/* Author and Meta Info */}
-      <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+      <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
         <img
           src={post.authorImage}
           alt={post.authorName}
-          className="w-6 h-6 md:w-8 md:h-8 rounded-full flex-shrink-0 object-cover
+          className="w-10 h-10 md:w-12 md:h-12 rounded-full flex-shrink-0 object-cover
                      border-2 border-white transition-transform duration-200 ease-out group-hover:rotate-6"
         />
         <div className="flex-1">
           {/* Author name */}
-          <p className="text-white text-xs md:text-sm font-semibold font-source-sans-pro" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>
+          <p className="text-white text-base md:text-lg font-semibold font-source-sans-pro" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>
             {post.authorName}
           </p>
           {/* Date */}
-          <p className="text-white/80 text-xs font-source-sans-pro">
+          <p className="text-white/80 text-sm md:text-base font-source-sans-pro">
             {post.date}
           </p>
         </div>
       </div>
 
       {/* Content Preview */}
-      <h3 className="text-white text-sm md:text-base font-bold font-playfair-display line-clamp-2 mb-2 md:mb-3" style={{ textShadow: '0 0 12px rgba(255, 255, 255, 0.3)' }}>
+      <h3 className="text-white text-xl md:text-2xl font-bold font-playfair-display line-clamp-2 mb-3 md:mb-4" style={{ textShadow: '0 0 12px rgba(255, 255, 255, 0.3)' }}>
         {post.title}
       </h3>
       
       {/* Excerpt for non-featured cards */}
       {!isFeatured && (
-        <p className="text-white/80 text-xs md:text-sm line-clamp-3 mb-4 flex-grow">
+        <p className="text-white/80 text-base md:text-lg line-clamp-4 mb-6 flex-grow">
           {post.excerpt}
         </p>
       )}
@@ -188,52 +256,7 @@ function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isFi
       {/* Read More Button */}
       <button 
         onClick={() => onReadMore(post)}
-        className="mt-auto px-4 py-2 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-colors self-start text-sm"
-      >
-        Read More
-      </button>
-    </div>
-  );
-}
-
-// Featured Blog Card Component
-function FeaturedBlogCard({ post, isVisible = true, onReadMore }: { 
-  post: BlogPost; 
-  isVisible?: boolean;
-  onReadMore: (post: BlogPost) => void;
-}) {
-  return (
-    <div className={`backdrop-blur-lg bg-white/10 border border-white/20 h-full relative p-4 md:p-6 flex flex-col rounded-lg shadow-2xl transition-all duration-500 ease-in-out hover:scale-[1.01] group hover:bg-white/15 hover:border-white/30 cursor-pointer
-                    ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'}`}>
-      <img
-        src={post.image}
-        alt={post.title}
-        className="w-full h-48 md:h-56 lg:h-64 object-cover mb-4 md:mb-6 rounded-md transition-transform duration-500 ease-in-out group-hover:scale-105"
-      />
-      <div className="flex items-start gap-3 md:gap-4 mb-3 md:mb-4">
-        <img
-          src={post.authorImage}
-          alt={post.authorName}
-          className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full flex-shrink-0 object-cover border-2 md:border-4 border-white transition-transform duration-300 ease-out group-hover:rotate-3"
-        />
-        <div className="flex-1">
-          <p className="text-white text-base md:text-lg font-semibold mb-1 font-source-sans-pro" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>
-            {post.authorName}
-          </p>
-          <p className="text-white/80 text-xs md:text-sm font-source-sans-pro">
-            {post.date}
-          </p>
-        </div>
-      </div>
-      <h3 className="text-white text-lg md:text-xl lg:text-2xl font-bold font-playfair-display mb-3 md:mb-4" style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}>
-        {post.title}
-      </h3>
-      <p className="text-white/80 text-sm md:text-base leading-relaxed line-clamp-4 mb-6 flex-grow">
-        {post.excerpt}
-      </p>
-      <button 
-        onClick={() => onReadMore(post)}
-        className="mt-auto px-4 py-2 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-colors self-start text-sm md:text-base"
+        className="mt-auto px-6 py-3 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition-colors self-start text-base md:text-lg font-medium"
       >
         Read More
       </button>
@@ -250,93 +273,6 @@ export default function BlogsAndNews() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const allBlogPosts: BlogPost[] = [
-    {
-      authorName: "Doctor Arvind V Reddy",
-      authorImage: "/reddy.jpg",
-      date: "Dec 6, 2024",
-      title: "Dr. Priyanka Das Joins WWE as National Official Physiotherapist In an exciting development for sports and medicine, Dr. Priyanka Das has been officially  ",
-      image: "/Blog1.jpg",
-      excerpt: "In an exciting development for sports and medicine, Dr. Priyanka Das has been officially appointed as the National Official Physiotherapist for WWE in India. This landmark partnership brings advanced physiotherapy expertise to professional wrestling.",
-      writer: "Doctor Arvind V Reddy",
-      readTime: "3 min read",
-      updatedDate: "Jan 21",
-      content: `Dr. Priyanka Das Joins WWE as National Official Physiotherapist
-
-In an exciting development for sports and medicine, Dr. Priyanka Das has been officially appointed as the National Official Physiotherapist for WWE in India.
-
-The announcement was made during a high-profile event, where Dr. Priyanka Das was seen alongside WWE officials in front of a wrestling ring, symbolizing her integration into the global wrestling entertainment brand.
-
-Dr. Das, a seasoned sports and medicine doctor with over a decade of experience, has treated a wide range of athletes, including Olympians and WWE international stars. Known for her innovative and personalized treatment approach, she has been a pioneer in enhancing athlete performance and recovery through advanced physiotherapy techniques.
-
-Her expertise spans multiple areas including:
-• Sports injury rehabilitation and prevention
-• Performance optimization for elite athletes
-• Advanced manual therapy techniques
-• Biomechanical assessment and correction
-• Personalized recovery protocols
-
-Speaking at the event, Dr. Das said, "It's a great honor to be part of WWE and contribute to the health and well-being of these incredible athletes. Wrestling is a physically demanding sport, and my focus will be on providing tailored care to ensure peak performance and injury prevention."
-
-Dr. Das brings a wealth of experience working with international athletes across various sports disciplines. Her holistic approach combines cutting-edge medical technology with traditional physiotherapy methods, ensuring comprehensive care for each athlete.
-
-This partnership between Dr. Priyanka Das and WWE is a significant step forward in promoting athlete health and strengthening the support system for wrestlers competing at the highest level. WWE's commitment to athlete welfare has never been stronger, with Dr. Das leading the charge in implementing world-class physiotherapy standards.
-
-The appointment also marks a significant milestone for Indian sports medicine professionals on the global stage, showcasing the expertise and talent available in the country's healthcare sector.
-
-Stay tuned for more updates as Dr. Das begins her new journey with WWE, bringing her expertise to the ring and beyond!`
-    },
-    {
-      authorName: "Deccan Chronicle",
-      authorImage: "/auth2.png",
-      date: "Oct 21, 2024",
-      title: "Rakul Preet Singh suffered a serious back injury while performing an 80-kg deadlift without proper precautions Dr. Priyanka Das on the Importance of Injury Prevention in Fitness: Insights from a Leading Sports Physiotherapist",
-      image: "/Blog2.jpg",
-      excerpt: "Actress Rakul Preet Singh's workout injury highlights the importance of proper form and professional guidance during heavy weight training sessions. Dr. Priyanka Das shares essential safety tips for fitness enthusiasts.",
-      writer: "Deccan Chronicle",
-      readTime: "4 min read",
-      updatedDate: "Jan 21",
-      content: `Rakul Preet Singh suffered a serious back injury while performing an 80-kg deadlift without proper precautions.
-
-Dr. Priyanka Das on the Importance of Injury Prevention in Fitness: Insights from a Leading Sports Physiotherapist
-
-In a recent discussion on fitness safety, Dr. Priyanka Das, a celebrated sports physiotherapist with over a decade of experience, addressed the critical need for proper techniques and precautions in weightlifting. This comes in light of the recent injury suffered by actress Rakul Preet Singh, who sustained a severe back injury while deadlifting 80 kg without adequate preparation or support.
-
-Dr. Priyanka Das, known for her work with international athletes, Olympians, and sports enthusiasts, emphasized, "Many individuals, in their eagerness to lift heavier weights, overlook the basics of proper form and injury prevention. This can lead to serious harm, particularly in areas like the lower back, neck, and shoulders."
-
-Understanding the Risks:
-
-Deadlifting, while an excellent compound exercise for building strength, requires meticulous attention to form and technique. Common mistakes include:
-• Rounding the back during the lift
-• Lifting with momentum instead of controlled movement
-• Inadequate core engagement
-• Improper hip hinge mechanics
-• Skipping warm-up exercises
-
-With a career spanning numerous high-profile clients, including WWE athletes, Dr. Das is recognized for her personalized approach to physiotherapy. Her expertise in combining cutting-edge medical techniques with practical fitness solutions has made her a trusted name in the world of sports and wellness.
-
-Addressing common mistakes, she added, "Heavy lifters must understand the importance of gradual progression. Rushing to lift heavy weights without stabilizing your core and strengthening key muscle groups first can result in long-term injuries."
-
-Dr. Das also highlighted the importance of tailored guidance and consistency in training:
-
-• Form First: Prioritize proper posture and alignment to protect the spine and joints.
-• Progress Gradually: Increase weight over time, allowing the body to adapt to new stress levels.
-• Seek Expert Guidance: Consult professionals to design a training plan suited to individual needs.
-• Warm-Up Properly: Dedicate 10-15 minutes to dynamic stretching and activation exercises.
-• Listen to Your Body: Pay attention to pain signals and never push through discomfort.
-
-Recovery and Rehabilitation:
-
-For those who have sustained injuries, Dr. Das recommends a structured rehabilitation program that includes:
-• Initial rest and anti-inflammatory treatment
-• Gradual mobility exercises
-• Core strengthening protocols
-• Progressive loading under supervision
-• Long-term maintenance strategies
-
-As one of the most sought-after sports physiotherapists, Dr. Priyanka Das is committed to promoting athlete safety and enhancing performance through holistic and effective physiotherapy methods. Her dedication to her field serves as an inspiration to both aspiring athletes and fitness enthusiasts.
-
-For more insights from Dr. Priyanka Das and tips on injury prevention, stay tuned to our website!`
-    },
     {
       authorName: "Chandni Kumar Mehra",
       authorImage: "/auth3.jpg",
@@ -426,7 +362,97 @@ Getting Started Today:
 Dr. Das encourages people of all ages to try racquet sports: "It's never too late to start. Whether you're 8 or 80, these sports can be adapted to your fitness level and provide immense benefits for both body and mind."
 
 For personalized guidance on incorporating racquet sports into your fitness routine, consult with sports medicine professionals who can design programs tailored to your individual needs and goals.`
-    }
+    }, 
+    
+    {
+      
+      authorName: "Doctor Arvind V Reddy",
+      authorImage: "/reddy.jpg",
+      date: "Dec 6, 2024",
+      title: "Dr. Priyanka Das Joins WWE as National Official Physiotherapist In an exciting development for sports and medicine, Dr. Priyanka Das has been officially  ",
+      image: "/Blog1.jpg",
+      excerpt: "In an exciting development for sports and medicine, Dr. Priyanka Das has been officially appointed as the National Official Physiotherapist for WWE in India. This landmark partnership brings advanced physiotherapy expertise to professional wrestling.",
+      writer: "Doctor Arvind V Reddy",
+      readTime: "3 min read",
+      updatedDate: "Jan 21",
+      content: `Dr. Priyanka Das Joins WWE as National Official Physiotherapist
+
+In an exciting development for sports and medicine, Dr. Priyanka Das has been officially appointed as the National Official Physiotherapist for WWE in India.
+
+The announcement was made during a high-profile event, where Dr. Priyanka Das was seen alongside WWE officials in front of a wrestling ring, symbolizing her integration into the global wrestling entertainment brand.
+
+Dr. Das, a seasoned sports and medicine doctor with over a decade of experience, has treated a wide range of athletes, including Olympians and WWE international stars. Known for her innovative and personalized treatment approach, she has been a pioneer in enhancing athlete performance and recovery through advanced physiotherapy techniques.
+
+Her expertise spans multiple areas including:
+• Sports injury rehabilitation and prevention
+• Performance optimization for elite athletes
+• Advanced manual therapy techniques
+• Biomechanical assessment and correction
+• Personalized recovery protocols
+
+Speaking at the event, Dr. Das said, "It's a great honor to be part of WWE and contribute to the health and well-being of these incredible athletes. Wrestling is a physically demanding sport, and my focus will be on providing tailored care to ensure peak performance and injury prevention."
+
+Dr. Das brings a wealth of experience working with international athletes across various sports disciplines. Her holistic approach combines cutting-edge medical technology with traditional physiotherapy methods, ensuring comprehensive care for each athlete.
+
+This partnership between Dr. Priyanka Das and WWE is a significant step forward in promoting athlete health and strengthening the support system for wrestlers competing at the highest level. WWE's commitment to athlete welfare has never been stronger, with Dr. Das leading the charge in implementing world-class physiotherapy standards.
+
+The appointment also marks a significant milestone for Indian sports medicine professionals on the global stage, showcasing the expertise and talent available in the country's healthcare sector.
+
+Stay tuned for more updates as Dr. Das begins her new journey with WWE, bringing her expertise to the ring and beyond!`
+    },
+    {
+      authorName: "Deccan Chronicle",
+      authorImage: "/auth2.png",
+      date: "Oct 21, 2024",
+      title: "Rakul Preet Singh suffered a serious back injury while performing an 80-kg deadlift without proper precautions Dr. Priyanka Das on the Importance of Injury Prevention in Fitness: Insights from a Leading Sports Physiotherapist",
+      image: "/Blog2.jpg",
+      excerpt: "Actress Rakul Preet Singh's workout injury highlights the importance of proper form and professional guidance during heavy weight training sessions. Dr. Priyanka Das shares essential safety tips for fitness enthusiasts.",
+      writer: "Deccan Chronicle",
+      readTime: "4 min read",
+      updatedDate: "Jan 21",
+      content: `Rakul Preet Singh suffered a serious back injury while performing an 80-kg deadlift without proper precautions.
+
+Dr. Priyanka Das on the Importance of Injury Prevention in Fitness: Insights from a Leading Sports Physiotherapist
+
+In a recent discussion on fitness safety, Dr. Priyanka Das, a celebrated sports physiotherapist with over a decade of experience, addressed the critical need for proper techniques and precautions in weightlifting. This comes in light of the recent injury suffered by actress Rakul Preet Singh, who sustained a severe back injury while deadlifting 80 kg without adequate preparation or support.
+
+Dr. Priyanka Das, known for her work with international athletes, Olympians, and sports enthusiasts, emphasized, "Many individuals, in their eagerness to lift heavier weights, overlook the basics of proper form and injury prevention. This can lead to serious harm, particularly in areas like the lower back, neck, and shoulders."
+
+Understanding the Risks:
+
+Deadlifting, while an excellent compound exercise for building strength, requires meticulous attention to form and technique. Common mistakes include:
+• Rounding the back during the lift
+• Lifting with momentum instead of controlled movement
+• Inadequate core engagement
+• Improper hip hinge mechanics
+• Skipping warm-up exercises
+
+With a career spanning numerous high-profile clients, including WWE athletes, Dr. Das is recognized for her personalized approach to physiotherapy. Her expertise in combining cutting-edge medical techniques with practical fitness solutions has made her a trusted name in the world of sports and wellness.
+
+Addressing common mistakes, she added, "Heavy lifters must understand the importance of gradual progression. Rushing to lift heavy weights without stabilizing your core and strengthening key muscle groups first can result in long-term injuries."
+
+Dr. Das also highlighted the importance of tailored guidance and consistency in training:
+
+• Form First: Prioritize proper posture and alignment to protect the spine and joints.
+• Progress Gradually: Increase weight over time, allowing the body to adapt to new stress levels.
+• Seek Expert Guidance: Consult professionals to design a training plan suited to individual needs.
+• Warm-Up Properly: Dedicate 10-15 minutes to dynamic stretching and activation exercises.
+• Listen to Your Body: Pay attention to pain signals and never push through discomfort.
+
+Recovery and Rehabilitation:
+
+For those who have sustained injuries, Dr. Das recommends a structured rehabilitation program that includes:
+• Initial rest and anti-inflammatory treatment
+• Gradual mobility exercises
+• Core strengthening protocols
+• Progressive loading under supervision
+• Long-term maintenance strategies
+
+As one of the most sought-after sports physiotherapists, Dr. Priyanka Das is committed to promoting athlete safety and enhancing performance through holistic and effective physiotherapy methods. Her dedication to her field serves as an inspiration to both aspiring athletes and fitness enthusiasts.
+
+For more insights from Dr. Priyanka Das and tips on injury prevention, stay tuned to our website!`
+    },
+    
   ];
 
   // Handle Read More click
@@ -473,39 +499,33 @@ For personalized guidance on incorporating racquet sports into your fitness rout
     }, 250); // Half the transition duration for smoother effect
   };
 
-  // Set up automatic rotation every 8 seconds
-  useEffect(() => {
-    const interval = setInterval(rotateBlogPosts, 8000);
-    return () => clearInterval(interval);
-  }, [currentIndex, isTransitioning]);
-
+  
   return (
-    <section className="py-10 md:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 xl:px-16">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-12 md:py-20 lg:py-28 px-4 sm:px-6 lg:px-8 xl:px-16">
+      <div className="max-w-6xl mx-auto">
         {/* Centered Heading */}
-        <div className="text-center mb-8 md:mb-12 lg:mb-16">
+        <div className="text-center mb-12 md:mb-16 lg:mb-20">
           <ElegantShadowTitle>
             Blogs and News
           </ElegantShadowTitle>
         </div>
 
-        {/* Updated 2-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-          {/* First Column - Single Card (Full Height) */}
-          <div className="h-half  ">
-            <BlogCard 
-              post={currentBlogs[0] || allBlogPosts[0]}
-              isVisible={!isTransitioning}
-              onReadMore={handleReadMore}
-              isFeatured={true}
-              isFirstColumn={true}
-            />
-          </div>
-
-          {/* Second Column - Two Cards Stacked Vertically */}
-          <div className="grid grid-rows-2 gap-6 md:gap-8 h-full">
-            {/* Top Card in Second Column */}
-            <div className="h-full">
+        {/* Updated Layout: First Row - 2 Columns, Second Row - 1 Card with horizontal layout */}
+        <div className="space-y-8 md:space-y-12">
+          {/* First Row - Two Cards Side by Side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+            {/* Left Card in First Row */}
+            <div className="w-full">
+              <BlogCard 
+                post={currentBlogs[0] || allBlogPosts[0]}
+                isVisible={!isTransitioning}
+                onReadMore={handleReadMore}
+                isFeatured={true}
+              />
+            </div>
+            
+            {/* Right Card in First Row */}
+            <div className="w-full">
               <BlogCard 
                 post={currentBlogs[1] || allBlogPosts[1]}
                 isVisible={!isTransitioning}
@@ -513,39 +533,28 @@ For personalized guidance on incorporating racquet sports into your fitness rout
                 isFeatured={true}
               />
             </div>
-            
-            {/* Bottom Card in Second Column */}
-            <div className="h-full">
+          </div>
+
+          {/* Second Row - Single Card with horizontal layout (image left, content right) */}
+          <div className="grid grid-cols-1 gap-8 md:gap-12">
+            <div className="w-full">
               <BlogCard 
                 post={currentBlogs[2] || allBlogPosts[2]}
                 isVisible={!isTransitioning}
                 onReadMore={handleReadMore}
                 isFeatured={true}
+                isSecondRow={true}
               />
             </div>
           </div>
         </div>
 
-        {/* Manual rotation controls */}
-        <div className="flex justify-center mt-6 md:mt-8">
-          <button 
-            onClick={rotateBlogPosts}
-            disabled={isTransitioning}
-            className={`px-5 py-2 bg-white/10 border border-white/20 text-white rounded-lg transition-all duration-300 ease-in-out
-                       ${isTransitioning 
-                         ? 'opacity-50 cursor-not-allowed' 
-                         : 'hover:bg-white/20 hover:scale-105'}`}
-          >
-            {isTransitioning ? 'Loading...' : 'Show New Content'}
-          </button>
-        </div>
-
         {/* Optional: Add progress indicators */}
-        <div className="flex justify-center mt-3 md:mt-4 space-x-2">
+        <div className="flex justify-center mt-6 md:mt-8 space-x-3">
           {allBlogPosts.map((_, index) => (
             <div 
               key={index}
-              className={`w-2 h-2 rounded-full transition-all duration-300 
+              className={`w-3 h-3 rounded-full transition-all duration-300 
                          ${index === currentIndex ? 'bg-white' : 'bg-white/30'}`}
             />
           ))}

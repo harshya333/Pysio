@@ -44,16 +44,16 @@ export function Text3D() {
   return (
     <div ref={containerRef} className="text3d">
       <img
-        src="/images/footertext.png"
+        src="/images/footertext1.png"
         alt="Flexrite World"
         className="text3d__image"
         style={{
           width: '100%',
           height: 'auto',
-          maxWidth: '800px',
+          maxWidth: '500px',
           margin: '0 auto',
           display: 'block',
-          transform: 'scale(1.4)',
+          transform: 'scale(3)',
           transformOrigin: 'center'
         }}
       />

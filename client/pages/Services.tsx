@@ -15,6 +15,7 @@ interface Service {
   duration: string;
   layout: "left" | "right";
   image: string;
+  backgroundImage: string;
 }
 
 const services: Service[] = [
@@ -26,6 +27,7 @@ const services: Service[] = [
     duration: "45 min",
     layout: "left",
     image: "/images/placeholder1.jpg",
+    backgroundImage: "/service1.png",
   },
   {
     id: "2",
@@ -35,6 +37,7 @@ const services: Service[] = [
     duration: "45 min",
     layout: "right",
     image: "/images/placeholder2.jpg",
+    backgroundImage: "/service1.png",
   },
   {
     id: "3",
@@ -44,6 +47,7 @@ const services: Service[] = [
     duration: "1 hour",
     layout: "left",
     image: "/images/placeholder3.jpg",
+    backgroundImage: "/service2.png",
   },
   {
     id: "4",
@@ -53,6 +57,7 @@ const services: Service[] = [
     duration: "45 min",
     layout: "right",
     image: "/images/placeholder4.jpg",
+    backgroundImage: "/service5.png",
   },
   {
     id: "5",
@@ -62,6 +67,7 @@ const services: Service[] = [
     duration: "45 min",
     layout: "left",
     image: "/images/placeholder5.jpg",
+    backgroundImage: "/service4.png",
   },
   {
     id: "6",
@@ -71,6 +77,7 @@ const services: Service[] = [
     duration: "1 hour",
     layout: "right",
     image: "/images/placeholder6.jpg",
+    backgroundImage: "/service6.png",
   },
 ];
 
@@ -359,6 +366,21 @@ export default function Services() {
           background: linear-gradient(90deg, transparent, rgba(148, 188, 117, 0.4), transparent);
         }
 
+        .glass-card::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.25 !important;
+          z-index: -1;
+          transition: all 0.4s ease;
+        }
+
         .glass-card:hover {
           transform: translateY(-8px);
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -366,9 +388,16 @@ export default function Services() {
           background: rgba(148, 188, 117, 0.12);
         }
 
+        .glass-card:hover::after {
+          opacity: 0.35;
+          transform: scale(1.05);
+        }
+
         .service-image {
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           border: 2px solid rgba(255, 255, 255, 0.1);
+          position: relative;
+          z-index: 1;
         }
 
         .glass-card:hover .service-image {
@@ -440,7 +469,14 @@ export default function Services() {
                   }`}
                   style={{ willChange: "opacity, transform" }}
                 >
-                  <div className="glass-card">
+                  <div 
+                    className="glass-card"
+                    style={{
+                      backgroundImage: `url(${service.backgroundImage})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  >
                     <div className={`flex flex-col ${
                       service.layout === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
                     } items-center justify-between p-6 md:p-8 lg:p-10 gap-6 md:gap-8 lg:gap-12`}>
@@ -466,20 +502,6 @@ export default function Services() {
                         </p>
                         
                         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
-                          {/* Desktop Book Session Button */}
-                          
-                          
-                          {/* Mobile Book Session Button */}
-                          <button
-                            className="sm:hidden mobile-button"
-                            onClick={() => {
-                              setSelectedService(service.title);
-                              setShowBookingModal(true);
-                            }}
-                          >
-                            Book Session
-                          </button>
-                          
                           <div className="text-center sm:text-right flex-shrink-0 min-w-0 bg-white/10 backdrop-blur-sm rounded-lg px-4 py-3 border border-white/10">
                             <p className="font-source text-sm md:text-base text-white font-semibold">
                               {service.duration}
@@ -496,170 +518,10 @@ export default function Services() {
               );
             })}
           </div>
-
-          
         </div>
-
         {/* Contact Footer */}
         <ContactFooter />
 
-        {/* Booking Modal */}
-        {showBookingModal && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="glass-card p-6 md:p-8 max-w-md w-full mx-4"
-            >
-              <button
-                onClick={closeBookingModal}
-                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors bg-white/10 p-1 rounded-full backdrop-blur-sm z-10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              
-              <h2 className="text-2xl font-bold text-white mb-6 text-center">Book Your Session</h2>
-              
-              <div className="space-y-4">
-                <div className="relative">
-                  <button
-                    onClick={() => setShowServiceDropdown(!showServiceDropdown)}
-                    className="glass-button w-full text-left flex justify-between items-center"
-                  >
-                    <span>{selectedService || "Select Service"}</span>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  
-                  {showServiceDropdown && (
-                    <div className="glass-dropdown absolute top-full left-0 right-0 mt-1 z-10">
-                      {services.map((service) => (
-                        <div
-                          key={service.id}
-                          className="glass-dropdown-item"
-                          onClick={() => {
-                            setSelectedService(service.title);
-                            setShowServiceDropdown(false);
-                          }}
-                        >
-                          {service.title}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                
-                <div className="relative">
-                  <button
-                    onClick={() => setShowDatePicker(!showDatePicker)}
-                    className="glass-button w-full text-left flex justify-between items-center"
-                  >
-                    <span>{selectedDate}</span>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </button>
-                </div>
-                
-                <div className="relative">
-                  <button
-                    onClick={() => setShowTimePicker(!showTimePicker)}
-                    className="glass-button w-full text-left flex justify-between items-center"
-                  >
-                    <span>{selectedTime}</span>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </button>
-                </div>
-                
-                <div className="pt-4">
-                  <button
-                    onClick={() => setShowKnowledgeOverlay(true)}
-                    className="glass-button w-full bg-white/20 hover:bg-white/25 text-center justify-center"
-                  >
-                    Confirm Booking
-                  </button>
-                </div>
-              </div>
-              
-              <div className="mt-6 pt-6 border-t border-white/20 flex items-center">
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center overflow-hidden">
-                  <img
-                    src={doctors[currentDoctorIndex].image}
-                    alt={doctors[currentDoctorIndex].name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <div className="ml-4">
-                  <p className="text-white font-medium">{doctors[currentDoctorIndex].name}</p>
-                  <p className="text-gray-300 text-sm">Available for consultation</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-        
-        {/* Knowledge Overlay */}
-        {showKnowledgeOverlay && (
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-50 p-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="glass-card p-6 md:p-8 max-w-md w-full mx-4"
-            >
-              <button
-                onClick={closeBookingModal}
-                className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors bg-white/10 p-1 rounded-full backdrop-blur-sm z-10"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-              
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                  <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl font-bold text-white">Booking Confirmed!</h2>
-                <p className="text-gray-300 mt-2">Your session has been successfully booked</p>
-              </div>
-              
-              <div className="bg-white/10 rounded-xl p-4 mb-6 backdrop-blur-sm">
-                <div className="flex justify-between py-2">
-                  <span className="text-gray-300">Service:</span>
-                  <span className="text-white font-medium">{selectedService}</span>
-                </div>
-                <div className="flex justify-between py-2">
-                  <span className="text-gray-300">Date:</span>
-                  <span className="text-white font-medium">{selectedDate}</span>
-                </div>
-                <div className="flex justify-between py-2">
-                  <span className="text-gray-300">Time:</span>
-                  <span className="text-white font-medium">{selectedTime}</span>
-                </div>
-                <div className="flex justify-between py-2">
-                  <span className="text-gray-300">Practitioner:</span>
-                  <span className="text-white font-medium">{doctors[currentDoctorIndex].name}</span>
-                </div>
-              </div>
-              
-              <div className="flex justify-center">
-                <button
-                  onClick={closeBookingModal}
-                  className="glass-button w-32 justify-center"
-                >
-                  Done
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
       </div>
     </div>
   );

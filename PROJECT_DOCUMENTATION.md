@@ -1,405 +1,376 @@
-# FLEXRITE WORLD - Project Documentation
-
-## Overview
-Flexrite World is a health and wellness center website specializing in physiotherapy. Built with React, TypeScript, and Vite, featuring advanced animations and modern UI components.
-
-## Project Structure
-
-### Main Components
-
-#### 1. Hero Component (`/client/components/Hero.tsx`)
-**Purpose**: Landing section with video background and animated text
-**Features**:
-- Parallax video background (`/bg-hero.mp4`)
-- Multi-layered scrolling text effect
-- Hero image with fade animation (`/hero.png`)
-- Framer Motion animations
-
-**Current State**:
-- Font Size: 144px (increased from 124px)
-- Letter Spacing: 8px
-- Glow Effect: Reduced by 50% (textShadow: 10px/20px, filter: 5px)
-- Scroll Effect: 3 layered texts with opacity animation
-- Text Position: Left 15%, Top 1/3
-
-**Recent Changes**:
-- ✅ Removed black outline from main text
-- ✅ Added scroll-triggered echo text visibility
-- ✅ Reduced glow intensity by 50%
-
-#### 2. Header Component (`/client/components/Header.tsx`)
-**Purpose**: Fixed navigation bar
-**Features**:
-- Auto-hide on scroll down, show on scroll up
-- White text links (changed from black)
-- Mobile hamburger menu
-- Z-index: 9999
-
-**Current State**:
-- Link colors: White with text-shadow
-- Mobile menu button: White bars
-- Scroll behavior: Hide/show based on scroll direction
-
-#### 3. AboutUs Component (`/client/components/AboutUs.tsx`)
-**Purpose**: "Our Story" section with glassmorphism card
-**Features**:
-- Intersection Observer for scroll animations
-- Glassmorphism background card
-- Image background (`/about.avif`)
-- Scroll-triggered scaling animation
-
-**Current State**:
-- Section Height: 1800px (increased from 1500px)
-- Top Margin: 200px (moved down)
-- Intersection Threshold: 0.3 (improved visibility)
-- Scaling: Fixed to stay at scale-100 after animation
-
-**Recent Changes**:
-- ✅ Moved section down by 200px
-- ✅ Fixed scaling behavior to stay at 100% after animation
-- ✅ Increased section height for better spacing
-- ✅ Moved about.avif image 20px to the right
-- ✅ Moved Our Story content 20px to the right
-
-#### 4. ContactFooter Component (`/client/components/ContactFooter.tsx`)
-**Purpose**: Footer section with contact information and particle background
-**Features**:
-- Particle background animation using Canvas and GSAP
-- Contact form modal integration
-- Feedback submission functionality
-
-**Current State**:
-- Background: Black with animated particle overlay
-- Particle opacity: 20% for subtle effect
-- Canvas size: 1200x600px with responsive scaling
-
-**Recent Changes**:
-- ✅ Added GSAP-powered particle background animation
-- ✅ Integrated canvas-based particle system with 3-color overlapping circles
-
-#### 5. MeetOurDoctors Component (`/client/components/MeetOurDoctors.tsx`)
-**Purpose**: Doctor profiles with glassmorphism cards
-**Features**:
-- Glassmorphism doctor cards
-- Hover effects with gradients
-- Profile images and name display
-
-**Current State**:
-- Card hover: White gradient + Navy blue gradient (added)
-- Navy gradient: rgba(25,25,112,0.15) with 0.3s delay
-- Improved name visibility on glassmorphism background
-
-**Recent Changes**:
-- ✅ Added subtle navy blue gradient after hover effect
-- ✅ Enhanced glassmorphism visibility for doctor names
-- ✅ Added light to dark navy blue gradient background (Option A implementation)
-
-#### Doctor Card Layer Structure & Background Image Options
-
-**Layer Hierarchy (Z-Index Order)**:
-1. **Base Card (.doctor-card)** - Z-index: 0
-   - Current: White glassmorphism with radial gradient pattern
-   - Size: 320px × 450px with 3px padding
-   - Border-radius: 32px
-
-2. **Hover Overlays**:
-   - **::before** - White gradient overlay (hover effect)
-   - **::after** - Navy blue gradient overlay (0.3s delay on hover)
-
-3. **Profile Picture Container** - Z-index: 1-3
-   - Normal: calc(100% - 6px) covering most of card
-   - Hover: 110px circle in top-left corner
-
-4. **Bottom Section (Name Display)** - Z-index: 2
-   - Normal: Bottom 20% of card with teal glassmorphism
-   - Hover: Expands to 75% of card height
-
-**Background Image Integration Options**:
-
-**Option A - Main Card Background** (Recommended):
-```css
-.doctor-card {
-  background-image: url('/your-image.jpg'), [existing gradients];
-  background-size: cover, 20px 20px, 100% 100%;
-}
-```
-
-**Option B - Dedicated Background Layer**:
-```css
-.doctor-card .background-image {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: url('/image.jpg') center/cover;
-  z-index: -1; opacity: 0.2;
-}
-```
-
-**Option C - Bottom Section Background**:
-```css
-.doctor-card .bottom-section {
-  background-image: url('/image.jpg'), [existing gradients];
-  background-size: cover, 15px 15px, 100% 100%;
-}
-```
-
-**Option D - New Pseudo-element**:
-```css
-.doctor-card::after {
-  background: url('/image.jpg') center/cover;
-  opacity: 0.3; z-index: -1;
-}
-```
-
-### UI Components (`/client/components/ui/`)
-
-#### ElegantShadowTitle Component (`ElegantShadowTitle.tsx`)
-**Purpose**: Uniform elegant shadow text effect with slide-in background strip animation
-**Animation Features**:
-- Background strip slides in from left to right using GSAP
-- Text fades in with upward motion after background animation
-- ScrollTrigger integration for viewport-based activation
-- Customizable delay parameter
-
-**Typography Specifications**:
-- Font Family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif
-- Font Size: 92px (uniform across all headings)
-- Text Transform: Uppercase
-- Letter Spacing: 0.15em
-- Multi-layer shadow effect with 28 shadow layers for elegant depth
-
-**Background Strip**:
-- Color: #e7e5e4 (light beige)
-- Animation: ScaleX from 0 to 1, transform origin left center
-- Size: Text width + 16px horizontal padding, text height + 4px vertical padding
-- Duration: 1.2s with power3.out easing
-
-**Usage Examples**:
-- "Our Story": ElegantShadowTitle with 0.2s delay
-- "Meet Our Doctors": ElegantShadowTitle (default timing)
-- "What Our Clients Say": ElegantShadowTitle (default timing)
-- "Blogs and News": ElegantShadowTitle (default timing)
-
-#### AnimatedTitle Component (`AnimatedTitle.tsx`) - DEPRECATED
-**Status**: Replaced by ElegantShadowTitle for all major headings
-**Previous Animation Types**:
-- `slideUp`: Text slides up with fade-in
-- `fadeIn`: Scale and fade animation
-- `splitChars`: Character-by-character stagger animation
-- `scaleIn`: Scale with rotation and bounce effect
-
-#### ParticleBackground Component (`ParticleBackground.tsx`)
-**Purpose**: Canvas-based particle animation system
-**Technical Details**:
-- Built with HTML5 Canvas and GSAP
-- Grid-based particle system (11x11 grid)
-- Three overlapping circles per grid position
-- Colors: Blue (#01AFF6), Pink (#F20085), Yellow (#FFD036)
-- Blend mode: Multiply for color mixing
-
-**Animation Sequence**:
-1. Initial entrance: Scale from 0 to 1 with rotation
-2. Continuous pulsing: Staggered breathing effect
-3. Grid-based stagger pattern from top-left
-
-**Performance Features**:
-- RequestAnimationFrame for smooth rendering
-- GSAP ticker integration
-- Automatic cleanup on unmount
-
-### Global Styles (`/client/global.css`)
-
-#### Debug Outlines (Development Only)
-```css
-img { outline: 3px solid hotpink !important; }
-section { outline: 4px solid lime !important; }
-h2, h3, h4, h5, h6 { outline: 2px solid red !important; }
-p { outline: 1px solid blue !important; }
-button { outline: 2px solid purple !important; }
-nav { outline: 3px solid green !important; }
-article { outline: 3px solid cyan !important; }
-main { outline: 4px solid yellow !important; }
-```
-
-## Animation Systems
-
-### 1. Hero Text Scroll Effect
-- **File**: Hero.tsx
-- **Mechanism**: 3 layered h1 elements with different scroll speeds
-- **Logic**: `scrollValue * 0.07 * index` for position offset
-- **Visibility**: Echo texts fade in based on scroll (`scrollValue / 200`)
-
-### 2. AboutUs Scaling Animation
-- **File**: AboutUs.tsx
-- **Mechanism**: Intersection Observer + setTimeout
-- **Phases**:
-  1. Initial: opacity-0, scale-85, translateY-12
-  2. Trigger: opacity-100, translateY-0, scale-105
-  3. Complete: scale-100 (stays visible)
-
-### 3. Doctor Card Hover Effects
-- **File**: MeetOurDoctors.tsx
-- **Sequence**:
-  1. White gradient overlay (immediate)
-  2. Navy blue gradient overlay (0.3s delay)
-  3. Enhanced glassmorphism visibility
-
-## Error Resolutions & Fixes
-
-### Issue 1: Hero Text Overlap
-**Problem**: Header navigation overlapping hero text
-**Solution**: Increased hero text z-index to 10001
-**File**: Hero.tsx:63
-
-### Issue 2: Echo Text Visibility
-**Problem**: Background echo texts always visible
-**Solution**: Set initial opacity: 0, fade in on scroll
-**File**: Hero.tsx:124, 141
-
-### Issue 3: AboutUs Scaling Behavior
-**Problem**: Section scaled up and disappeared on scroll
-**Solution**: 
-- Fixed scaling to end at scale-100
-- Moved section down 200px
-- Increased intersection threshold to 0.3
-**File**: AboutUs.tsx:91, 125, 41
-
-### Issue 4: Doctor Card Name Visibility
-**Problem**: Glassmorphism made doctor names hard to read
-**Solution**: Added navy blue gradient overlay on hover
-**File**: MeetOurDoctors.tsx:63-64
-
-### Issue 5: AboutUs Section Positioning
-**Problem**: Need to adjust image and content positioning
-**Solution**: 
-- Moved about.avif image 20px to the right
-- Moved Our Story content 20px to the right using transform
-**File**: AboutUs.tsx:108, 119
-
-### Issue 6: Section Title Animation
-**Problem**: Static section titles lacked visual impact
-**Solution**: 
-- Created reusable AnimatedTitle component with GSAP
-- Implemented 4 animation types: slideUp, fadeIn, splitChars, scaleIn
-- Added ScrollTrigger for viewport-based animations
-**File**: AnimatedTitle.tsx, AboutUs.tsx:136-144, MeetOurDoctors.tsx:88-93
-
-### Issue 7: Footer Visual Enhancement
-**Problem**: Footer section needed dynamic background element
-**Solution**: 
-- Created particle animation system using Canvas and GSAP
-- Implemented 3-color overlapping circle grid with stagger animations
-- Added as background overlay with 20% opacity
-**File**: ParticleBackground.tsx, ContactFooter.tsx:13-19
-
-### Issue 8: TileTextReveal Implementation Failure ❌
-**Problem**: Attempted to implement complex tile-based text animation for all section headings
-**Implementation**: Created TileTextReveal component with 5x5 tile grid system
-**Result**: Complete failure - user rejected with explicit feedback
-**Resolution**: 
-- ✅ Reverted all TileTextReveal implementations
-- ✅ Restored original AnimatedTitle components in AboutUs and MeetOurDoctors
-- ✅ Restored original h2 elements in Testimonials and BlogsAndNews  
-- ✅ Removed TileTextReveal.tsx component entirely
-- ✅ System restored to working state with original animation system
-
-### Issue 9: ElegantShadowTitle Implementation ✅
-**Problem**: Need uniform elegant shadow text effect for all section headings with slide-in background strip
-**Requirements**: 
-- Use only "elegant shadow" effect for all headings
-- Background strip slides in from left to right edge
-- Strip height: text height + 10px extra
-- Uniform font size (92px) across all headings
-- Apply to: "Our Story", "Meet Our Doctors", "What Our Clients Say", "Blogs and News"
-**Implementation**: 
-- ✅ Created ElegantShadowTitle component with GSAP animations
-- ✅ Implemented slide-in background strip animation (left to right)
-- ✅ Applied elegant shadow text effect with multi-layer shadows
-- ✅ Used consistent typography: Avant Garde font family, 92px size, uppercase
-- ✅ Replaced all heading components across 4 sections
-**Current State**: All major headings now use ElegantShadowTitle:
-- "Our Story": ElegantShadowTitle with 0.2s delay
-- "Meet Our Doctors": ElegantShadowTitle 
-- "What Our Clients Say": ElegantShadowTitle
-- "Blogs and News": ElegantShadowTitle
-
-## Technical Implementation Details
-
-### Scroll Effects
-- Hero text uses `window.scrollY` with multipliers
-- AboutUs uses Intersection Observer API
-- Framer Motion for smooth animations
-
-### Styling Approach
-- Tailwind CSS for utility classes
-- Inline styles for dynamic values
-- CSS-in-JS for complex animations
-
-### Z-Index Hierarchy
-1. Header: 9999
-2. Hero Text: 10001
-3. Hero Components: 10-50
-4. AboutUs: 20-30
-5. Other sections: 10
-
-## File Locations
-
-### Core Components
-- `/client/components/Hero.tsx` - Main landing section
-- `/client/components/Header.tsx` - Navigation
-- `/client/components/AboutUs.tsx` - Our Story section
-- `/client/components/ContactFooter.tsx` - Footer with particle background
-- `/client/components/MeetOurDoctors.tsx` - Doctor profiles
-
-### UI Components
-- `/client/components/ui/ElegantShadowTitle.tsx` - Uniform elegant shadow text with slide-in background strip
-- `/client/components/ui/AnimatedTitle.tsx` - GSAP text animations (deprecated, replaced by ElegantShadowTitle)
-- `/client/components/ui/ParticleBackground.tsx` - Canvas particle system
-
-### Assets
-- `/public/hero.png` - Main hero image (scaled 110%)
-- `/public/bg-hero.mp4` - Background video
-- `/public/about.avif` - AboutUs background image
-
-### Styles
-- `/client/global.css` - Global styles and debug outlines
-
-## Debug Tools
-
-### Visual Debugging
-- Colored outlines for all elements (removable in production)
-- Different colors for different element types
-- Easy identification of layout issues
-
-### Browser Dev Tools
-- Use React DevTools for component inspection
-- Check Intersection Observer in Elements tab
-- Monitor scroll events in Console
-
-## Performance Considerations
-
-### Optimizations
-- Framer Motion for hardware-accelerated animations
-- Intersection Observer for efficient scroll detection
-- Conditional rendering for hover effects
-
-### Potential Issues
-- Multiple scroll listeners (Hero + AboutUs)
-- Large video background file
-- Complex glassmorphism effects
-
-## Deployment Notes
-
-### Before Production
-1. Remove debug outlines from global.css
-2. Optimize video/image assets
-3. Test scroll performance on mobile
-4. Verify accessibility compliance
-
-### Environment Variables
-- None currently required
-- All assets are static files
-
----
-
-*Last Updated: August 16, 2025*
-*Version: 1.4.0* (ElegantShadowTitle implementation with uniform typography and slide-in animations)
+# 📁 Project Overview
+
+**Project Name:** Flexrite World  
+**Description:** A modern, interactive physiotherapy website showcasing services, doctors, testimonials, and health-related content. The site features advanced animations, 3D effects, and a sleek design to engage users and promote physiotherapy services.
+
+**Framework and Version:** React 18.3.1 with Vite (build tool), TypeScript  
+**Key Technologies:**
+- **Routing:** React Router DOM v6.26.2
+- **Styling:** Tailwind CSS v3.4.17 with custom design system
+- **Animations:** Framer Motion v12.6.2, GSAP v3.13.0
+- **3D Graphics:** Three.js v0.176.0, @react-three/fiber v8.18.0
+- **UI Components:** Radix UI primitives
+- **Forms:** React Hook Form v7.53.0
+- **State Management:** React Query v5.56.2
+- **Icons:** Lucide React v0.462.0
+
+**Global Dependencies:**
+- @paper-design/shaders-react: Custom shader effects
+- aceternity-ui: Additional UI components
+- animejs: Animation library
+- emailjs-com: Contact form handling
+- simplex-noise: Procedural generation
+
+# 🧩 Project Structure & File Details
+
+## `/client` (Main Application Directory)
+**Purpose:** Contains the entire React application built with Vite.
+
+### `/client/components`
+**Purpose:** Reusable React components organized by functionality.
+
+**Key Files:**
+- `Header.tsx`: Navigation header with scroll effects
+- `Hero.tsx`: Main hero section with complex animations and scroll-triggered effects
+- `ParallaxSection.tsx`: Parallax scrolling effects
+- `MeetOurDoctors.tsx`: Doctor profiles and information
+- `BlogsAndNews.tsx`: Blog/news content display
+- `CelebrityTestimonials.tsx`: Celebrity endorsements
+- `ClientReviews.tsx`: Customer reviews carousel
+- `ContactFooter.tsx`: Contact information and footer
+- `LoadingPage.tsx`: Initial loading animation
+- `VideoSection.tsx`: Video content display
+- `AboutUs.tsx`: Company information section
+
+**Relationships:** Components are imported into pages and other components. Many use custom hooks from `/hooks` and UI primitives from `/components/ui`.
+
+### `/client/components/ui`
+**Purpose:** Design system components based on Radix UI and custom implementations.
+
+**Key Files:**
+- `ShaderBackground.tsx`: WebGL shader background effects
+- `ParticleBackground.tsx`: Particle animation backgrounds
+- `AnimatedTitle.tsx`: Animated text components
+- `GlassVideoCard.tsx`: Glassmorphism video cards
+- `MistOverlay.tsx`: Atmospheric overlay effects
+- `ThankYouCard.tsx`: Success/thank you messages
+- Plus 40+ Radix UI primitive components (accordion, dialog, etc.)
+
+**Global Styles:** `global.css` contains global animations, font imports, and utility classes.
+
+### `/client/hooks`
+**Purpose:** Custom React hooks for shared logic.
+
+**Files:**
+- `use-mobile.tsx`: Mobile device detection
+- `use-toast.ts`: Toast notification management
+- `useZoomOnScroll.tsx`: Scroll-based zoom effects
+
+### `/client/lib`
+**Purpose:** Utility functions and configurations.
+
+**Files:**
+- `utils.ts`: General utility functions (cn for class merging, etc.)
+- `utils.spec.ts`: Unit tests for utilities
+
+### `/client/pages`
+**Purpose:** Page components for routing.
+
+**Files:**
+- `Index.tsx`: Homepage composition
+- `Services.tsx`: Services offered
+- `Careers.tsx`: Career opportunities
+- `Perks.tsx`: Benefits/perks
+- `Corporate.tsx`: Corporate services
+- `Portfolio.tsx`: Work portfolio
+- `FreeHealthCheckup.tsx`: Health checkup form
+- `NotFound.tsx`: 404 error page
+
+**Relationships:** Pages import components and are routed via `AnimatedRoutes.tsx`.
+
+# 🎨 Design System & UI
+
+## Color Palette
+**Primary Colors:**
+- Navy: `#0F172A` (navy), `#1E293B` (navy-light), `#020617` (navy-dark)
+- Teal: `#0E7490` (teal), `#5EEAD4` (teal-light), `#0C4A6E` (teal-dark)
+- Sky: `#7DD3FC`
+
+**Neutral Colors:**
+- Paper: `#F8FAFC`
+- Charcoal: `#1E293B`
+- Mist: `#E2E8F0`
+
+**CSS Variables (from global.css):**
+- Background: `hsl(0 0% 100%)`
+- Foreground: `hsl(222.2 84% 4.9%)`
+- Primary: `hsl(222.2 47.4% 11.2%)`
+- Secondary: `hsl(210 40% 96.1%)`
+- Accent: `hsl(210 40% 96.1%)`
+
+## Typography
+**Font Families:**
+- Playfair Display: Serif font for headings (`'Playfair Display', serif`)
+- Source Sans Pro: Sans-serif for body text (`'Source Sans Pro', sans-serif`)
+- Lato: Alternative sans-serif (`'Lato', sans-serif`)
+- Roboto: System font (`'Roboto', sans-serif`)
+
+**Font Weights:** 400 (regular), 500 (medium), 600-700 (semi-bold to bold), 800-900 (extra-bold)
+
+**Size Scale:** Responsive clamp() functions used extensively, e.g., `clamp(2rem, 8vw, 10rem)` for hero text
+
+## Spacing & Layout Rules
+**Container:** Centered with max-width `1400px`, padding `2rem`
+
+**Grid/Flex Patterns:**
+- Hero: Absolute positioning with flexbox for content alignment
+- Cards: Grid layouts with responsive breakpoints
+- Navigation: Flexbox with space-between alignment
+
+**Breakpoints (Tailwind defaults):**
+- sm: 640px
+- md: 768px
+- lg: 1024px
+- xl: 1280px
+- 2xl: 1400px
+
+## Icons & Illustrations
+**Libraries:**
+- Lucide React: Modern icon set
+- Custom SVGs: Hero images and illustrations in `/public`
+
+**Usage:** Icons used in navigation, buttons, and feature highlights
+
+# 🌈 Backgrounds, Gradients & Overlays
+
+## Background Effects
+**Watercolor Gradients (Tailwind custom):**
+- `bg-watercolor-1`: Radial gradients with teal and white tones
+- `bg-watercolor-2`: Multiple radial gradients for texture
+- `bg-watercolor-cta`: High-contrast CTA gradient
+
+**Vignette:** `bg-vignette` - radial gradient for depth
+
+## Shader Backgrounds
+**ShaderBackground Component:**
+- Uses @paper-design/shaders-react
+- WebGL-based animated backgrounds
+- Applied to main sections for visual interest
+
+**Particle Backgrounds:**
+- Custom particle systems using Three.js
+- Animated dots/points for atmosphere
+
+**Mist Overlays:**
+- Semi-transparent overlays for depth
+- Used in sections for layering effect
+
+**Parallax Effects:**
+- CSS transforms based on scroll position
+- Implemented in ParallaxSection component
+
+# ⚙️ Components Documentation
+
+## Core Components
+
+### Header
+**File:** `client/components/Header.tsx`  
+**Purpose:** Navigation bar with scroll-based styling changes  
+**Props:** None  
+**Interactions:** Scroll detection for background changes  
+**Child Components:** Navbar links, logo
+
+### Hero
+**File:** `client/components/Hero.tsx`  
+**Purpose:** Main landing section with animated text and scroll effects  
+**Props:** None  
+**Renders:** Animated title "FLEXRITE WORLD", taglines, hero image, scroll indicator  
+**Interactions:** Scroll-triggered line animations, mouse scroll indicator  
+**Child Components:** VideoSection, AboutUs
+
+### MeetOurDoctors
+**File:** `client/components/MeetOurDoctors.tsx`  
+**Purpose:** Display doctor profiles with images and information  
+**Props:** None  
+**Renders:** Grid of doctor cards with photos, names, specialties  
+**Interactions:** Hover effects on cards
+
+### BlogsAndNews
+**File:** `client/components/BlogsAndNews.tsx`  
+**Purpose:** Display blog posts and news articles  
+**Props:** None  
+**Renders:** Carousel of blog cards with images and excerpts  
+**Interactions:** Navigation between blog items
+
+### ShaderBackground
+**File:** `client/components/ui/ShaderBackground.tsx`  
+**Purpose:** WebGL shader background effects  
+**Props:** `{ children: ReactNode }`  
+**Renders:** Canvas with shader effects, wraps child content  
+**Interactions:** Animated shader patterns
+
+## UI Components (Selection)
+
+### AnimatedTitle
+**File:** `client/components/ui/AnimatedTitle.tsx`  
+**Purpose:** Animated text with reveal effects  
+**Props:** `{ children: ReactNode }`  
+**Renders:** Text with CSS animations  
+**Interactions:** Scroll-triggered reveals
+
+### GlassVideoCard
+**File:** `client/components/ui/GlassVideoCard.tsx`  
+**Purpose:** Glassmorphism video display cards  
+**Props:** `{ src: string, title?: string, description?: string }`  
+**Renders:** Video in glassmorphism container  
+**Interactions:** Hover effects
+
+### MistOverlay
+**File:** `client/components/ui/MistOverlay.tsx`  
+**Purpose:** Atmospheric mist effects  
+**Props:** None  
+**Renders:** Animated mist particles  
+**Interactions:** Continuous animation
+
+# 🧠 Hooks & State Management
+
+## Custom Hooks
+
+### useZoomOnScroll
+**File:** `client/hooks/useZoomOnScroll.tsx`  
+**Purpose:** Provides zoom effects based on scroll position  
+**Returns:** `{ ref: RefObject<HTMLDivElement>, style: CSSProperties }`  
+**Logic:** Calculates transform scale based on scroll progress
+
+### useIsMobile
+**File:** `client/hooks/use-mobile.tsx`  
+**Purpose:** Detects mobile devices  
+**Returns:** `boolean`  
+**Logic:** Window width < 768px
+
+### useToast
+**File:** `client/hooks/use-toast.ts`  
+**Purpose:** Toast notification management  
+**Returns:** Toast state and control functions
+
+## State Management
+**Approach:** React Query for server state, local component state for UI  
+**Context Providers:** QueryClientProvider, TooltipProvider, Toaster providers  
+**Global State:** Minimal, mostly component-level state
+
+# 🪄 Animations & Transitions
+
+## Libraries Used
+- **Framer Motion:** Page transitions, component animations
+- **GSAP:** Advanced timeline animations
+- **Anime.js:** Lightweight animations
+- **CSS Animations:** Keyframe animations in global.css
+
+## Key Animations
+
+### Page Transitions
+**Implementation:** AnimatedRoutes with Framer Motion  
+**Variants:** initial (opacity 0, y 30), enter (opacity 1, y 0), exit (opacity 0, y -20)  
+**Duration:** 0.8s enter, 0.6s exit
+
+### Scroll Animations
+**Hero Lines:** Translate based on scroll progress  
+**Reveal Effects:** Fade in on scroll in various components  
+**Parallax:** Transform Y based on scroll position
+
+### Hover Effects
+**Cards:** Scale transforms, shadow changes  
+**Buttons:** Color transitions, scale effects  
+**Navigation:** Background and text color changes
+
+# 🧰 Utilities & Configurations
+
+## Tailwind Configuration
+**File:** `tailwind.config.ts`  
+**Custom Colors:** Navy, teal, sky variants  
+**Fonts:** Playfair, Source Sans Pro, Lato, Roboto  
+**Background Images:** Watercolor gradients, vignette  
+**Animations:** Accordion animations  
+**Plugins:** tailwindcss-animate
+
+## Vite Configuration
+**File:** `vite.config.ts`  
+**React Plugin:** SWC for fast compilation  
+**Path Aliases:** @/ points to client/
+
+## Environment Variables
+**Usage:** dotenv for configuration  
+**Purpose:** API keys, environment-specific settings
+
+## Helper Functions
+**File:** `client/lib/utils.ts`  
+**cn Function:** Class name merging with clsx and tailwind-merge  
+**Purpose:** Consistent className handling
+
+# 🧾 Page-by-Page Breakdown
+
+## Homepage (/)
+**Path:** `/`  
+**File:** `client/pages/Index.tsx`  
+**Description:** Main landing page with all major sections  
+**Components Used:**
+- Header
+- Hero
+- ParallaxSection
+- MeetOurDoctors
+- BlogsAndNews
+- CelebrityTestimonials
+- ClientReviews
+- ContactFooter
+- ShaderBackground
+- Floating FreeHealthCheckup button
+
+**Layout:** Full-screen sections with fixed header
+
+## Services (/services)
+**Path:** `/services`  
+**File:** `client/pages/Services.tsx`  
+**Description:** Detailed services offered by Flexrite World  
+**Components:** Service cards, descriptions, CTAs
+
+## Free Health Checkup (/freehealthcheckup)
+**Path:** `/freehealthcheckup`  
+**File:** `client/pages/FreeHealthCheckup.tsx`  
+**Description:** Interactive health assessment form  
+**Components:** Form fields, progress indicators, thank you cards  
+**Layout:** Multi-step form with animations
+
+## Other Pages
+- **Careers (/careers):** Job listings and company culture
+- **Perks (/perks):** Benefits calculator and information
+- **Corporate (/corporate):** B2B services
+- **Portfolio (/portfolio):** Case studies and work examples
+- **Not Found:** 404 error page
+
+# 🧪 Future Development / Notes
+
+## Optimization Suggestions
+- **Image Optimization:** Implement lazy loading for hero images
+- **Bundle Splitting:** Code-split large components (Three.js, shaders)
+- **Animation Performance:** Use `will-change` for animated elements
+- **SEO:** Add meta tags and structured data
+
+## Code Quality Improvements
+- **TypeScript:** Add stricter typing for component props
+- **Testing:** Expand unit test coverage
+- **Accessibility:** Add ARIA labels and keyboard navigation
+- **Performance:** Implement React.memo for expensive components
+
+## Scalability Considerations
+- **Component Library:** Extract reusable components to separate package
+- **State Management:** Consider Zustand for complex state needs
+- **API Integration:** Implement proper error handling and loading states
+
+## Unused Components Found
+- Several UI components in `/stash` appear unused
+- Duplicate ThankYouCard components (ThankYouCard.tsx vs ThankYouCard1.tsx)
+
+## Technical Debt
+- Inline styles mixed with Tailwind classes
+- Large Hero component could be split into smaller pieces
+- Some components lack proper TypeScript interfaces

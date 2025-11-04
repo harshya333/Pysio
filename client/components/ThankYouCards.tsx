@@ -62,9 +62,9 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
 
       const cardOffset = cumulativeOffset(cardRef.current)
       const cardTop = cardOffset.top
-      const cardBottom = cardOffset.top + 410 // card height (342 * 1.2)
+      const cardBottom = cardOffset.top + 600 // Updated to square height (600px)
       const cardLeft = cardOffset.left
-      const cardRight = cardOffset.left + 600 // card width
+      const cardRight = cardOffset.left + 600 // card width remains 600px for square
 
       // Check if cursor is within restricted boundaries (60px vertical, 80px horizontal)
       const reactZoneTop = cardTop - 60
@@ -111,7 +111,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
       if (shineRef.current) shineRef.current.style.transition = ""
 
       const x = ((e.pageX - cardOffset.left - 300 / 2) * -1) / 100 // 600 / 2
-      const y = ((e.pageY - cardOffset.top - 410 / 2) * -1) / 100 // 342 * 1.2
+      const y = ((e.pageY - cardOffset.top - 600 / 2) * -1) / 100 // Updated to 600 / 2 for square
 
       // Further reduced transformation values for subtlety
       const matrix = [
@@ -129,7 +129,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
       // Subtle shine reflection based on mouse position
       if (shineRef.current) {
         const shineX = (e.clientX - cardOffset.left - 300) * 0.12 // Reduced by 33% from 0.18
-        const shineY = (e.clientY - cardOffset.top - 205) * 0.12 // Reduced by 33% from 0.18
+        const shineY = (e.clientY - cardOffset.top - 300) * 0.12 // Updated to 300 for square center
         shineRef.current.style.transform = `translateX(${shineX}px) translateY(${shineY}px) rotate(45deg)`
       }
 
@@ -157,7 +157,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           margin: 0 auto;
           width: 100%;
           max-width: 600px;
-          aspect-ratio: 600 / 410;
+          aspect-ratio: 1 / 1; /* Changed to square aspect ratio */
           display: flex;
           justify-content: center;
           align-items: center;
@@ -177,6 +177,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
         @media (max-width: 768px) {
           .thank-you-wrapper {
             max-width: 100%;
+            aspect-ratio: 1 / 1; /* Maintain square on mobile */
           }
 
           .thank-you-card {
@@ -261,7 +262,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           bottom: 60px;
           z-index: 2;
           width: 684px;
-          height: 600px;
+          height: 684px; /* Updated to maintain proportions for square */
         }
 
         .card__greenShine {
@@ -271,7 +272,7 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           bottom: 60px;
           z-index: 2;
           width: 684px;
-          height: 600px;
+          height: 684px; /* Updated to maintain proportions for square */
         }
 
         .card__videoContainer {
@@ -284,14 +285,27 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           border-radius: 20px;
           overflow: hidden;
           transition: transform 0.3s ease-out;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.1); /* Added background for better contrast */
         }
 
         .card__video {
           width: 100%;
           height: 100%;
-          object-fit: contain;
+          object-fit: cover; /* Changed from 'contain' to 'cover' to fill the square */
           border-radius: 20px;
           background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Fallback for image when video is not available */
+        .card__imageFallback {
+          width: 100%;
+          height: 100%;
+          object-fit: cover; /* Ensure image also covers the square */
+          border-radius: 20px;
+          background-color: rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
@@ -304,6 +318,10 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
           }
 
           .card__video {
+            border-radius: 12px;
+          }
+
+          .card__imageFallback {
             border-radius: 12px;
           }
         }
@@ -397,6 +415,13 @@ const ThankYouCard: React.FC<ThankYouCardProps> = ({ doctor }) => {
             />
             Your browser does not support the video tag.
           </video>
+          {/* Fallback image if video doesn't load */}
+          <img 
+            src={doctor.image} 
+            alt={doctor.name}
+            className="card__imageFallback"
+            style={{ display: 'none' }} // Hidden by default, shown via JS if video fails
+          />
         </div>
         <div ref={cometRef} className="card__cometOuter">
           <div className="card__comet"></div>

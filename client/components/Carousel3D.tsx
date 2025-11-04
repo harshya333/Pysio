@@ -64,7 +64,7 @@ export default function SimpleCarousel() {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Carousel Section using the imported Carousel component */}
       <div className="mb-8 sm:mb-12 lg:mb-16">
         <div className="relative overflow-hidden w-full h-full">
@@ -72,8 +72,11 @@ export default function SimpleCarousel() {
         </div>
       </div>
 
-      {/* Enhanced Simple Carousel Section with transparent background */}
-      <div className="w-full max-w-6xl mx-auto">
+      {/* Enhanced Simple Carousel Section with black background strip */}
+      <div className="w-full max-w-6xl mx-auto relative">
+        
+
+        {/* Carousel Container */}
         <div className="relative bg-transparent rounded-lg sm:rounded-xl overflow-hidden">
           {/* Slides with transparent background and proper image fitting */}
           <div className="relative h-64 sm:h-80 md:h-96 lg:h-[450px] xl:h-[500px]">
@@ -84,7 +87,7 @@ export default function SimpleCarousel() {
                   index === currentSlide ? 'opacity-100' : 'opacity-0'
                 }`}
               >
-                {/* Image container with semi-transparent overlay effect */}
+                {/* Image container without the semi-transparent overlay */}
                 <div className="relative w-full h-full flex items-center justify-center">
                   <img 
                     src={slide.src} 
@@ -96,12 +99,7 @@ export default function SimpleCarousel() {
                     }}
                   />
                 </div>
-                {/* Overlay with title - enhanced for better visibility on shader background */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent p-4 sm:p-6 rounded-b-lg sm:rounded-b-xl">
-                  <h3 className="text-white text-lg sm:text-xl md:text-2xl font-semibold text-center drop-shadow-lg">
-                    {slide.title}
-                  </h3>
-                </div>
+                {/* Removed the black gradient overlay with title */}
               </div>
             ))}
           </div>
@@ -109,7 +107,7 @@ export default function SimpleCarousel() {
           {/* Navigation Buttons - enhanced for better visibility */}
           <button
             onClick={prevSlide}
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-105 border border-white/20"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-105 border border-white/20 z-20"
             aria-label="Previous slide"
           >
             <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -119,7 +117,7 @@ export default function SimpleCarousel() {
 
           <button
             onClick={nextSlide}
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-105 border border-white/20"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-2 sm:p-3 shadow-lg transition-all duration-200 hover:scale-105 border border-white/20 z-20"
             aria-label="Next slide"
           >
             <svg className="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,8 +125,8 @@ export default function SimpleCarousel() {
             </svg>
           </button>
 
-          {/* Indicators - enhanced for better visibility */}
-          <div className="absolute bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2">
+          {/* Indicators - positioned at the center of the black strip */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2 z-20">
             {slides.map((_, index) => (
               <button
                 key={index}
@@ -146,18 +144,13 @@ export default function SimpleCarousel() {
               />
             ))}
           </div>
-
-          {/* Slide Counter - enhanced for better visibility */}
-          <div className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 backdrop-blur-sm text-white text-xs sm:text-sm rounded-full px-2 sm:px-3 py-1 border">
-            {currentSlide + 1} / {slides.length}
-          </div>
         </div>
 
         {/* Additional Controls for Mobile - enhanced for better visibility */}
         <div className="flex justify-center items-center gap-4 mt-4 sm:mt-6">
           <button
             onClick={prevSlide}
-            className="sm:hidden bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-3 shadow-lg transition-all border border-white/20"
+            className="sm:hidden bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-3 shadow-lg transition-all border border-white/20 z-20"
             aria-label="Previous slide"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,7 +160,7 @@ export default function SimpleCarousel() {
           
           <button
             onClick={nextSlide}
-            className="sm:hidden bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-3 shadow-lg transition-all border border-white/20"
+            className="sm:hidden bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white rounded-full p-3 shadow-lg transition-all border border-white/20 z-20"
             aria-label="Next slide"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

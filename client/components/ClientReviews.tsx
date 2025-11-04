@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import ElegantShadowTitle from "./ui/ElegantShadowTitle1"
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger)
@@ -162,16 +163,21 @@ export default function ClientReviews() {
   }
 
   return (
-    <section ref={sectionRef} className="py-8 lg:py-12 px-4 lg:px-16 relative z-20">
-      <div className="max-w-7xl mx-auto">
+    <section ref={sectionRef} className="py-8 lg:py-12 px-4 lg:px-16 relative z-20 min-h-screen flex items-center justify-center">
+      {/* Frosty Glass Background Container */}
+      <div className="wrapper absolute inset-0 flex items-center justify-center">
+        
+      </div>
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto relative z-10 w-full">
         {/* Header Section */}
         <div className="text-center mb-12 lg:mb-16">
-          <h2 
-            ref={headerRef}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-slate-400"
-          >
-            Reviews
-          </h2>
+          <div ref={headerRef}>
+            <ElegantShadowTitle className="mb-6">
+              Reviews
+            </ElegantShadowTitle>
+          </div>
         </div>
 
         {/* Reviews Grid */}
@@ -183,6 +189,16 @@ export default function ClientReviews() {
           ))}
         </div>
       </div>
+
+      {/* Add the CSS styles */}
+      <style jsx>{`
+        .wrapper {
+          background: rgba(255, 255, 255, 0.192);
+          backdrop-filter: blur(10px);
+          border-radius: 15px;
+          border: 1px solid rgba(43, 43, 43, 0.568);
+        }
+      `}</style>
     </section>
   )
 }

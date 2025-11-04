@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from "react"
-import ElegantShadowTitle from './ui/ElegantShadowTitle'
+import ElegantShadowTitle from './ui/ElegantShadowTitle1'
 
 interface CardData {
   id: string

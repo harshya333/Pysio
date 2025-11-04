@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react"
-import ElegantShadowTitle from './ui/ElegantShadowTitle'
+import ElegantShadowTitle from './ui/ElegantShadowTitle1'
 import SubtextWithStrip from './ui/SubtextWithStrip'
 
 interface CardData {

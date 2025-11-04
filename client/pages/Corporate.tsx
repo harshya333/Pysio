@@ -346,9 +346,9 @@ export default function WaveGym() {
                       onClick={handleFreePass}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 rounded-full font-bold text-white shadow-2xl hover:shadow-xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-r from-black to-Orange-600 hover:from-Orange-700 hover:to-black animate-pulse"
+                      className="px-8 py-4 rounded-full font-bold text-white shadow-2xl hover:shadow-xl transform transition-all duration-300 bg-gradient-to-r from-orange-500 to-black hover:from-orange-600 hover:to-gray-900"
                     >
-                     Claim your free pass today
+                      Claim your free pass today
                     </motion.button>
                   </motion.div>
                 </div>
@@ -671,7 +671,7 @@ export default function WaveGym() {
                       onClick={handleFreePass}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 rounded-full font-bold text-white shadow-2xl hover:shadow-xl transform hover:scale-105 transition-all duration-300 bg-gradient-to-r from-black to-Orange-100 hover:from-Orange-100 hover:to-orange animate-pulse"
+                      className="px-8 py-4 rounded-full font-bold text-white shadow-2xl hover:shadow-xl transform transition-all duration-300 bg-gradient-to-r from-orange-500 to-black hover:from-orange-600 hover:to-gray-900"
                     >
                       Claim Your Free Day Pass Now
                     </motion.button>
