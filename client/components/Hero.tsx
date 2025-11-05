@@ -280,17 +280,23 @@ const Hero: FC = () => {
           width: 100%; /* Full width of the container */
         }
 
-        /* Text Background Container - UPDATED: Full width and plain black */
+        /* Text Background Container - full-width background disabled; will use scoped heading background */
         .text-background-container {
+          display: none;
+        }
+
+        /* Scoped black background that only covers the heading width (matches inline-block width)
+           This places a black strip exactly under the heading text (up to the last letter). */
+        .heading-wrapper::before {
+          content: '';
           position: absolute;
           top: 0;
           left: 0;
-          width: 100%; /* Full width of parent container */
+          width: 100%; /* matches the heading inline-block width */
           height: 100%;
           border-radius: 12px;
-          overflow: hidden;
+          background: #000000;
           z-index: -1;
-          background: #000000; /* Plain black background */
         }
 
         .text-wave-effect {
@@ -321,16 +327,17 @@ const Hero: FC = () => {
         /* Hero Image positioned at right side with updated dimensions - transparent and no border */
         .hero-image-full {
           position: absolute;
-          right: -10px; /* Moved left by 70px (from 60px to -10px) */
-          top: calc(50% - 260px); /* MOVED UP BY 100PX (from -160px to -260px) */
+          right: -10px; /* slight horizontal offset kept */
+          /* anchor the image to the bottom so it visually meets the white scroll strip */
+          bottom: 36px; /* moved down a little (was 56px) */
           width: 40%;
-          height: 80%;
+          height: 65%; /* reduced from 80% to 65% to raise the bottom edge */
+          opacity: 0.92; /* slightly reduced image opacity for visual softness */
           object-fit: cover;
           object-position: center;
           z-index: 15; /* Increased z-index to bring image to front */
           border-radius: 0;
           background: transparent;
-          transform: translateY(-50%);
         }
 
         /* Equal gaps for both lines - responsive */
@@ -425,9 +432,9 @@ const Hero: FC = () => {
 
           .hero-image-full {
             right: -20px; /* Adjusted for tablet */
-            top: calc(50% - 240px); /* MOVED UP BY 100PX (from -140px to -240px) */
+            bottom: 30px; /* moved down a little (was 50px) */
             width: 45%;
-            height: 75%;
+            height: 60%; /* reduced from 75% to 60% */
           }
 
           .subtitle-container {
@@ -463,14 +470,15 @@ const Hero: FC = () => {
           .hero-image-full {
             position: relative;
             width: 80%;
-            height: 350px;
-            margin-top: 1rem; /* MOVED UP BY 16PX (from 2rem to 1rem) */
+            height: 300px; /* reduced from 350px to 300px to lift bottom edge */
+            margin-top: 1rem;
             border-radius: 0;
             background: transparent;
             right: auto;
             top: auto;
             transform: none;
             z-index: 15; /* Maintain higher z-index on mobile */
+            margin-bottom: 36px; /* moved down a little (was 56px) */
           }
 
           .subtitle-container {
@@ -528,8 +536,9 @@ const Hero: FC = () => {
         @media (max-width: 480px) {
           .hero-image-full {
             width: 90%;
-            height: 280px;
-            margin-top: 0.5rem; /* MOVED UP BY 16PX (from 1.5rem to 0.5rem) */
+            height: 240px; /* reduced from 280px to 240px for smallest screens */
+            margin-top: 0.5rem;
+            margin-bottom: 36px; /* moved down a little (was 48px) */
           }
 
           .scroll-line-container {
@@ -597,15 +606,9 @@ const Hero: FC = () => {
 
       {/* Fixed Hero Section */}
       <div className="sticky top-0 left-0 h-screen w-full overflow-hidden">
+       
         {/* Hero Image - Moved to front with higher z-index */}
-        <img 
-          src="/images/hero.png" 
-          alt="Flexrite World"
-          className="hero-image-full hero-image"
-          onError={(e) => {
-            console.log('Image failed to load, check the path');
-          }}
-        />
+       
 
         {/* Animated Lines - Behind the image */}
         <div className="animated-line top-line-container" style={lineStyles.topLine}>
@@ -641,13 +644,13 @@ const Hero: FC = () => {
               className="w-full relative" // Added relative positioning
               style={{ transform: "translateY(0)" }}
             >
-              {/* Text Background - UPDATED: Plain black and full width */}
-              <div className="text-background-container">
-                {/* Removed MeshGradient and replaced with plain black background */}
+              {/* Text Background - switched to heading-scoped background */}
+              <div className="text-background-container" style={{ display: "none" }}>
+                {/* Full-width background disabled; heading-wrapper ::before will provide scoped black strip */}
               </div>
 
               {/* Main Heading with Layers - STABLE POSITION */}
-              <div className="relative inline-block">
+              <div className="relative inline-block heading-wrapper">
                 <h1
                   className="hero-heading hero-heading-1 pixel-text"
                   style={{
@@ -782,6 +785,15 @@ const Hero: FC = () => {
           </div>
           
         </div>
+<div> <img 
+          src="/images/hero.png" 
+          alt="Flexrite World"
+          className="hero-image-full hero-image"
+          onError={(e) => {
+            console.log('Image failed to load, check the path');
+          }}
+        /></div>
+
       </div>
 
       {/* Video Section */}

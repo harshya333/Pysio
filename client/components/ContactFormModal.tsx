@@ -69,7 +69,7 @@ export default function ContactFormModal() {
             htmlFor="email"
             className="block text-sm font-medium text-white/80 mb-2"
           >
-            Email
+            Email 
           </label>
           <input
             type="email"

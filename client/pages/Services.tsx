@@ -366,17 +366,12 @@ export default function Services() {
           background: linear-gradient(90deg, transparent, rgba(148, 188, 117, 0.4), transparent);
         }
 
+        /* disable the ::after overlay so it doesn't conflict with the new
+           inline gradient background above; using the inline gradient gives
+           precise control of darkness per card */
         .glass-card::after {
           content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-          opacity: 0.25 !important;
+          opacity: 0 !important;
           z-index: -1;
           transition: all 0.4s ease;
         }
@@ -398,6 +393,8 @@ export default function Services() {
           border: 2px solid rgba(255, 255, 255, 0.1);
           position: relative;
           z-index: 1;
+          /* slightly reduce image opacity for a softer, more consistent look */
+          opacity: 0.92;
         }
 
         .glass-card:hover .service-image {
@@ -472,9 +469,12 @@ export default function Services() {
                   <div 
                     className="glass-card"
                     style={{
-                      backgroundImage: `url(${service.backgroundImage})`,
+                      /* add a semi-opaque dark gradient on top of the background image
+                         to reduce the image brightness/visibility and make text more readable */
+                      backgroundImage: `linear-gradient(rgba(0,0,0,0.52), rgba(0,0,0,0.52)), url(${service.backgroundImage})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
+                      backgroundRepeat: 'no-repeat',
                     }}
                   >
                     <div className={`flex flex-col ${

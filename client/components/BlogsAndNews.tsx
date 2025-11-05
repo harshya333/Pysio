@@ -9,7 +9,7 @@ interface BlogPost {
   title: string;
   image: string;
   excerpt: string;
-  content?: string; // Optional full content for the popup
+  content?: string;
   writer?: string;
   readTime?: string;
   updatedDate?: string;
@@ -78,7 +78,7 @@ function BlogDetailPopup({ post, isOpen, onClose }: {
             </div>
           </div>
 
-          {/* Title - Reduced font size */}
+          {/* Title */}
           <h1 className="text-white text-2xl md:text-1xl lg:text-2xl font-playfair-display mb-6" 
               style={{ textShadow: '0 0 15px rgba(255, 255, 255, 0.3)' }}>
             {post.title}
@@ -129,7 +129,7 @@ function BlogDetailPopup({ post, isOpen, onClose }: {
   );
 }
 
-// BlogCard Component with consistent width and adjusted image heights
+// BlogCard Component
 function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isSecondRow = false }: { 
   post: BlogPost; 
   isFeatured?: boolean;
@@ -167,11 +167,9 @@ function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isSe
                          border-2 border-white transition-transform duration-200 ease-out group-hover:rotate-6"
             />
             <div className="flex-1 text-left">
-              {/* Author name */}
               <p className="text-white text-base md:text-lg font-semibold font-source-sans-pro text-left" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>
                 {post.authorName}
               </p>
-              {/* Date */}
               <p className="text-white/80 text-sm md:text-base font-source-sans-pro text-left">
                 {post.date}
               </p>
@@ -211,7 +209,7 @@ function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isSe
                  ${isVisible ? 'opacity-100 transform translate-y-0' : 'opacity-0 transform translate-y-4'}
                  w-full`}
     >
-      {/* Image Area with consistent height for all cards */}
+      {/* Image Area */}
       <img
         src={post.image}
         alt={post.title}
@@ -230,11 +228,9 @@ function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isSe
                      border-2 border-white transition-transform duration-200 ease-out group-hover:rotate-6"
         />
         <div className="flex-1">
-          {/* Author name */}
           <p className="text-white text-base md:text-lg font-semibold font-source-sans-pro" style={{ textShadow: '0 0 10px rgba(255, 255, 255, 0.3)' }}>
             {post.authorName}
           </p>
-          {/* Date */}
           <p className="text-white/80 text-sm md:text-base font-source-sans-pro">
             {post.date}
           </p>
@@ -246,7 +242,7 @@ function BlogCard({ post, isFeatured = false, isVisible = true, onReadMore, isSe
         {post.title}
       </h3>
       
-      {/* Excerpt for non-featured cards */}
+      {/* Excerpt */}
       {!isFeatured && (
         <p className="text-white/80 text-base md:text-lg line-clamp-4 mb-6 flex-grow">
           {post.excerpt}
@@ -464,7 +460,7 @@ For more insights from Dr. Priyanka Das and tips on injury prevention, stay tune
   // Close popup
   const handleClosePopup = () => {
     setIsPopupOpen(false);
-    setTimeout(() => setSelectedPost(null), 300); // Clear selected post after transition
+    setTimeout(() => setSelectedPost(null), 300);
   };
 
   // Initialize with first 3 blog posts
@@ -472,31 +468,26 @@ For more insights from Dr. Priyanka Das and tips on injury prevention, stay tune
     setCurrentBlogs(allBlogPosts.slice(0, 3));
   }, []);
 
-  // Function to rotate blog posts with smooth transition
-  const rotateBlogPosts = () => {
-    if (isTransitioning) return; // Prevent multiple clicks during transition
+  // Function to navigate to specific blog set
+  const navigateToIndex = (index: number) => {
+    if (isTransitioning || index === currentIndex) return;
     
     setIsTransitioning(true);
     
-    // Start fade out
     setTimeout(() => {
-      // Calculate the next set of posts
-      const newIndex = (currentIndex + 1) % allBlogPosts.length;
       const nextPosts = [];
       for (let i = 0; i < 3; i++) {
-        const index = (newIndex + i) % allBlogPosts.length;
-        nextPosts.push(allBlogPosts[index]);
+        const postIndex = (index + i) % allBlogPosts.length;
+        nextPosts.push(allBlogPosts[postIndex]);
       }
       
-      // Update content immediately
       setCurrentBlogs(nextPosts);
-      setCurrentIndex(newIndex);
+      setCurrentIndex(index);
       
-      // Wait a bit then fade back in
       setTimeout(() => {
         setIsTransitioning(false);
       }, 50);
-    }, 250); // Half the transition duration for smoother effect
+    }, 250);
   };
 
   
@@ -510,11 +501,10 @@ For more insights from Dr. Priyanka Das and tips on injury prevention, stay tune
           </ElegantShadowTitle>
         </div>
 
-        {/* Updated Layout: First Row - 2 Columns, Second Row - 1 Card with horizontal layout */}
+        {/* Blog Cards Layout */}
         <div className="space-y-8 md:space-y-12">
           {/* First Row - Two Cards Side by Side */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            {/* Left Card in First Row */}
             <div className="w-full">
               <BlogCard 
                 post={currentBlogs[0] || allBlogPosts[0]}
@@ -524,7 +514,6 @@ For more insights from Dr. Priyanka Das and tips on injury prevention, stay tune
               />
             </div>
             
-            {/* Right Card in First Row */}
             <div className="w-full">
               <BlogCard 
                 post={currentBlogs[1] || allBlogPosts[1]}
@@ -535,7 +524,7 @@ For more insights from Dr. Priyanka Das and tips on injury prevention, stay tune
             </div>
           </div>
 
-          {/* Second Row - Single Card with horizontal layout (image left, content right) */}
+          {/* Second Row - Single Card with horizontal layout */}
           <div className="grid grid-cols-1 gap-8 md:gap-12">
             <div className="w-full">
               <BlogCard 
@@ -549,14 +538,25 @@ For more insights from Dr. Priyanka Das and tips on injury prevention, stay tune
           </div>
         </div>
 
-        {/* Optional: Add progress indicators */}
-        <div className="flex justify-center mt-6 md:mt-8 space-x-3">
+        {/* Navigation Buttons */}
+        <div className="flex justify-center mt-8 md:mt-12 space-x-4">
           {allBlogPosts.map((_, index) => (
-            <div 
+            <button
               key={index}
+              onClick={() => navigateToIndex(index)}
+              disabled={isTransitioning}
               className={`w-3 h-3 rounded-full transition-all duration-300 
-                         ${index === currentIndex ? 'bg-white' : 'bg-white/30'}`}
-            />
+                         
+                         ${index === currentIndex 
+                           ? 'bg-white text-black scale-110 shadow-lg' 
+                           : 'bg-white/20 text-white hover:bg-white/30 hover:scale-105'
+                         }
+                         ${isTransitioning ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
+                         border border-white/30 flex items-center justify-center`}
+              aria-label={`View blog set ${index + 1}`}
+            >
+              {/* very small dot-style control; no inner text to keep it compact */}
+            </button>
           ))}
         </div>
       </div>

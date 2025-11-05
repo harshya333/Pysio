@@ -470,7 +470,7 @@ export default function FreeHealthCheckup() {
                     "#000000",
                   ]}
                   speed={0.05}
-                  backgroundColor="#000000"
+                  style={{ backgroundColor: "#000000" }}
                 />
 
                 {/* Static Wave Effect */}
@@ -651,7 +651,7 @@ export default function FreeHealthCheckup() {
                     "#000000",
                   ]}
                   speed={0.05}
-                  backgroundColor="#000000"
+                  style={{ backgroundColor: "#000000" }}
                 />
 
                 {/* Static Wave Effect */}

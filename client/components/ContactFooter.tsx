@@ -7,17 +7,24 @@ export default function ContactFooter() {
   };
 
   const handleEmailUs = () => {
-    // Open default mail client with pre-filled details
+    const to = "team@flexriteworld.org";
     const subject = "Get in Touch - FlexRite World";
     const body = "Hello FlexRite World team,\n\nI would like to get in touch with you regarding:\n\n\n\nBest regards,\n[Your Name]";
-    const mailtoLink = `mailto:team@flexriteworld.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
-    window.open(mailtoLink, "_blank");
+
+    const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink; // opens default mail client immediately
   };
+
+
 
   const handleWhatsAppClick = () => {
     window.open("https://wa.me/919757090909", "_blank");
   };
+
+  // Precompute mailto link so it can be used by both the click handler and the anchor fallback
+  const mailtoSubject = "Get in Touch - FlexRite World";
+  const mailtoBody = "Hello FlexRite World team,\n\nI would like to get in touch with you regarding:\n\n\n\nBest regards,\n[Your Name]";
+  const mailtoLink = `mailto:team@flexriteworld.org?subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(mailtoBody)}`;
 
   return (
     <footer
@@ -39,7 +46,7 @@ export default function ContactFooter() {
               <p className="text-white/80 text-sm mb-2">
                 Ready to start your journey with FlexRite World? We're here to help you achieve your goals and create exceptional solutions together.
               </p>
-              
+
               {/* Contact Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                 {/* Official Landline */}
@@ -61,12 +68,12 @@ export default function ContactFooter() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center p-2 rounded-lg bg-white/10">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-4 h-4" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.189-1.248-6.189-3.515-8.464"/>
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893c0-3.189-1.248-6.189-3.515-8.464" />
                     </svg>
                   </div>
                   <div>
                     <p className="text-xs text-white/60">Official WhatsApp</p>
-                    <button 
+                    <button
                       onClick={handleWhatsAppClick}
                       className="text-sm font-semibold hover:text-white/80 transition-colors text-left"
                     >
@@ -79,7 +86,7 @@ export default function ContactFooter() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center p-2 rounded-lg bg-white/10">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-4 h-4" viewBox="0 0 24 24">
-                      <path d="M17.5 2h-11C5.12 2 4 3.12 4 4.5v15C4 20.88 5.12 22 6.5 22h11c1.38 0 2.5-1.12 2.5-2.5v-15C20 3.12 18.88 2 17.5 2zm-7 17c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm7-4.5h-14V4.5c0-.28.22-.5.5-.5h13c.28 0 .5.22.5.5v10.5z"/>
+                      <path d="M17.5 2h-11C5.12 2 4 3.12 4 4.5v15C4 20.88 5.12 22 6.5 22h11c1.38 0 2.5-1.12 2.5-2.5v-15C20 3.12 18.88 2 17.5 2zm-7 17c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm7-4.5h-14V4.5c0-.28.22-.5.5-.5h13c.28 0 .5.22.5.5v10.5z" />
                     </svg>
                   </div>
                   <div>
@@ -94,7 +101,7 @@ export default function ContactFooter() {
                 <div className="flex items-center gap-2">
                   <div className="flex items-center justify-center p-2 rounded-lg bg-white/10">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-4 h-4" viewBox="0 0 24 24">
-                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                      <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
                     </svg>
                   </div>
                   <div>
@@ -106,19 +113,22 @@ export default function ContactFooter() {
                 </div>
               </div>
 
-              <div className="mt-2">
-                <button
-                  className="w-full px-4 py-3 text-white font-semibold bg-white/10 border border-white/20 backdrop-blur-md rounded-xl shadow-md hover:bg-white/20 transition-all duration-300 text-base hover:scale-105"
-                  onClick={handleEmailUs}
-                >
-                  Email Us
-                </button>
-              </div>
+              <div className="mt-2 relative z-[9999]">
+  <button
+    type="button"
+    onClick={handleEmailUs}
+    className="w-full px-4 py-3 text-white font-semibold bg-white/10 border border-white/20 backdrop-blur-md rounded-xl shadow-md hover:bg-white/20 transition-all duration-300 text-base hover:scale-105"
+    style={{ cursor: "pointer" }}
+  >
+    Email us
+  </button>
+</div>
+
             </div>
           </div>
 
           <div className="w-full lg:w-1/2 flex">
-            <div 
+            <div
               className="w-full h-full rounded-xl overflow-hidden border border-white/20 bg-white/5 backdrop-blur-sm min-h-[180px] cursor-pointer relative"
               onClick={handleMapClick}
               title="Click to view locations on Google Maps"
@@ -248,16 +258,16 @@ export default function ContactFooter() {
                 title="Visit our website"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-5 h-5" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
                 </svg>
               </a>
             </div>
 
             {/* Copyright and additional info */}
             <div className="flex flex-col items-center sm:items-end gap-1 text-center sm:text-right">
-              <a 
-                href="" 
-                target="_blank" 
+              <a
+                href=""
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm font-semibold hover:text-white/80 transition-colors"
               >
