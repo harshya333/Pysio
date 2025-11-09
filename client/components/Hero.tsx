@@ -344,7 +344,7 @@ const Hero: FC = () => {
         .top-line-container {
           top: calc(50% - 100px);
           left: 0;
-          width: 50%;
+          width: 50%;z
           z-index: 10; /* Lower z-index so image appears above lines */
         }
 

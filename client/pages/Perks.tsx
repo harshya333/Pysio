@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Header from "@/components/Header";
 import ContactFooter from "@/components/ContactFooter";
 import { Button } from "@/components/ui/button";
@@ -9,70 +9,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { User, UserCheck, Minus, Plus, Activity, Scale, Heart, TrendingUp, TrendingDown, Target } from 'lucide-react';
 import ShaderBackground from "@/components/ui/ShaderBackground";
 
-interface BMIResult {
+type BMIResult = {
   bmi: number;
   category: string;
   description: string;
-  idealWeight: {
-    min: number;
-    max: number;
-  };
-}
+  idealWeight: { min: number; max: number; };
+};
 
-interface CalorieResult {
+type CalorieResult = {
   calories: number;
   bmr: number;
   goal: string;
   description: string;
-  macronutrients: {
-    protein: number;
-    carbs: number;
-    fat: number;
-  };
-}
+  macronutrients: { protein: number; carbs: number; fat: number; };
+};
 
 export default function HealthCalculator() {
-  // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Optional: Also handle hash-based navigation if needed
-    const handleHashChange = () => {
-      if (window.location.hash) {
-        const sectionId = window.location.hash.substring(1);
-        setTimeout(() => {
-          scrollToSection(sectionId);
-        }, 100);
-      }
-    };
-
-    // Handle initial hash
-    if (window.location.hash) {
-      setTimeout(() => {
-        scrollToSection(window.location.hash.substring(1));
-      }, 300);
-    }
-
-    window.addEventListener('hashchange', handleHashChange);
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
   }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      const offsetTop = section.getBoundingClientRect().top + window.pageYOffset;
-      const headerOffset = 80; // Adjust based on your header height
-      const targetPosition = offsetTop - headerOffset;
-      
-      window.scrollTo({
-        top: targetPosition,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   const [bmiForm, setBmiForm] = useState({
     name: "",
@@ -98,6 +53,117 @@ export default function HealthCalculator() {
 
   const bmiCardRef = useRef<HTMLDivElement>(null);
   const calorieCardRef = useRef<HTMLDivElement>(null);
+  const nutrientCardRef = useRef<HTMLDivElement>(null);
+
+  type NutrientPer100 = {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+    fiber?: number;
+  };
+
+  type NutrientResult = {
+    item: string;
+    amountGrams: number;
+    per100: NutrientPer100;
+    totals: NutrientPer100;
+  };
+
+  const [nutrientForm, setNutrientForm] = useState({
+    name: "",
+    searchTerm: "",
+    amount: 100,
+    unit: "g",
+  });
+  const [nutrientResult, setNutrientResult] = useState<NutrientResult | null>(null);
+  const [showNutrientResult, setShowNutrientResult] = useState(false);
+  const [nutrientLoading, setNutrientLoading] = useState(false);
+  const [nutrientError, setNutrientError] = useState<string | null>(null);
+
+  // simple nutrient database per 100g (demo values)
+ 
+
+  const convertToGrams = (amount: number, unit: string) => {
+    if (unit === 'kg') return amount * 1000;
+    if (unit === 'ltr' || unit === 'l' || unit === 'ml') {
+      // assume density ~1g/ml for simple foods/fluids (demo)
+      if (unit === 'ml') return amount; // ml -> g
+      return amount * 1000; // ltr -> g
+    }
+    return amount; // g
+  }
+
+  const calculateNutrients = async () => {
+    if (!nutrientForm.name || !nutrientForm.searchTerm) return;
+
+    setNutrientLoading(true);
+    setNutrientError(null);
+    setNutrientResult(null);
+
+    try {
+      const response = await fetch(`/api/food?query=${encodeURIComponent(nutrientForm.searchTerm)}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch nutrient data');
+      }
+
+      if (!data.per100) {
+        setNutrientError('Could not find nutrient data for the entered item. Try a different search term (e.g. "apple", "chicken breast").');
+        return;
+      }
+
+      const grams = convertToGrams(nutrientForm.amount, nutrientForm.unit);
+      const factor = grams / 100;
+      const per100 = data.per100;
+
+      const totals: NutrientPer100 = {
+        calories: Math.round(per100.calories * factor * 10) / 10,
+        protein: Math.round(per100.protein * factor * 10) / 10,
+        carbs: Math.round(per100.carbs * factor * 10) / 10,
+        fat: Math.round(per100.fat * factor * 10) / 10,
+        fiber: per100.fiber ? Math.round(per100.fiber * factor * 10) / 10 : undefined,
+      };
+
+      const result: NutrientResult = {
+        item: data.item,
+        amountGrams: grams,
+        per100,
+        totals,
+      };
+
+      setNutrientResult(result);
+
+    } catch (err) {
+      console.error('Failed to fetch nutrients:', err);
+      setNutrientError('Failed to fetch nutrient data. Please try again.');
+      return;
+    } finally {
+      setNutrientLoading(false);
+    }
+
+    if (nutrientCardRef.current) {
+      nutrientCardRef.current.style.transform = 'rotateY(90deg)';
+      setTimeout(() => {
+        setShowNutrientResult(true);
+        if (nutrientCardRef.current) {
+          nutrientCardRef.current.style.transform = 'rotateY(0deg)';
+        }
+      }, 300);
+    }
+  };
+
+  const resetNutrient = () => {
+    if (nutrientCardRef.current) {
+      nutrientCardRef.current.style.transform = 'rotateY(90deg)';
+      setTimeout(() => {
+        setShowNutrientResult(false);
+        setNutrientResult(null);
+        if (nutrientCardRef.current) nutrientCardRef.current.style.transform = 'rotateY(0deg)';
+      }, 300);
+    }
+  };
 
   const calculateBMI = () => {
     if (!bmiForm.name || !bmiForm.dateOfBirth) return;
@@ -357,7 +423,7 @@ export default function HealthCalculator() {
 
     return (
       <div className="w-full mt-4">
-        <div className="relative h-6 bg-gradient-to-r from-blue-400 via-cyan-400 via-green-400 via-yellow-400 via-orange-400 to-red-500 rounded-full overflow-hidden shadow-inner">
+        <div className="relative h-6 bg-gradient-to-r from-blue-400 via-green-400 to-red-500 rounded-full overflow-hidden shadow-inner">
           <div className="absolute inset-0 flex justify-between items-center px-1">
             {[16, 18.5, 25, 30, 35, 40].map((value, index) => (
               <div key={index} className="flex flex-col items-center">
@@ -443,17 +509,14 @@ export default function HealthCalculator() {
     }
   };
 
-  // Glassy card style
   const glassStyle = {
     background: 'rgba(255, 255, 255, 0.1)',
     backdropFilter: 'blur(10px)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
   };
-
-  // Glassy card with accent style
   const glassAccentStyle = {
+    ...glassStyle,
     background: 'rgba(255, 255, 255, 0.15)',
-    backdropFilter: 'blur(10px)',
     border: '1px solid rgba(255, 255, 255, 0.3)',
   };
 
@@ -1002,6 +1065,143 @@ export default function HealthCalculator() {
 
                           <Button 
                             onClick={resetCalorie}
+                            className="w-full rounded-lg py-2 sm:py-3 font-bold h-9 sm:h-11 bg-white text-gray-900 hover:bg-white/90 transition-all text-sm sm:text-base"
+                          >
+                            Calculate Again
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Nutrient Calculator Card */}
+                <div ref={nutrientCardRef} className="flip-card h-full">
+                  {!showNutrientResult ? (
+                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-2xl h-full min-h-[500px] sm:min-h-[550px]" style={glassStyle}>
+                      <div className="mb-4 sm:mb-6 flex items-center gap-3">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          <Target className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Nutrients Calculator</h2>
+                          <div className="w-12 sm:w-16 h-0.5 bg-white/60"></div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="space-y-2">
+                          <Label className="text-white font-medium text-sm sm:text-base">Your Name</Label>
+                          <Input
+                            placeholder="Enter your name"
+                            value={nutrientForm.name}
+                            onChange={(e) => setNutrientForm(prev => ({ ...prev, name: e.target.value }))}
+                            className="rounded-lg border-white/30 bg-white/20 text-white placeholder:text-gray-300 h-9 sm:h-10 focus:border-white focus:ring-white/20 text-sm sm:text-base"
+                          />
+                        </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-white font-medium text-sm sm:text-base">Search for food</Label>
+                            <Input
+                              placeholder="Enter any food item (e.g. apple, chicken breast, milk)"
+                              value={nutrientForm.searchTerm}
+                              onChange={(e) => setNutrientForm(prev => ({ ...prev, searchTerm: e.target.value }))}
+                              className="rounded-lg border-white/30 bg-white/20 text-white placeholder:text-gray-300 h-9 sm:h-10 focus:border-white focus:ring-white/20 text-sm sm:text-base"
+                            />
+                            {nutrientError && (
+                              <p className="text-red-400 text-xs mt-1">{nutrientError}</p>
+                            )}
+                          </div>                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-white font-medium text-sm sm:text-base">Amount</Label>
+                            <Input
+                              type="number"
+                              value={nutrientForm.amount}
+                              onChange={(e) => setNutrientForm(prev => ({ ...prev, amount: parseFloat(e.target.value) || 0 }))}
+                              className="rounded-lg border-white/30 bg-white/20 text-white h-9 sm:h-10 focus:border-white focus:ring-white/20 text-sm sm:text-base"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label className="text-white font-medium text-sm sm:text-base">Unit</Label>
+                            <Select value={nutrientForm.unit} onValueChange={(value) => setNutrientForm(prev => ({ ...prev, unit: value }))}>
+                              <SelectTrigger className="rounded-lg border-white/30 bg-white/20 text-white h-9 sm:h-10 focus:border-white focus:ring-white/20 text-xs sm:text-sm">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent className="bg-gray-800 border-gray-700">
+                                <SelectItem value="g" className="text-white text-xs sm:text-sm">g (grams)</SelectItem>
+                                <SelectItem value="kg" className="text-white text-xs sm:text-sm">kg (kilograms)</SelectItem>
+                                <SelectItem value="ml" className="text-white text-xs sm:text-sm">ml (milliliters)</SelectItem>
+                                <SelectItem value="ltr" className="text-white text-xs sm:text-sm">ltr (liters)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        <Button 
+                          onClick={calculateNutrients}
+                          className="w-full rounded-lg py-2 sm:py-3 font-bold h-9 sm:h-11 bg-white text-gray-900 hover:bg-white/90 transition-all text-sm sm:text-base"
+                          disabled={!nutrientForm.name || !nutrientForm.searchTerm || nutrientLoading}
+                        >
+                          {nutrientLoading ? 'Searching...' : 'Calculate Nutrients'}
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-2xl h-full min-h-[500px] sm:min-h-[550px]" style={glassStyle}>
+                      <div className="mb-4 sm:mb-6 flex items-center gap-3">
+                        <div className="p-2 bg-white/20 rounded-lg">
+                          <Target className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Nutrient Result</h2>
+                          <div className="w-12 sm:w-16 h-0.5 bg-white/60"></div>
+                        </div>
+                      </div>
+
+                      {nutrientResult && (
+                        <div className="space-y-3 sm:space-y-4">
+                          <Card className="border-white/30" style={glassAccentStyle}>
+                            <CardContent className="p-3 sm:p-4">
+                              <div className="text-center mb-3 sm:mb-4">
+                                <h3 className="text-lg sm:text-xl font-bold text-white mb-1">{nutrientForm.name}</h3>
+                                <div className="text-sm text-white/80">{nutrientResult.item.charAt(0).toUpperCase() + nutrientResult.item.slice(1)} • {nutrientResult.amountGrams} g</div>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-3">
+                                <div className="text-center">
+                                  <div className="text-2xl font-bold text-white">{nutrientResult.totals.calories}</div>
+                                  <div className="text-white/80 text-xs">Calories</div>
+                                </div>
+                                <div className="text-center">
+                                  <div className="text-2xl font-bold text-white">{nutrientResult.totals.protein} g</div>
+                                  <div className="text-white/80 text-xs">Protein</div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="border-white/30" style={glassStyle}>
+                            <CardContent className="p-3 sm:p-4">
+                              <div className="grid grid-cols-3 gap-3 text-center">
+                                <div>
+                                  <div className="font-bold text-base sm:text-lg text-white">{nutrientResult.totals.carbs} g</div>
+                                  <div className="text-white/80 text-xs">Carbs</div>
+                                </div>
+                                <div>
+                                  <div className="font-bold text-base sm:text-lg text-white">{nutrientResult.totals.fat} g</div>
+                                  <div className="text-white/80 text-xs">Fat</div>
+                                </div>
+                                <div>
+                                  <div className="font-bold text-base sm:text-lg text-white">{nutrientResult.totals.fiber ?? '-'} g</div>
+                                  <div className="text-white/80 text-xs">Fiber</div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          <Button 
+                            onClick={resetNutrient}
                             className="w-full rounded-lg py-2 sm:py-3 font-bold h-9 sm:h-11 bg-white text-gray-900 hover:bg-white/90 transition-all text-sm sm:text-base"
                           >
                             Calculate Again

@@ -41,7 +41,7 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
           "#4a9e60", // Light green
         ]}
         speed={0.25}
-        backgroundColor="#264348"
+        backgroundcolor="#264348"
       />
 
       {/* Mist Overlay with 90% transparency */}

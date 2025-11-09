@@ -7,6 +7,7 @@ import { MeshGradient } from "@paper-design/shaders-react";
 
 export default function FreeHealthCheckup() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [visible, setVisible] = useState<boolean[]>([]);
   const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -16,12 +17,6 @@ export default function FreeHealthCheckup() {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleApplyNow = () => {
-    const contactSection = document.getElementById('contact-form');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   const handleCallNow = () => {
     window.open('tel:02244506234', '_self');
@@ -732,49 +727,62 @@ export default function FreeHealthCheckup() {
               variants={textVariants}
               className="text-center"
             >
-              <div className="glass-section max-w-4xl mx-auto">
-                <div className="glass-section-content">
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-grayish-blue mb-6 tracking-tight">
-                    Join Us in Making a Difference
-                  </h2>
-                  <p className="font-source text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto">
-                    Pain-free living is not a luxury—it's a right.
-                  </p>
-                  <p className="font-source text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                    If you or someone you know can benefit from our program, don't hesitate to reach out.
-                  </p>
-                  <p className="font-source text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                    Together, let's create a community where care knows no boundaries.
-                  </p>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <button
-                      className="desktop-button md:hidden mobile-button"
-                      onClick={handleCallNow}
+                <div className="glass-section max-w-4xl mx-auto">
+                  {/* CTA with layered background image + gradient overlay for readability */}
+                  <div className="glass-section-content relative p-0 overflow-hidden" style={{padding: 0}}>
+                    {/* Background image layer */}
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0"
                       style={{
-                        background: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid rgba(255, 255, 255, 0.3)",
+                        backgroundImage: `url('/images/cta-bg.jpg')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat',
+                        filter: 'brightness(0.5) contrast(0.95) saturate(0.9)'
                       }}
-                    >
-                      Call Now
-                    </button>
-                    <button
-                      className="hidden md:block desktop-button"
-                      onClick={handleCallNow}
-                      style={{
-                        background: "rgba(255, 255, 255, 0.2)",
-                        border: "1px solid rgba(255, 255, 255, 0.3)",
-                      }}
-                    >
-                      Call Now
-                    </button>
+                    />
+
+                    {/* Gradient overlay to ensure text contrast */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
+
+                    {/* Content wrapper */}
+                    <div className="relative z-20 py-12 px-6 sm:px-12">
+                      <div className="max-w-3xl mx-auto text-center">
+                        <div className="inline-flex items-center justify-center mb-4">
+                          {/* small accent circle to match page style */}
+                          <span className="w-3 h-3 rounded-full bg-emerald-400/80 mr-3 shadow-md" />
+                          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-grayish-blue mb-0 tracking-tight">
+                            Join Us in Making a Difference
+                          </h2>
+                        </div>
+
+                        <p className="font-source text-lg md:text-xl text-white/90 mb-4">
+                          Pain-free living is not a luxury—it's a right.
+                        </p>
+                        <p className="font-source text-base md:text-lg text-white/80 mb-6">
+                          If you or someone you know can benefit from our program, don't hesitate to reach out. Together, let's create a community where care knows no boundaries.
+                        </p>
+
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6">
+                          <button
+                            className="desktop-button"
+                            onClick={handleCallNow}
+                            style={{ minWidth: 160 }}
+                          >
+                            Call Now
+                          </button>
+
+                         
+                        </div>
+
+                        <p className="font-source text-sm text-white/80 mt-6">
+                          To know more about our Free Health Check-Up today.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  
-                  <p className="font-source text-lg md:text-xl text-white/90 mt-8 max-w-2xl mx-auto">
-                    To know more about our Free Health Check-Up today.
-                  </p>
                 </div>
-              </div>
             </motion.div>
           </div>
         </div>

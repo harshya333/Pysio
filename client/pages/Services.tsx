@@ -141,16 +141,9 @@ export default function Services() {
 
   // Also scroll to top when route changes to this page
   useEffect(() => {
-    // Listen for navigation changes and scroll to top
-    const unlisten = navigate((location, action) => {
-      if (action === "PUSH" || action === "POP") {
-        window.scrollTo(0, 0);
-      }
-    });
-    return () => {
-      if (typeof unlisten === "function") unlisten();
-    };
-  }, [navigate]);
+    // Scroll to top on any route change
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (showBookingModal) {

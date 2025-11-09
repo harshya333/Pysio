@@ -1,4 +1,5 @@
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 // ...existing code...
 
@@ -27,9 +28,10 @@ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 // Added active state for navigation links
 const location = useLocation();
-const isActive = (path) => location.pathname === path;
+const isActive = (path: string) => location.pathname === path;
 
 <Link
+
   to="/services"
   className={`font-playfair font-bold text-base transition-opacity ${
     isActive("/services") ? "text-blue-500" : "text-black hover:opacity-70"
@@ -40,19 +42,14 @@ const isActive = (path) => location.pathname === path;
 
 // Apply Playfair Display font to all navbar text
 {/* ...other links... */}
-<Link
+<><Link
   to="/about"
-  className={`font-playfair font-bold text-base transition-opacity ${
-    isActive("/about") ? "text-blue-500" : "text-black hover:opacity-70"
-  }`}
+  className={`font-playfair font-bold text-base transition-opacity ${isActive("/about") ? "text-blue-500" : "text-black hover:opacity-70"}`}
 >
   About
-</Link>
-<Link
+</Link><Link
   to="/contact"
-  className={`font-playfair font-bold text-base transition-opacity ${
-    isActive("/contact") ? "text-blue-500" : "text-black hover:opacity-70"
-  }`}
+  className={`font-playfair font-bold text-base transition-opacity ${isActive("/contact") ? "text-blue-500" : "text-black hover:opacity-70"}`}
 >
-  Contact
-</Link>;
+    Contact
+  </Link></>;
